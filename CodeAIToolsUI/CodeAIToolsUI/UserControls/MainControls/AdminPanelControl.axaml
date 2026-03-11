@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CodeAIToolsUI.UserControls.MainControls.AdminPanelControl"
+             d:DesignWidth="980" d:DesignHeight="620"
+             Background="#1a1d23"
+             FontFamily="Segoe UI">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Body -->
+        <Grid Grid.Row="1">
+            <Grid Background="#1a1d23">
+                <StackPanel Margin="24,16,24,24">
+
+                    <!-- Header Row -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="Proje Yönetim Paneli"
+                                   Foreground="#e2e8f0"
+                                   FontSize="20" FontWeight="Bold"
+                                   VerticalAlignment="Center"/>
+
+                        <!-- Search -->
+                        <Border Grid.Column="1"
+                                Background="#22262e"
+                                BorderBrush="#374151"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="10,0"
+                                Margin="0,0,10,0"
+                                Width="180" Height="36">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="🔍" FontSize="12" Margin="0,0,6,0"
+                                           VerticalAlignment="Center" Foreground="#64748b"/>
+                                <TextBlock Text="Projeleri ara..." Foreground="#64748b"
+                                           FontSize="12" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- New Project -->
+                        <!-- Style="{StaticResource NewProjectButtonStyle}" → Classes="newProjectBtn" -->
+                        <Button Grid.Column="2"
+                                Classes="newProjectBtn"
+                                Click="NewProjectButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="+" FontSize="16" FontWeight="Bold"
+                                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Yeni Proje" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <!-- Divider -->
+                    <Border Height="1" Background="#374151" Margin="0,0,0,20"/>
+
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <WrapPanel x:Name="ProjectCardsPanel" Orientation="Horizontal"/>
+                    </ScrollViewer>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

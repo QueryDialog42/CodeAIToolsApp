@@ -1,0 +1,114 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CodeAIToolsUI.UserControls.MainControls.ProjectCardControl">
+
+    <Border Width="220" Margin="0,0,16,16"
+            Background="#22262e"
+            BorderBrush="#2d323c"
+            BorderThickness="1"
+            CornerRadius="10">
+        <StackPanel Margin="16,14,16,14">
+
+            <!-- Üst satır: ikon + durum -->
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Proje ikonu -->
+                <Border Width="36" Height="36" CornerRadius="8" Background="#1d4ed8">
+                    <TextBlock Text="📁" FontSize="16"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Durum rozeti -->
+                <Border x:Name="StatusBadge" Grid.Column="2"
+                        CornerRadius="10" Padding="8,3"
+                        Background="#064e3b"
+                        VerticalAlignment="Center">
+                    <TextBlock x:Name="StatusText" Text="Aktif"
+                               Foreground="#22c55e"
+                               FontSize="10" FontWeight="SemiBold"/>
+                </Border>
+            </Grid>
+
+            <!-- Proje adı -->
+            <TextBlock x:Name="ProjectNameText"
+                       Text="Proje Adı"
+                       Foreground="#f1f5f9"
+                       FontSize="14" FontWeight="SemiBold"
+                       TextTrimming="CharacterEllipsis"
+                       Margin="0,0,0,4"/>
+
+            <!-- Açıklama -->
+            <TextBlock x:Name="ProjectDescText"
+                       Text="Proje açıklaması buraya gelecek."
+                       Foreground="#64748b"
+                       FontSize="11"
+                       TextWrapping="Wrap"
+                       MaxHeight="40"
+                       TextTrimming="CharacterEllipsis"
+                       Margin="0,0,0,12"/>
+
+            <!-- Ayırıcı -->
+            <Border Height="1" Background="#2d323c" Margin="0,0,0,10"/>
+
+            <!-- Alt bilgi: tarih + üyeler -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Foreground="Gray" Text="📅" FontSize="11" Margin="0,0,4,0"/>
+                    <TextBlock x:Name="ProjectDateText"
+                               Text="—"
+                               Foreground="#64748b" FontSize="11"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Foreground="BlueViolet" Text="👤" FontSize="11" Margin="0,0,4,0"/>
+                    <TextBlock x:Name="ProjectMemberText"
+                               Text="—"
+                               Foreground="#64748b" FontSize="11"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Butonlar -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Style="{StaticResource ...}" → Classes="..." -->
+                <Button Grid.Column="0"
+                        Classes="cardButton"
+                        Click="OpenProject_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📂" Foreground="#94a3b8" FontSize="11" Margin="0,0,4,0"/>
+                        <TextBlock Text="Aç" Foreground="#94a3b8" FontSize="11"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="2"
+                        Classes="cardButton"
+                        Click="DeleteProject_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="#f87171" Text="🗑️" FontSize="11" Margin="0,0,4,0"/>
+                        <TextBlock Text="Sil" Foreground="#f87171" FontSize="11"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+        </StackPanel>
+    </Border>
+</UserControl>

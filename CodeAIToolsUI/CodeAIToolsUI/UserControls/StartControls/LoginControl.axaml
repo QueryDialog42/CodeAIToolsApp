@@ -1,0 +1,94 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CodeAIToolsUI.UserControls.StartControls.LoginControl"
+             Background="#0D0D2B">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT PANEL: Login Form -->
+        <StackPanel Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Margin="70,0,50,0">
+
+            <TextBlock Text="Tekrar Hoşgeldiniz!"
+                       Foreground="#c4ffe5"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"/>
+
+            <TextBlock x:Name="ErrorText"
+                       Text="yanlış email veya şifre hatası"
+                       Foreground="#E05555"
+                       FontSize="13"
+                       Margin="0,0,0,18"
+                       IsVisible="False"/>
+
+            <!-- Email Field -->
+            <Grid Margin="0,0,0,14">
+                <TextBox Classes="TextBoxTemplate generalTextBox loginInput"
+                        x:Name="EmailBox" />
+                <TextBlock x:Name="EmailPlaceholder"
+                           Classes="generalPlaceholder"
+                           Text="email"
+                           Foreground="#6677AA"/>
+            </Grid>
+
+            <!-- Password Field -->
+            <!-- Avalonia'da PasswordBox yok; TextBox + PasswordChar kullanılır -->
+            <Grid Margin="0,0,0,20">
+                <TextBox x:Name="PasswordBox"
+                         Classes="TextBoxTemplate generalTextBox loginInput"
+                         PasswordChar="●"/>
+                <TextBlock x:Name="PasswordPlaceholder"
+                           Classes="generalPlaceholder"
+                           Text="şifre"
+                           Foreground="#6677AA"
+                           FontSize="14"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           Margin="15,0,0,0"/>
+            </Grid>
+
+            <Button Content="GİRİŞ"
+                    Classes="loginBtn"
+                    Margin="0,0,0,14"
+                    Click="LoginButton_Click"/>
+
+            <Button Content="Kayıt olmadınız mı?"
+                    Classes="isRegisteredBtn"
+                    HorizontalAlignment="Left"
+                    Click="RegisterButton_Click"/>
+
+        </StackPanel>
+
+        <!-- Vertical Divider -->
+        <Rectangle Grid.Column="1"
+                   Width="1"
+                   Fill="#2A3060"
+                   VerticalAlignment="Stretch"
+                   Margin="0,40"/>
+
+        <!-- RIGHT PANEL -->
+        <StackPanel Grid.Column="2"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="Yapay zeka ile ilgili"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="haberler"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

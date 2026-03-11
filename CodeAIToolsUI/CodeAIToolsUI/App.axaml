@@ -1,0 +1,18 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="CodeAIToolsUI.App"
+             RequestedThemeVariant="Default">
+
+    <Application.Styles>
+        <FluentTheme/>
+        <StyleInclude Source="/Styles/GeneralStyleDict.axaml"/>
+        <StyleInclude Source="/Styles/MainWindowDict.axaml"/>
+        <StyleInclude Source="/Styles/LoginStyleDict.axaml"/>
+        <StyleInclude Source="/Styles/RegisterStyleDict.axaml"/>
+        <StyleInclude Source="/Styles/ProjectCardStyleDict.axaml"/>
+        <StyleInclude Source="/Styles/PopupContentStyleDict.axaml"/>
+        <StyleInclude Source="/CustomTemplates/CustomTextBox.axaml"/>
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml"/>
+    </Application.Styles>
+
+</Application>

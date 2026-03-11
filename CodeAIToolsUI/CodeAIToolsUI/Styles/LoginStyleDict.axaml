@@ -1,0 +1,63 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- LoginInput -->
+    <Style Selector="TextBox.loginInput">
+        <Setter Property="Background"   Value="#1A2040"/>
+        <Setter Property="Foreground"   Value="#AAAACC"/>
+        <Setter Property="BorderBrush"  Value="#8484e8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Tag" Value="#292e47"/>
+    </Style>
+
+    <!-- LoginButton -->
+    <Style Selector="Button.loginBtn">
+        <Setter Property="Background"      Value="#A8E6CF"/>
+        <Setter Property="Foreground"      Value="#0D0D2B"/>
+        <Setter Property="FontSize"        Value="15"/>
+        <Setter Property="FontWeight"      Value="Bold"/>
+        <Setter Property="Height"          Value="48"/>
+        <Setter Property="Width"           Value="300" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.loginBtn /template/ ContentPresenter">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+    </Style>
+    
+    <Style Selector="Button.loginBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#80DDB8"/>
+    </Style>
+    <Style Selector="Button.loginBtn:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#60CDA0"/>
+    </Style>
+
+    <!-- IsRegisteredButton -->
+    <Style Selector="Button.isRegisteredBtn">
+        <Setter Property="Background"      Value="#F48FB1"/>
+        <Setter Property="Foreground"      Value="#7B1040"/>
+        <Setter Property="FontSize"        Value="14"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        <Setter Property="Height"          Value="44"/>
+        <Setter Property="Width"           Value="200" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.isRegisteredBtn /template/ ContentPresenter">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+    </Style>
+    
+    <Style Selector="Button.isRegisteredBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#E07090"/>
+    </Style>
+    <Style Selector="Button.isRegisteredBtn:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#C05070"/>
+    </Style>
+
+</Styles>

@@ -1,0 +1,261 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CodeAIToolsUI.UserControls.MainControls"
+             mc:Ignorable="d"
+             x:Class="CodeAIToolsUI.UserControls.MainControls.AdminMainControl"
+             d:DesignHeight="680" d:DesignWidth="980"
+             Background="#1a1d23"
+             FontFamily="Segoe UI">
+
+    <Grid x:Name="mainGrid">
+        <Grid.RowDefinitions>
+            <!-- rowCards=0, rowTerminalSplitter=1, rowTerminal=2 -->
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="200"/>
+        </Grid.RowDefinitions>
+
+        <!-- Kartlar + Comment -->
+        <Grid Grid.Row="0" Margin="12,12,12,6" x:Name="innerGrid">
+            <Grid.ColumnDefinitions>
+                <!-- colFlow=0, (splitter)=1, colCode=2 -->
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <!-- (cards)=0, rowCommentSplitter=1, rowComment=2 -->
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!-- Akış Sayfası -->
+            <Border Grid.Column="0" Grid.Row="0"
+                    Background="{StaticResource BgCard}" CornerRadius="6" Margin="0,0,3,3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Padding="14,10,14,6">
+                        <Grid>
+                            <TextBlock Text="Flow Page"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <Button x:Name="btnMaxFlow"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Click="BtnMaxFlow_Click"
+                                    ToolTip.Tip="Maximize"
+                                    Classes="navBtn" Padding="4,2">
+                                <TextBlock x:Name="iconMaxFlow" Text="⛶" FontSize="12"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <local:PageControl x:Name="flowPage" Grid.Row="1"/>
+                </Grid>
+            </Border>
+
+            <!-- Dikey GridSplitter -->
+            <GridSplitter x:Name="verticalSplitter"
+                          Grid.Column="1" Grid.RowSpan="3"
+                          Width="6"
+                          ResizeDirection="Columns"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"
+                          Background="Transparent"
+                          Cursor="SizeWestEast"/>
+
+            <!-- Kod Sayfası -->
+            <Border Grid.Column="2" Grid.Row="0"
+                    Background="{StaticResource BgCard}" CornerRadius="6" Margin="3,0,0,3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Padding="14,10,14,6">
+                        <Grid>
+                            <TextBlock Text="Code Page"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <Button x:Name="btnMaxCode"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Click="BtnMaxCode_Click"
+                                    ToolTip.Tip="Maximize"
+                                    Classes="navBtn" Padding="4,2">
+                                <TextBlock x:Name="iconMaxCode" Text="⛶" FontSize="12"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <local:PageControl x:Name="codePage" Grid.Row="1"/>
+
+                    <!-- Loading Overlay -->
+                    <Grid x:Name="loadingOverlay" Grid.Row="0" Grid.RowSpan="2"
+                          IsVisible="False" Background="#80000000">
+                        <Ellipse Width="50" Height="50"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Stroke="{StaticResource TextPrimary}"
+                                 StrokeThickness="4"
+                                 RenderTransformOrigin="0.5,0.5">
+                            <Ellipse.RenderTransform>
+                                <RotateTransform Angle="0"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Yatay GridSplitter (Kartlar | Comment) -->
+            <GridSplitter x:Name="horizontalSplitter"
+                          Grid.Row="1" Grid.ColumnSpan="3"
+                          Height="6"
+                          ResizeDirection="Rows"
+                          HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                          Background="Transparent"
+                          Cursor="SizeNorthSouth"/>
+
+            <!-- Akış Comment -->
+            <Border Grid.Column="0" Grid.Row="2"
+                    Background="{StaticResource BgCard}" CornerRadius="6"
+                    Margin="0,3,3,0" Padding="14,10">
+                <TextBox TextWrapping="Wrap" AcceptsReturn="True"
+                         Classes="flowCodeCommentTextBox"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         Foreground="{StaticResource TextSecondary}"/>
+            </Border>
+
+            <!-- Kod Comment -->
+            <Border Grid.Column="2" Grid.Row="2"
+                    Background="{StaticResource BgCard}" CornerRadius="6"
+                    Margin="3,3,0,0" Padding="14,10">
+                <TextBox TextWrapping="Wrap" AcceptsReturn="True"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         Classes="flowCodeCommentTextBox"
+                         Foreground="{StaticResource TextSecondary}"/>
+            </Border>
+        </Grid>
+
+        <!-- GridSplitter (Kartlar+Comment | Terminal) -->
+        <GridSplitter x:Name="terminalSplitter"
+                      Grid.Row="1" Height="6"
+                      ResizeDirection="Rows"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                      Background="Transparent"
+                      Cursor="SizeNorthSouth" Margin="12,0"/>
+
+        <!-- Terminal -->
+        <Border Grid.Row="2" Background="{StaticResource BgCard}"
+                CornerRadius="6" Margin="12,0,12,12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border x:Name="TerminalHead" Grid.Row="0" Padding="14,10,14,6">
+                    <Grid>
+                        <TextBlock Text="Terminal"
+                                   Foreground="{StaticResource AccentBlue}"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                        <Button x:Name="btnMaxTerminal"
+                                HorizontalAlignment="Right" VerticalAlignment="Center"
+                                Click="BtnMaxTerminal_Click"
+                                ToolTip.Tip="Maximize"
+                                Classes="navBtn" Padding="4,2">
+                            <TextBlock x:Name="iconMaxTerminal" Text="⛶" FontSize="12"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Terminal içerik — Work Mode'da gizlenir -->
+                <Border x:Name="terminalContentBorder" Grid.Row="1">
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="TerminalLines" Margin="12,8"/>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Toolbar -->
+                <Border Grid.Row="2" Padding="10,6"
+                        BorderBrush="{StaticResource BorderColor}"
+                        BorderThickness="0,1,0,0">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+
+                            <!-- Çalıştır -->
+                            <Button x:Name="executeButton"
+                                    Click="ExecuteButton_Clicked"
+                                    Classes="navBtn" Padding="6,1"
+                                    ToolTip.Tip="Çalıştır">
+                                <TextBlock x:Name="executeIcon" Text="▶"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           FontSize="20"/>
+                            </Button>
+
+                            <!-- Durdur -->
+                            <Button x:Name="stopButton"
+                                    Click="StopButton_Clicked"
+                                    IsEnabled="False"
+                                    Classes="navBtn" Padding="6,1"
+                                    ToolTip.Tip="Durdur">
+                                <TextBlock x:Name="stopIcon" Text="■"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           FontSize="20"/>
+                            </Button>
+
+                            <!-- Yenile -->
+                            <Button x:Name="transformButton"
+                                    Click="TransformButton_Clicked"
+                                    Classes="navBtn" Padding="6,4"
+                                    ToolTip.Tip="Yenile">
+                                <TextBlock Text="↺"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           FontSize="20"/>
+                            </Button>
+
+                            <!-- Kaydet -->
+                            <Button Classes="navBtn" Padding="6,4" ToolTip.Tip="Kaydet">
+                                <TextBlock Text="🔖"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           FontSize="14"/>
+                            </Button>
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                            <!-- Temizle -->
+                            <Button Classes="navBtn" Padding="6,4"
+                                    ToolTip.Tip="Temizle"
+                                    Click="ClearTerminal_Clicked">
+                                <TextBlock Text="🗑"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           FontSize="18"/>
+                            </Button>
+
+                            <!-- Work Mode -->
+                            <Button x:Name="btnWorkMode"
+                                    Click="BtnWorkMode_Click"
+                                    ToolTip.Tip="Work Mode"
+                                    Classes="navBtn" Padding="6,1">
+                                <TextBlock x:Name="iconWorkMode" Text="⊞" FontSize="20"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </Button>
+
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

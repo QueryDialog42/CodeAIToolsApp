@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CodeAIToolsUI.UserControls.StartControls.RegisterControl"
+             Background="#0D0D2B">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ═══════════════ LEFT PANEL ═══════════════ -->
+        <StackPanel Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Margin="70,0,50,0">
+
+            <!-- Title -->
+            <TextBlock Text="Hesap Oluştur"
+                       Foreground="#F472B6"
+                       FontSize="36"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"/>
+
+            <!-- Error Message -->
+            <TextBlock x:Name="ErrorText"
+                       Text="Geçersiz email hata mesajı"
+                       Foreground="#E05555"
+                       FontSize="13"
+                       Margin="0,0,0,16"
+                       IsVisible="False"/>
+
+            <!-- Email Field -->
+            <Grid Margin="0,0,0,14">
+                <TextBox x:Name="EmailBox"
+                         Classes="TextBoxTemplate generalTextBox registerInput"/>
+                <TextBlock x:Name="EmailPlaceholder"
+                           Text="email"
+                           Foreground="#C099AA"
+                           Classes="generalPlaceholder"/>
+            </Grid>
+
+            <!-- Password Field -->
+            <!-- Avalonia'da PasswordBox yok; TextBox + PasswordChar kullanılır -->
+            <Grid Margin="0,0,0,18">
+                <TextBox x:Name="PasswordBox"
+                         Classes="TextBoxTemplate generalTextBox registerInput"
+                         PasswordChar="●"/>
+                <TextBlock x:Name="PasswordPlaceholder"
+                           Text="şifre"
+                           Foreground="#C099AA"
+                           Classes="generalPlaceholder"/>
+            </Grid>
+
+            <!-- Git Email Field -->
+            <Grid Margin="0,0,0,14">
+                <TextBox x:Name="GitEmailBox"
+                         Classes="TextBoxTemplate generalTextBox registerInput"/>
+                <TextBlock x:Name="GitEmailPlaceholder"
+                           Text="git email"
+                           Foreground="#C099AA"
+                           Classes="generalPlaceholder"/>
+            </Grid>
+
+            <!-- Role RadioButtons -->
+            <!-- Avalonia'da GroupName yok; aynı parent altındaki RadioButton'lar otomatik grup oluşturur -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                <RadioButton x:Name="UserRadioButton"
+                             Content="Kullanıcı"
+                             Classes="roleCheckBox"
+                             IsChecked="True"
+                             Margin="0,0,24,0"/>
+                <RadioButton x:Name="AdminRadioButton"
+                             Content="Yönetici"
+                             Classes="roleCheckBox"/>
+            </StackPanel>
+
+            <!-- KAYDOL Button -->
+            <Button Content="KAYDOL"
+                    Classes="registerButton"
+                    Margin="0,0,0,14"
+                    Click="RegisterButton_Click"/>
+
+            <!-- Kayıtlı mısınız? Button -->
+            <Button Content="Kayıtlı mısınız?"
+                    Classes="loginButton"
+                    HorizontalAlignment="Left"
+                    Click="LoginButton_Click"/>
+
+        </StackPanel>
+
+        <!-- Vertical Divider -->
+        <Rectangle Grid.Column="1"
+                   Width="1"
+                   Fill="#2A3060"
+                   VerticalAlignment="Stretch"
+                   Margin="0,40"/>
+
+        <!-- ═══════════════ RIGHT PANEL ═══════════════ -->
+        <StackPanel Grid.Column="2"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="projenin yararlarını anlatan"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="bir bölüm"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

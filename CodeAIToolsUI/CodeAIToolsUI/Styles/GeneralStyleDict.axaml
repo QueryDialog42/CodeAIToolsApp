@@ -1,0 +1,42 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="TextBox.generalTextBox">
+        <Setter Property="FontSize"                 Value="14"/>
+        <Setter Property="BorderThickness"          Value="1"/>
+        <Setter Property="Height"                   Value="48"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding"                  Value="14,10"/>
+    </Style>
+    
+    <Style Selector="TextBox.generalTextBox:focus /template/ Border">
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
+    </Style>
+    
+    
+
+    <!-- General Placeholder Style -->
+    <Style Selector="TextBlock.generalPlaceholder">
+        <Setter Property="FontSize"          Value="14"/>
+        <Setter Property="IsHitTestVisible"  Value="False"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin"            Value="15,0,0,0"/>
+    </Style>
+
+    <!--Flow Code Comment Text Boxes-->
+    <Style Selector="TextBox.flowCodeCommentTextBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+
+        <Style Selector="^ /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style Selector="^Border">
+            
+        </Style>
+    </Style>
+    
+</Styles>

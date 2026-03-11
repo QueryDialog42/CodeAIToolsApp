@@ -1,0 +1,39 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="TextBox.TextBoxTemplate">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8"
+                        Padding="{TemplateBinding Padding}">
+                    <ScrollViewer x:Name="PART_ContentHost"
+                                  Focusable="False"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <!-- Avalonia TextBox'ın çalışması için PART_TextPresenter zorunlu -->
+                        <TextPresenter x:Name="PART_TextPresenter"
+                                       Text="{TemplateBinding Text}"
+                                       CaretBrush="{TemplateBinding CaretBrush}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </ScrollViewer>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <!-- IsKeyboardFocused → :focus -->
+    <Style Selector="TextBox.TextBoxTemplate:focus /template/ Border#border">
+        <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}"/>
+    </Style>
+
+    <!-- IsKeyboardFocused → :focus -->
+    <Style Selector="TextBox.customTextBox:focus /template/ Border#border">
+        <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}"/>
+    </Style>
+
+</Styles>

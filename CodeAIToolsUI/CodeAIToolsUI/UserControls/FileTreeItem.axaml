@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:uc="clr-namespace:CodeAIToolsUI.UserControls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CodeAIToolsUI.UserControls.FileTreeControl">
+
+    <Border Padding="16,4,12,4">
+        <ItemsControl x:Name="FileTreeItems">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type uc:FileTreeItem}">
+                    <Button Click="FileItem_Clicked"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Tag="{Binding}">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="{Binding Indentation}">
+
+                            <TextBlock Text="{Binding Icon}"
+                                       FontSize="12"
+                                       Margin="0,0,6,0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="SemiBold"
+                                       Foreground="{Binding FileForeground}"/>
+
+                            <TextBlock Text="{Binding Name}"
+                                       Foreground="{StaticResource TextSecondary}"
+                                       FontSize="11"
+                                       VerticalAlignment="Center">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Open"/>
+                                        <MenuItem Header="Rename"/>
+                                        <MenuItem Header="Delete"
+                                                  Click="DeleteProject_Clicked"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+
+                        </StackPanel>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Border>
+</UserControl>

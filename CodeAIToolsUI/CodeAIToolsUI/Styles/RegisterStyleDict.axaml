@@ -1,0 +1,103 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Register Input Style -->
+    <Style Selector="TextBox.registerInput">
+        <Setter Property="Background"   Value="#472f42"/>
+        <Setter Property="Foreground"   Value="#DDBBCC"/>
+        <Setter Property="BorderBrush"  Value="#ad509a"/>
+        <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+
+    <!-- Role RadioButton Style -->
+    <Style Selector="RadioButton.roleCheckBox">
+        <Setter Property="Foreground"             Value="White"/>
+        <Setter Property="FontSize"               Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Cursor"                 Value="Hand"/>
+        <Setter Property="Template">
+            <ControlTemplate TargetType="RadioButton">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border x:Name="CheckBorder"
+                            Width="20" Height="20"
+                            CornerRadius="3"
+                            BorderThickness="2"
+                            BorderBrush="#AAAACC"
+                            Background="Transparent"
+                            Margin="0,0,6,0">
+                        <TextBlock x:Name="CheckMark"
+                                   Text="✓"
+                                   Foreground="White"
+                                   FontSize="13"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   IsVisible="False"/>
+                    </Border>
+                    <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <!-- ControlTemplate.Triggers → pseudo-class selectors -->
+    <Style Selector="RadioButton.roleCheckBox:pointerover /template/ Border#CheckBorder">
+        <Setter Property="BorderBrush" Value="#de6d96"/>
+    </Style>
+    <Style Selector="RadioButton.roleCheckBox:checked /template/ Border#CheckBorder">
+        <Setter Property="Background"  Value="#E0407A"/>
+        <Setter Property="BorderBrush" Value="#E0407A"/>
+    </Style>
+    <Style Selector="RadioButton.roleCheckBox:checked /template/ TextBlock#CheckMark">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+
+    <!-- Register (KAYDOL) Button Style -->
+    <Style Selector="Button.registerButton">
+        <Setter Property="Background"      Value="#F06090"/>
+        <Setter Property="Foreground"      Value="#7B1040"/>
+        <Setter Property="FontSize"        Value="16"/>
+        <Setter Property="FontWeight"      Value="Bold"/>
+        <Setter Property="Height"          Value="48"/>
+        <Setter Property="Width"           Value="300" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.registerButton /template/ ContentPresenter">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.registerButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#D04070"/>
+    </Style>
+        
+    <Style Selector="Button.registerButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#B03060"/>
+    </Style>
+
+    <!-- Login Link Button Style -->
+    <Style Selector="Button.loginButton">
+        <Setter Property="Background"      Value="#A8C8B8"/>
+        <Setter Property="Foreground"      Value="#2A5040"/>
+        <Setter Property="FontSize"        Value="14"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        <Setter Property="Height"          Value="46"/>
+        <Setter Property="Width"           Value="200" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="8"/>
+    </Style>
+    <Style Selector="Button.loginButton /template/ ContentPresenter">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+    </Style>
+    <Style Selector="Button.loginButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#88B098"/>
+    </Style>
+    <Style Selector="Button.loginButton:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#6A9078"/>
+    </Style>
+
+</Styles>

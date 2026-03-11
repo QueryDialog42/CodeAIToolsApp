@@ -1,0 +1,234 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CodeAIToolsUI.UserControls.AccountPopupContent">
+
+    <Border Margin="0,4,0,0" Width="280" MaxHeight="500"
+            BoxShadow="0 4 20 0 #8C000000">
+
+        <Border Background="{StaticResource PopupBg}"
+                BorderBrush="{StaticResource PopupBorder}"
+                BorderThickness="1"
+                CornerRadius="12">
+
+            <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+
+                    <!-- Header -->
+                    <Grid Margin="16,14,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Hesap Bilgileri"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   FontSize="13" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Click="Close_Click"
+                                Classes="actionBtn" Padding="6,4">
+                            <TextBlock Text="✕" FontSize="11"
+                                       Foreground="{StaticResource TextMuted}"/>
+                        </Button>
+                    </Grid>
+
+                    <!-- Avatar + name -->
+                    <StackPanel Orientation="Horizontal" Margin="16,14,16,0">
+                        <Border Width="46" Height="46" CornerRadius="23"
+                                Background="{StaticResource AccentPurple}">
+                            <TextBlock x:Name="AvatarInitials" Text="U"
+                                       Foreground="White" FontSize="18" FontWeight="Bold"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="DisplayName" Text="Kullanıcı"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       FontSize="14" FontWeight="SemiBold"/>
+                            <Border x:Name="RoleBadge" Classes="badge"
+                                    Background="#1d4ed8"
+                                    HorizontalAlignment="Left" Margin="0,4,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="RoleIcon" Text="🛡️"
+                                               Foreground="GhostWhite" FontSize="10"
+                                               Margin="0,0,4,0"/>
+                                    <TextBlock x:Name="RoleLabel" Text="Admin"
+                                               Foreground="White" FontSize="10"
+                                               FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Divider -->
+                    <Border Height="1" Background="{StaticResource DividerColor}"
+                            Margin="16,14,16,0"/>
+
+                    <!-- Info cards -->
+                    <StackPanel Margin="16,12,16,0">
+
+                        <!-- Email -->
+                        <Border Background="{StaticResource CardBg}"
+                                CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="6"
+                                        Background="#1d4ed8">
+                                    <TextBlock Text="✉" Foreground="White" FontSize="13"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="E-posta"
+                                               Foreground="{StaticResource TextMuted}"
+                                               FontSize="10"/>
+                                    <TextBlock x:Name="EmailText" Text="—"
+                                               Foreground="{StaticResource TextPrimary}"
+                                               FontSize="12" FontWeight="Medium"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- GitHub email -->
+                        <Border x:Name="GithubCard" IsVisible="False"
+                                Background="{StaticResource CardBg}"
+                                CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="6"
+                                        Background="#171515">
+                                    <TextBlock Text="🐱" FontSize="14" Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="GitHub E-posta"
+                                               Foreground="{StaticResource TextMuted}"
+                                               FontSize="10"/>
+                                    <TextBlock x:Name="GithubEmailText" Text=""
+                                               Foreground="{StaticResource TextPrimary}"
+                                               FontSize="12" FontWeight="Medium"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Durum -->
+                        <Border Background="{StaticResource CardBg}"
+                                CornerRadius="8" Padding="12,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="6"
+                                        Background="#064e3b">
+                                    <TextBlock Text="⚡" Foreground="GreenYellow" FontSize="13"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="Durum"
+                                               Foreground="{StaticResource TextMuted}"
+                                               FontSize="10"/>
+                                    <TextBlock Text="Aktif"
+                                               Foreground="{StaticResource AccentGreen}"
+                                               FontSize="12" FontWeight="Medium"/>
+                                </StackPanel>
+                                <Ellipse Grid.Column="2" Width="8" Height="8"
+                                         Fill="{StaticResource AccentGreen}"
+                                         VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- Divider -->
+                    <Border Height="1" Background="{StaticResource DividerColor}"
+                            Margin="16,12,16,0"/>
+
+                    <!-- İşbirlikçiler -->
+                    <StackPanel Margin="16,12,16,0">
+
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="👥" FontSize="12" Foreground="BlueViolet"
+                                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="İşbirlikçiler"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           FontSize="12" FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Click="AddCollaborator_Click"
+                                    Classes="actionBtn" Padding="8,4">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="+" FontSize="14" Margin="0,0,4,0"
+                                               Foreground="{StaticResource AccentGreen}"/>
+                                    <TextBlock Text="Ekle" FontSize="11"
+                                               Foreground="{StaticResource AccentGreen}"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <Border Background="{StaticResource CardBg}"
+                                CornerRadius="8" Padding="4">
+                            <ScrollViewer MaxHeight="140"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="CollaboratorList"/>
+                            </ScrollViewer>
+                        </Border>
+
+                        <TextBlock x:Name="NoCollaboratorsText"
+                                   Text="Henüz işbirlikçi yok."
+                                   Foreground="{StaticResource TextMuted}"
+                                   FontSize="11" HorizontalAlignment="Center"
+                                   Margin="0,6,0,0" IsVisible="True"/>
+                    </StackPanel>
+
+                    <!-- Divider -->
+                    <Border Height="1" Background="{StaticResource DividerColor}"
+                            Margin="16,12,16,0"/>
+
+                    <!-- Footer buttons -->
+                    <Grid Margin="16,10,16,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Classes="actionBtn"
+                                Click="EditProfile_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="✏️" FontSize="11" Margin="0,0,5,0"/>
+                                <TextBlock Text="Düzenle" FontSize="12"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" Classes="actionBtn"
+                                Click="Logout_Click"
+                                Foreground="#f87171">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🚪" FontSize="11" Margin="0,0,5,0"/>
+                                <TextBlock Text="Çıkış Yap" FontSize="12"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Border>
+    </Border>
+</UserControl>

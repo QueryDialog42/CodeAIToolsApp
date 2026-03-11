@@ -1,0 +1,164 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CodeAIToolsUI.UserControls.TeamControl.CollaboratorSearchControl">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="PopupBg"       Color="#1e2228"/>
+        <SolidColorBrush x:Key="PopupBorder"   Color="#2d323c"/>
+        <SolidColorBrush x:Key="CardBg"        Color="#22262e"/>
+        <SolidColorBrush x:Key="AccentGreen"   Color="#22c55e"/>
+        <SolidColorBrush x:Key="AccentPurple"  Color="#7c3aed"/>
+        <SolidColorBrush x:Key="TextPrimary"   Color="#f1f5f9"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#94a3b8"/>
+        <SolidColorBrush x:Key="TextMuted"     Color="#64748b"/>
+        <SolidColorBrush x:Key="DividerColor"  Color="#2d323c"/>
+        <SolidColorBrush x:Key="InputBg"       Color="#2d323c"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+
+        <!-- ActionBtn -->
+        <Style Selector="Button.actionBtn">
+            <Setter Property="Background"       Value="Transparent"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Cursor"           Value="Hand"/>
+            <Setter Property="Foreground"       Value="#94a3b8"/>
+            <Setter Property="FontSize"         Value="12"/>
+            <Setter Property="Padding"          Value="10,7"/>
+            <Setter Property="CornerRadius"     Value="6"/>
+        </Style>
+        <Style Selector="Button.actionBtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#374151"/>
+        </Style>
+        <Style Selector="Button.actionBtn:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#4b5563"/>
+        </Style>
+
+        <!-- AddBtn -->
+        <Style Selector="Button.addBtn">
+            <Setter Property="Background"      Value="#14532d"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Foreground"      Value="#22c55e"/>
+            <Setter Property="FontSize"        Value="11"/>
+            <Setter Property="Padding"         Value="10,5"/>
+            <Setter Property="CornerRadius"    Value="6"/>
+        </Style>
+        <Style Selector="Button.addBtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#166534"/>
+        </Style>
+        <Style Selector="Button.addBtn:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#15803d"/>
+        </Style>
+
+        <!-- SearchBox -->
+        <Style Selector="TextBox.searchBox">
+            <Setter Property="Background"      Value="#2d323c"/>
+            <Setter Property="Foreground"      Value="#f1f5f9"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush"     Value="#3d4453"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Padding"         Value="10,8"/>
+            <Setter Property="CaretBrush"      Value="#f1f5f9"/>
+            <Setter Property="CornerRadius"    Value="8"/>
+        </Style>
+        <Style Selector="TextBox.searchBox:focus">
+            <Setter Property="BorderBrush" Value="#7c3aed"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <!-- DropShadowEffect → BoxShadow -->
+    <Border Margin="0,4,0,0" Width="300" MaxHeight="480"
+            BoxShadow="0 4 20 0 #8C000000">
+
+        <Border Background="{StaticResource PopupBg}"
+                BorderBrush="{StaticResource PopupBorder}"
+                BorderThickness="1" CornerRadius="12">
+            <StackPanel>
+
+                <!-- Header -->
+                <Grid Margin="16,14,12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="👥"
+                                   Foreground="BlueViolet"
+                                   FontSize="13"
+                                   Margin="0,0,8,0"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text="İşbirlikçi Ekle"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   FontSize="13" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Click="Close_Click"
+                            Classes="actionBtn"
+                            Padding="6,4">
+                        <TextBlock Text="✕" FontSize="11"
+                                   Foreground="{StaticResource TextMuted}"/>
+                    </Button>
+                </Grid>
+
+                <!-- Divider -->
+                <Border Height="1"
+                        Background="{StaticResource DividerColor}"
+                        Margin="16,12,16,0"/>
+
+                <!-- Search box -->
+                <Grid Margin="16,12,16,0">
+                    <TextBox x:Name="SearchBox"
+                             Classes="searchBox"
+                             TextChanged="SearchBox_TextChanged"/>
+                    <TextBlock x:Name="SearchPlaceholder"
+                               Text="🔍  E-posta ile ara..."
+                               Foreground="{StaticResource TextMuted}"
+                               FontSize="12"
+                               IsHitTestVisible="False"
+                               Margin="12,0,0,0"
+                               VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Divider -->
+                <Border Height="1"
+                        Background="{StaticResource DividerColor}"
+                        Margin="16,12,16,0"/>
+
+                <!-- Result list -->
+                <ScrollViewer MaxHeight="280"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              Margin="0,4,0,0">
+                    <StackPanel x:Name="ResultsList" Margin="16,0,16,0"/>
+                </ScrollViewer>
+
+                <!-- Empty state -->
+                <TextBlock x:Name="EmptyText"
+                           Text="Arama yapmak için e-posta girin."
+                           Foreground="{StaticResource TextMuted}"
+                           FontSize="11"
+                           HorizontalAlignment="Center"
+                           Margin="0,12,0,16"
+                           IsVisible="True"/>
+
+                <!-- Not found -->
+                <TextBlock x:Name="NotFoundText"
+                           Text="Kullanıcı bulunamadı."
+                           Foreground="{StaticResource TextMuted}"
+                           FontSize="11"
+                           HorizontalAlignment="Center"
+                           Margin="0,12,0,16"
+                           IsVisible="False"/>
+
+            </StackPanel>
+        </Border>
+    </Border>
+</UserControl>

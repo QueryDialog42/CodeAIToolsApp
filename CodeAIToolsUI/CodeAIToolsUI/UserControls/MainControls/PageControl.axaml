@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalon="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+             mc:Ignorable="d"
+             x:Class="CodeAIToolsUI.UserControls.MainControls.PageControl"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <avalon:TextEditor x:Name="editor"
+                       FontFamily="Cascadia Mono"
+                       VerticalScrollBarVisibility="Auto"
+                       HorizontalScrollBarVisibility="Disabled"
+                       Background="{StaticResource BgInput}"
+                       Foreground="{StaticResource TextPrimary}"
+                       BorderThickness="0"
+                       ShowLineNumbers="True"/>
+</UserControl>
