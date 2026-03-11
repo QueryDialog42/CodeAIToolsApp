@@ -1,0 +1,19 @@
+CodeAITools Yazım Kuralları:
+1. ";" işareti cümlenin bittiğini ifade eder
+2. ">", ">=", "=", "<=", "<" işaretleri anlamlarını korurlar.
+3. 'x ≠ 0' → 'x != 0'
+4. bir satırda sadece matematik işlemi varsa, başka bir ifadeye gerek duymadan o işlem yapılır
+5. "EXIT" anahtar sözcüğü kodun bittiği yerdir.
+6. "IF" ile if bloğu başlar, "END" ile biter, "ELIF", "ELSE" blockları da var
+7. "FOR" ile for bloğu başlar, "NEXT" ile biter
+8. "SAY" her daim System.out.println() demektir -> SAY: Hello World = System.out.println("Hello World")
+9. "DEF:" ile fonskiyon başlar, "RETURN: " ile biter. "DEF: fonksiyon ismi (parametre1, parametre2, ...); RETURN: döndürülen değer"
+10. "CALL" ile fonksiyon çağrılır
+11. iç içe "FOR", "IF" ve "DEF"ler "-" sonraki rakamla gösterilebilir (tercihen)
+12. çift tırnak (") içine yazılan her şey String olarak algılanır. çift tırnak içine {} yazılabilir
+13. 'AND' ve 'OR' --> '&' ve '||' işlerini görür.
+14. 'CHECK: YES: NO: BUT:' bloğu var. 'CHECK' true ise YES: çalışır, False ise NO: çalışır, BUT: her iki ihtimalde de çalışır (opsiyonel)
+15. USE: kullanılacak class'ı belirtir.
+16. "#" yorum satırı demektir
+17. UNTIL: anahtar kelimesi ile bir koşul gerçekleşene kadar while bloğu çalıştırılır, DONE ile biter
+18. [] içine yazılan şey, bunun altında yazan akışların ne işe yaradığını anlatır.
