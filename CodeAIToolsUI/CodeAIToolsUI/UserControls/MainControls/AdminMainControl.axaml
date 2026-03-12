@@ -199,7 +199,7 @@
                                     ToolTip.Tip="Çalıştır">
                                 <TextBlock x:Name="executeIcon" Text="▶"
                                            Foreground="{StaticResource TextSecondary}"
-                                           FontSize="20"/>
+                                           FontSize="18"/>
                             </Button>
 
                             <!-- Durdur -->
@@ -210,7 +210,7 @@
                                     ToolTip.Tip="Durdur">
                                 <TextBlock x:Name="stopIcon" Text="■"
                                            Foreground="{StaticResource TextSecondary}"
-                                           FontSize="20"/>
+                                           FontSize="18"/>
                             </Button>
 
                             <!-- Yenile -->
@@ -218,9 +218,9 @@
                                     Click="TransformButton_Clicked"
                                     Classes="navBtn" Padding="6,4"
                                     ToolTip.Tip="Yenile">
-                                <TextBlock Text="↺"
+                                <TextBlock Text="🔄"
                                            Foreground="{StaticResource TextSecondary}"
-                                           FontSize="20"/>
+                                           FontSize="14"/>
                             </Button>
 
                             <!-- Kaydet -->

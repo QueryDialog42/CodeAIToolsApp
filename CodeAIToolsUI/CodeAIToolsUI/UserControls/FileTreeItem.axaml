@@ -30,9 +30,10 @@
                             <TextBlock Text="{Binding Name}"
                                        Foreground="{StaticResource TextSecondary}"
                                        FontSize="11"
-                                       VerticalAlignment="Center">
+                                       VerticalAlignment="Center"
+                                       Tag="{Binding}">
                                 <TextBlock.ContextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu Tag="{Binding $parent[TextBlock]}">
                                         <MenuItem Header="Open"/>
                                         <MenuItem Header="Rename"/>
                                         <MenuItem Header="Delete"

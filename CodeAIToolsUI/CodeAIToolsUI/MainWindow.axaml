@@ -155,13 +155,8 @@
                                        FontSize="12"/>
                             <Border Grid.Column="1" Background="#374151"
                                     CornerRadius="10" Padding="5,1" Margin="4,0">
-                                <TextBlock Text="🐱+2"
-                                           Foreground="{StaticResource TextSecondary}"
-                                           FontSize="10"/>
+
                             </Border>
-                            <TextBlock Grid.Column="2" Text="Onay bekliyor"
-                                       Foreground="{StaticResource TextMuted}"
-                                       FontSize="10" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <userControls:FileTreeControl x:Name="fileTree"/>

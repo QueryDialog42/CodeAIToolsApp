@@ -2,14 +2,19 @@ using System;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
+using CodeAIToolsUI.APIs;
 using CodeAIToolsWPF;
 using MessageBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using Newtonsoft.Json;
 
 namespace CodeAIToolsUI.UserControls
 {
@@ -117,7 +122,7 @@ namespace CodeAIToolsUI.UserControls
                 // Avalonia'da ContextMenu.PlacementTarget → Tag üzerinden erişim
                 if (sender is not MenuItem menuItem) return;
                 if (menuItem.Parent is not ContextMenu contextMenu) return;
-                if (contextMenu.PlacementTarget is not TextBlock textBlock) return;
+                if (contextMenu.Tag is not TextBlock textBlock) return;
 
                 var item = textBlock.Tag as FileTreeItem;
                 var name = item?.Name;
@@ -132,6 +137,7 @@ namespace CodeAIToolsUI.UserControls
                 if (result == ButtonResult.Yes && item != null)
                 {
                     Directory.Delete(item.FilePath, true);
+                    DeleteProjectFromDatabase(item.Name);
                 }
 
                 Clear();
@@ -188,6 +194,16 @@ namespace CodeAIToolsUI.UserControls
         {
             var box = MessageBoxManager.GetMessageBoxStandard(title, message, ButtonEnum.Ok, Icon.Info);
             await box.ShowAsync();
+        }
+
+        private async Task DeleteProjectFromDatabase(string projectName)
+        {
+            using var client = new HttpClient();
+            var response = await client.DeleteAsync(ApiEndpoints.DEL_PROJ_API + Path.VolumeSeparatorChar + $"{projectName}" );
+            if (!response.IsSuccessStatusCode)
+            {
+                GeneralRoutines.ShowException($"An error occured while deleting the project: {response.ReasonPhrase}");
+            }
         }
 
         #endregion

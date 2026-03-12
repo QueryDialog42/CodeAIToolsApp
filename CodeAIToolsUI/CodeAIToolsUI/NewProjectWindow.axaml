@@ -139,6 +139,92 @@
                            VerticalAlignment="Top"
                            IsHitTestVisible="False"/>
             </Grid>
+            
+            <!-- Advanced Section -->
+            <TextBlock Text="Gelişmiş" Classes="fieldLabel" Margin="0,0,0,8"/>
+
+            <Border Background="#0D0D0D"
+                    BorderBrush="#2A2A2A"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Margin="0,0,0,20">
+                <StackPanel>
+
+                    <!-- Advanced Toggle Header -->
+                    <Button Classes="iconBtn"
+                            HorizontalAlignment="Stretch"
+                            Padding="12,10"
+                            Click="BtnAdvancedToggle_Click">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="GitHub Entegrasyonu (Opsiyonel)"
+                                       Foreground="#AAAAAA"
+                                       FontSize="13"
+                                       FontFamily="Segoe UI"
+                                       VerticalAlignment="Center"/>
+                            <Path x:Name="AdvancedArrow"
+                                  Grid.Column="1"
+                                  Data="M6 9l6 6 6-6"
+                                  Stroke="#AAAAAA"
+                                  StrokeThickness="1.5"
+                                  Width="16" Height="16"
+                                  Stretch="Uniform"
+                                  VerticalAlignment="Center"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Collapsible Content -->
+                    <StackPanel x:Name="AdvancedPanel"
+                                IsVisible="False"
+                                Margin="12,0,12,12">
+
+                        <Border Background="#161616"
+                                CornerRadius="6"
+                                Padding="10"
+                                Margin="0,0,0,12">
+                            <TextBlock Text="Token girerek projenizi otomatik olarak GitHub'a yükleyebilirsiniz. Bu adım tamamen opsiyoneldir."
+                                       Foreground="#777777"
+                                       FontSize="12"
+                                       FontFamily="Segoe UI"
+                                       TextWrapping="Wrap"/>
+                        </Border>
+
+                        <TextBlock Text="GitHub Token"
+                                   Classes="fieldLabel"
+                                   Margin="0,0,0,8"/>
+                        <Grid>
+                            <TextBox x:Name="TxtGitHubToken"
+                                     Classes="darkInput"
+                                     Height="44"
+                                     VerticalContentAlignment="Center"
+                                     PasswordChar="●"
+                                     TextChanged="TxtGitHubToken_TextChanged"/>
+                            <TextBlock x:Name="PlaceholderToken"
+                                       Text="ghp_xxxxxxxxxxxxxxxxxxxx"
+                                       Foreground="#555555"
+                                       FontSize="14"
+                                       FontFamily="Segoe UI"
+                                       Margin="14,0,0,0"
+                                       VerticalAlignment="Center"
+                                       IsHitTestVisible="False"/>
+                        </Grid>
+                        
+                        <!-- Token hata mesajı -->
+                        <TextBlock x:Name="TxtTokenError"
+                                   Foreground="#FF4D4D"
+                                   FontSize="12"
+                                   FontFamily="Segoe UI"
+                                   Margin="4,6,0,0"
+                                   IsVisible="False"
+                                   TextWrapping="Wrap"/>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
             <!-- Collaborators -->
             <TextBlock Text="İşbirlikçiler" Classes="fieldLabel"/>
