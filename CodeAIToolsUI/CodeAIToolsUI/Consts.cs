@@ -45,5 +45,10 @@ namespace CodeAIToolsWPF
         public const string ADD_COLL_API = "http://localhost:8080/teams/addCollaborator";
         public const string GET_COLLS_API = "http://localhost:8080/teams/getCollaborators";
         public const string REM_COLL_API = "http://localhost:8080/teams/removeCollaborator";
+        public const string GET_TOK_API = "http://localhost:8080/github/token";
+        public const string IS_VAL_API = "http://localhost:8080/github/isValid";
+        public const string CRE_GIT_API = "http://localhost:8080/github/create";
+        public const string DEL_GIT_API = "http://localhost:8080/github/delete";
+        public const string TOK_LINK = "https://github.com/settings/tokens";
     }
 }

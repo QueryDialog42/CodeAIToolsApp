@@ -221,6 +221,19 @@
                                    Margin="4,6,0,0"
                                    IsVisible="False"
                                    TextWrapping="Wrap"/>
+                        
+                        <!-- Link Button -->
+                        <Button Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0,8,0,0"
+                                Cursor="Hand"
+                                Click="BtnOpenLink_Click">
+                            <TextBlock Text="No Token? Get one here"
+                                       Foreground="#5B5FC7"
+                                       FontSize="12"
+                                       FontFamily="Segoe UI"
+                                       TextDecorations="Underline"/>
+                        </Button>
 
                     </StackPanel>
                 </StackPanel>

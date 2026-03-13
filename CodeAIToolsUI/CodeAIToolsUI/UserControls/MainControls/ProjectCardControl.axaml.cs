@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using CodeAIToolsUI.APIs.DTOs;
@@ -37,7 +38,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
         private void DeleteProject_Click(object sender, RoutedEventArgs e)
             => DeleteRequested?.Invoke(this, _project);
-
+        
         #endregion
     }
 }

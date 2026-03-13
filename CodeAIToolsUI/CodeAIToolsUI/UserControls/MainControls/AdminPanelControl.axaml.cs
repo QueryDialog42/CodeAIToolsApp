@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -72,24 +74,25 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
         private async Task StackProjects()
         {
-            using var client = new HttpClient();
-            var response = await client.GetAsync(
-                ApiEndpoints.GET_PROJS_API + $"/{RequestManager.activeUserDto?.u_id}");
-
-            if (!response.IsSuccessStatusCode) return;
-
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            var projects = JsonConvert.DeserializeObject<List<ProjectDto>>(jsonResponse);
-
-            if (projects == null) return;
-
-            ProjectCardsPanel.Children.Clear();
-
-            foreach (var project in projects)
+            using (var client = new HttpClient())
             {
-                var card = new ProjectCardControl(project);
-                ProjectCardsPanel.Children.Add(card);
-                SubscribeProjectEvents(card);
+                var response = await client.GetAsync(ApiEndpoints.GET_PROJS_API + Path.VolumeSeparatorChar + RequestManager.activeUserDto?.u_id);
+
+                if (!response.IsSuccessStatusCode) return;
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var projects = JsonConvert.DeserializeObject<List<ProjectDto>>(jsonResponse);
+
+                if (projects == null) return;
+
+                ProjectCardsPanel.Children.Clear();
+
+                foreach (var project in projects)
+                {
+                    var card = new ProjectCardControl(project);
+                    ProjectCardsPanel.Children.Add(card);
+                    SubscribeProjectEvents(card);
+                }
             }
         }
 
@@ -97,23 +100,52 @@ namespace CodeAIToolsUI.UserControls.MainControls
         {
             card.DeleteRequested += async (s, e) =>
             {
+                var pName = e.p_name;
                 using var client = new HttpClient();
-                var response = await client.DeleteAsync(
-                    ApiEndpoints.DEL_PROJ_API + $"/{e.p_name}");
 
-                if (response.IsSuccessStatusCode)
-                {
-                    ProjectCardsPanel.Children.Remove(card);
-                }
-                else
-                {
-                    var box = MessageBoxManager.GetMessageBoxStandard(
-                        "Database Failed",
-                        $"Failed to delete project from database: {response.StatusCode}",
-                        ButtonEnum.Ok, Icon.Error);
-                    await box.ShowAsync();
-                }
+                // delete only from repo
+                if (await DeleteForGitProject(client, pName!, card)) await DeleteForDataBaseProject(client, pName!, card);
+
             };
+        }
+
+        private async Task<bool> DeleteForGitProject(HttpClient client, string pName, ProjectCardControl card)
+        {
+            pName = PrepareString(pName);
+            
+            client.DefaultRequestHeaders.Add("user_id", RequestManager.activeUserDto?.u_id.ToString());
+            var response = await client.DeleteAsync(ApiEndpoints.DEL_GIT_API + Path.VolumeSeparatorChar + pName);
+
+            if (response.IsSuccessStatusCode) return true;
+            
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                await MessageBoxManager.GetMessageBoxStandard("Warning", "The repo does not exist already", ButtonEnum.Ok, Icon.Warning).ShowAsync();
+                ProjectCardsPanel.Children.Remove(card);
+                return false;
+            }
+            
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                    "Database Failed",
+                    $"Failed to delete project from database: {response.StatusCode}",
+                    ButtonEnum.Ok, Icon.Error);
+                await box.ShowAsync();
+                return false;
+        }
+
+        private async Task DeleteForDataBaseProject(HttpClient client, string pName, ProjectCardControl card)
+        {
+            var response = await client.DeleteAsync(ApiEndpoints.DEL_PROJ_API + Path.VolumeSeparatorChar + pName);
+            if (!response.IsSuccessStatusCode)
+            {
+                await GeneralRoutines.ShowException("Failed to delete project from database " + response.Content.ReadAsStringAsync().Result);
+            }
+            ProjectCardsPanel.Children.Remove(card);
+        }
+
+        private string PrepareString(string projectName)
+        {
+            return projectName.Trim().Replace(" ", "-");
         }
 
         #endregion

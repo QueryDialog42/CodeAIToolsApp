@@ -115,7 +115,7 @@ namespace CodeAIToolsUI.UserControls.StartControls
             }
             catch (Exception ex)
             {
-                GeneralRoutines.ShowException($"Register Error: {ex.Message}");
+                await GeneralRoutines.ShowException($"Register Error: {ex.Message}");
             }
         }
 

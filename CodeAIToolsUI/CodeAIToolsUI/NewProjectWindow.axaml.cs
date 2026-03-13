@@ -1,8 +1,14 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using CodeAIToolsUI.APIs;
@@ -12,19 +18,21 @@ using MessageBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using Octokit;
 using LibGit2Sharp;
+using Newtonsoft.Json;
+using Application = Avalonia.Application;
 
 namespace CodeAIToolsUI
 {
     public partial class NewProjectWindow : Window
     {
         private bool _isAdvancedOpen = false;
-        private string? github_token;
-        private string? github_username = RequestManager.activeUserDto.u_git_email;
+        private string? _githubToken;
+        private readonly string? _githubUsername = RequestManager.activeUserDto?.u_git_email;
         
         public NewProjectWindow()
         {
             InitializeComponent();
-            // DragMove → BeginMoveDrag
+            Loaded += async (_, _) => await initGithubToken();
             PointerPressed += (s, e) =>
             {
                 if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
@@ -60,6 +68,8 @@ namespace CodeAIToolsUI
                 p_name = ProjectName,
                 p_description = Description
             };
+
+            _githubToken = TxtGitHubToken.Text;
 
             if (await CreateProject(projectDto)) Close(true); // DialogResult = true
         }
@@ -103,95 +113,30 @@ namespace CodeAIToolsUI
 
         private async Task<bool> CreateProject(ProjectDto projectDto) {
             var projectFolder = Path.Combine(MainWindow.RootFolder, projectDto.p_name!);
-            github_token = TxtGitHubToken?.Text;
+            _githubToken = TxtGitHubToken?.Text;
             TxtTokenError.IsVisible = false;
             TxtTokenError.Text = "";
             
-            if (!string.IsNullOrEmpty(github_token))
+            if (!string.IsNullOrEmpty(_githubToken))
             {
-                if (await IsValidGitHubToken(github_token))
+                if (await IsValidGitHubToken())
                 {
-                    // 2. GitHub'da repository oluştur
-            
-                    string repoUrl = await CreateGitHubRepository(projectDto);
-
-                    // 3. Yerel Git repo'yu başlat ve ilk commit'i at
-                    if (!string.IsNullOrEmpty(repoUrl))
-                    {
-                        InitLocalGitRepo(projectFolder, repoUrl);
-                    }
+                    await CreateGithubRepo(projectDto, projectFolder);
                 }
                 else
                 {
-                    showTokenError();
+                    ShowTokenError();
                     return false;
                 }
             }
             
-            var flowText = Path.Combine(projectFolder, Configs.FLOW_FILE);
-            var codeText = Path.Combine(projectFolder, Configs.CODE_FILE);
-
-            // 1. Yerel klasörü ve dosyaları oluştur
-            Directory.CreateDirectory(projectFolder);
-            File.Create(flowText).Close();
-            File.Create(codeText).Close();
+            
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.Windows.OfType<MainWindow>().FirstOrDefault()?.LoadProjects();
+            }
             
             return true;
-        }
-
-        private async Task<string> CreateGitHubRepository(ProjectDto projectDto)
-        {
-            try
-            {
-                var client = new GitHubClient(new Octokit.ProductHeaderValue("CodeAIToolsProject"));
-                client.Credentials = new Octokit.Credentials(github_token);
-
-                var newRepo = new NewRepository(projectDto.p_name)
-                {
-                    Description = projectDto.p_description,
-                    Private = false,
-                    AutoInit = false
-                };
-
-                var repo = await client.Repository.Create(newRepo);
-                return repo.CloneUrl;
-            }
-            catch (Exception ex)
-            {
-                GeneralRoutines.ShowException($"An error occured while creating GitHub repository: {ex.Message}");
-                return null;
-            }
-        }
-
-        private void InitLocalGitRepo(string projectFolder, string remoteUrl)
-        {
-            // Git repo başlat
-            LibGit2Sharp.Repository.Init(projectFolder);
-
-            using var repo = new LibGit2Sharp.Repository(projectFolder);
-
-            // Remote ekle
-            repo.Network.Remotes.Add("origin", remoteUrl);
-
-            // Tüm dosyaları stage'e al
-            Commands.Stage(repo, "*");
-
-            // İlk commit
-            var signature = new LibGit2Sharp.Signature(github_username, "you@email.com", DateTimeOffset.Now);
-            repo.Commit("Initial commit", signature, signature);
-
-            // Push
-            var options = new PushOptions
-            {
-                CredentialsProvider = (url, user, cred) =>
-                    new UsernamePasswordCredentials
-                    {
-                        Username = github_username,
-                        Password = github_token
-                    }
-            };
-
-            repo.Network.Push(repo.Branches["main"], options);
         }
         
         private void BtnAdvancedToggle_Click(object? sender, RoutedEventArgs e)
@@ -214,35 +159,83 @@ namespace CodeAIToolsUI
                 PlaceholderToken.IsVisible = string.IsNullOrEmpty(TxtGitHubToken.Text);
         }
 
-        private async Task<bool> IsValidGitHubToken(string token)
-        {
-            try
-            {
-                var client = new GitHubClient(new Octokit.ProductHeaderValue("CodeAIToolsIsTokenValid"));
-                client.Credentials = new Octokit.Credentials(token);
-
-                // Kendi kullanıcı bilgini çek, başarılıysa token geçerli
-                var user = await client.User.Current();
-                return user != null;
-            }
-            catch (AuthorizationException)
-            {
-                return false; // Token geçersiz veya yetkisiz
-            }
-            catch (Exception)
-            {
-                return false; // Bağlantı hatası vb.
-            }
-        }
-
         #endregion
 
-        private void showTokenError()
+        private void ShowTokenError()
         {
             TxtGitHubToken?.BorderThickness = new Thickness(3);
             TxtGitHubToken?.BorderBrush = Brushes.Red;
             TxtTokenError.IsVisible = true;
             TxtTokenError.Text = "The Github Token is wrong";
+        }
+
+        private void CreateLocal(string projectFolder)
+        {
+            var flowText = Path.Combine(projectFolder, Configs.FLOW_FILE);
+            var codeText = Path.Combine(projectFolder, Configs.CODE_FILE);
+
+            // 1. Yerel klasörü ve dosyaları oluştur
+            Directory.CreateDirectory(projectFolder);
+            File.Create(flowText).Close();
+            File.Create(codeText).Close();
+        }
+
+        private async Task CreateGithubRepo(ProjectDto projectDto, string projectFolder)
+        {
+            projectDto.belongs_to = RequestManager.activeUserDto!.u_id;
+            
+            using (var client = new HttpClient())
+            {
+                var json = JsonConvert.SerializeObject(projectDto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                client.DefaultRequestHeaders.Add("token", _githubToken); 
+                
+                var response = await client.PostAsync(ApiEndpoints.CRE_GIT_API, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    CreateLocal(projectFolder);
+                }
+            }
+        }
+
+        private async Task<bool> IsValidGitHubToken()
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("token", _githubToken); 
+                var response = await client.GetAsync(ApiEndpoints.IS_VAL_API);
+                var isValid = bool.Parse(await response.Content.ReadAsStringAsync());
+                return isValid;
+            }
+        }
+
+        private async Task<string> GetGithubToken()
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync(ApiEndpoints.GET_TOK_API + Path.VolumeSeparatorChar + RequestManager.activeUserDto!.u_id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Content.ReadAsStringAsync().Result;
+                }
+                return "";
+            }
+        }
+
+        private async Task initGithubToken()
+        {
+            string token = await GetGithubToken();
+            _githubToken = token;
+            TxtGitHubToken.Text = token;
+        }
+        
+        private void BtnOpenLink_Click(object? sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = ApiEndpoints.TOK_LINK,
+                UseShellExecute = true
+            });
         }
     }
 }

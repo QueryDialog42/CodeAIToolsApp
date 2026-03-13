@@ -137,7 +137,7 @@ namespace CodeAIToolsUI.UserControls
                 if (result == ButtonResult.Yes && item != null)
                 {
                     Directory.Delete(item.FilePath, true);
-                    DeleteProjectFromDatabase(item.Name);
+                    await DeleteProjectFromDatabase(item.Name);
                 }
 
                 Clear();
@@ -150,7 +150,7 @@ namespace CodeAIToolsUI.UserControls
             }
             catch (Exception ex)
             {
-                GeneralRoutines.ShowException($"An error occured while deleting the project, {ex}");
+                await GeneralRoutines.ShowException($"An error occured while deleting the project, {ex}");
             }
         }
 
@@ -196,14 +196,21 @@ namespace CodeAIToolsUI.UserControls
             await box.ShowAsync();
         }
 
-        private async Task DeleteProjectFromDatabase(string projectName)
+        private static async Task DeleteProjectFromDatabase(string projectName)
         {
-            using var client = new HttpClient();
-            var response = await client.DeleteAsync(ApiEndpoints.DEL_PROJ_API + Path.VolumeSeparatorChar + $"{projectName}" );
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                GeneralRoutines.ShowException($"An error occured while deleting the project: {response.ReasonPhrase}");
+                using (var client = new HttpClient())
+                {
+                    var response =
+                        await client.DeleteAsync(ApiEndpoints.DEL_PROJ_API + Path.VolumeSeparatorChar + projectName);
+                }
             }
+            catch (IOException e)
+            {
+                await GeneralRoutines.ShowException($"An error occured while deleting the project: {e.Message}");
+            }
+            
         }
 
         #endregion

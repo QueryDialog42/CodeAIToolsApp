@@ -146,17 +146,12 @@
                     <Border Padding="12,10">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="activeProject" Text=""
                                        Foreground="{StaticResource TextSecondary}"
                                        FontSize="12"/>
-                            <Border Grid.Column="1" Background="#374151"
-                                    CornerRadius="10" Padding="5,1" Margin="4,0">
-
-                            </Border>
                         </Grid>
                     </Border>
                     <userControls:FileTreeControl x:Name="fileTree"/>

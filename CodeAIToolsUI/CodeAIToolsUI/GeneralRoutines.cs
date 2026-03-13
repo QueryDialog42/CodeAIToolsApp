@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
@@ -24,9 +25,9 @@ namespace CodeAIToolsUI
             control.BorderBrush = Brushes.Red; // System.Windows.Media → Avalonia.Media
         }
 
-        public static void ShowException(string errorText)
+        public static async Task ShowException(string errorText)
         {
-            MessageBoxManager.GetMessageBoxStandard(errorText, "Error", ButtonEnum.Ok, Icon.Error);
+            await MessageBoxManager.GetMessageBoxStandard("Error", errorText, ButtonEnum.Ok, Icon.Error).ShowAsync();
         }
 
         #endregion

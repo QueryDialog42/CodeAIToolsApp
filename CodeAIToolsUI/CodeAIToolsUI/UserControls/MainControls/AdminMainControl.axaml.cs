@@ -86,7 +86,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
             }
             catch (Exception ex)
             {
-                GeneralRoutines.ShowException($"An unexcepted error occured {ex.Message}");
+                await GeneralRoutines.ShowException($"An unexcepted error occured {ex.Message}");
             }
         }
 
@@ -561,7 +561,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
             }
             catch (Exception ex)
             {
-                GeneralRoutines.ShowException(
+                await GeneralRoutines.ShowException(
                     $"Transform error occured. AI could not transform your flow. {ex.Message}");
             }
         }
