@@ -34,4 +34,4 @@ build/
 
 ### App Properties ###
 src/main/resources/application.properties
-src/main/resources/CodeAITools-Yazım-Kuralları.txt
+src/main/resources/CodeAITools-Yazim-Kurallari.txt
