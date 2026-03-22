@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace CodeAIToolsWPF.APIs.DTOs
+namespace CodeAIToolsUI.APIs.DTOs
 {
     public class AIResponseDto
     {

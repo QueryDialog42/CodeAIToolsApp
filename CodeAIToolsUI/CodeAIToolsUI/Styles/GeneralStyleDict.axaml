@@ -1,6 +1,20 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <Styles.Resources>
+        <!--General Colors-->
+        <SolidColorBrush x:Key="AccentPurple"   Color="#7c3aed"/>
+        <SolidColorBrush x:Key="AccentBlue"     Color="#3b82f6" />
+        <SolidColorBrush x:Key="AccentBlueDark" Color="#1d4ed8" />
+        <SolidColorBrush x:Key="AccentBlueDim"  Color="#1e3a5f" />
+        <SolidColorBrush x:Key="AccentRed"      Color="#ef4444" />
+        <SolidColorBrush x:Key="AccentRedDark"  Color="#b91c1c" />
+        <SolidColorBrush x:Key="AccentGreen"    Color="#22c55e" />
+        <SolidColorBrush x:Key="TerminalGreen"  Color="#22c55e" />
+        
+    </Styles.Resources>
+    
+    
     <Style Selector="TextBox.generalTextBox">
         <Setter Property="FontSize"                 Value="14"/>
         <Setter Property="BorderThickness"          Value="1"/>
@@ -39,4 +53,101 @@
         </Style>
     </Style>
     
+    <Style Selector="TextBlock.search" >
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- ─── ApproveButton ─────────────────────────────────────────────────── -->
+    <Style Selector="Button.approveBtn">
+        <Setter Property="Background"      Value="{StaticResource AccentBlueDim}"/>
+        <Setter Property="Foreground"      Value="{StaticResource AccentBlue}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="14,6"/>
+        <Setter Property="FontSize"        Value="12"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="4"/>
+    </Style>
+    <Style Selector="Button.approveBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource AccentBlueDark}"/>
+    </Style>
+    <Style Selector="Button.approveBtn:pointerover">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+    </Style>
+
+    <!-- ─── RejectButton ──────────────────────────────────────────────────── -->
+    <Style Selector="Button.rejectBtn">
+        <Setter Property="Background"      Value="{StaticResource AccentRed}"/>
+        <Setter Property="Foreground"      Value="{StaticResource TextPrimary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="14,6"/>
+        <Setter Property="FontSize"        Value="12"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="4"/>
+    </Style>
+    <Style Selector="Button.rejectBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource AccentRedDark}"/>
+    </Style>
+
+    <!-- ─── SidebarItem ───────────────────────────────────────────────────── -->
+    <Style Selector="Border.sidebarItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding"    Value="12,6"/>
+        <Setter Property="Cursor"     Value="Hand"/>
+    </Style>
+
+    <!-- ─── TextBox ───────────────────────────────────────────────────────── -->
+    <Style Selector="TextBox.textBoxStyle">
+        <Setter Property="Background"      Value="{StaticResource BgInput}"/>
+        <Setter Property="Foreground"      Value="{StaticResource TextSecondary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="10,8"/>
+        <Setter Property="FontSize"        Value="12"/>
+        <Setter Property="CaretBrush"      Value="{StaticResource TextPrimary}"/>
+        <Setter Property="CornerRadius"    Value="4"/>
+    </Style>
+
+    <!-- ─── NewProjectButton ─────────────────────────────────────────────── -->
+    <Style Selector="Button.newProjectBtn">
+        <Setter Property="Background"      Value="{StaticResource AccentBlue}"/>
+        <Setter Property="Foreground"      Value="{StaticResource TextPrimary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="14,8"/>
+        <Setter Property="FontSize"        Value="13"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="6"/>
+    </Style>
+    <Style Selector="Button.newProjectBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource AccentBlueDark}"/>
+    </Style>
+
+    <!-- ─── SearchBox ─────────────────────────────────────────────────────── -->
+    <Style Selector="TextBox.searchBox">
+        <Setter Property="Background"      Value="{StaticResource BgPanel}"/>
+        <Setter Property="Foreground"      Value="{StaticResource TextSecondary}"/>
+        <Setter Property="BorderBrush"     Value="{StaticResource MenubarBorderColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding"         Value="10,8"/>
+        <Setter Property="FontSize"        Value="12"/>
+        <Setter Property="CaretBrush"      Value="{StaticResource TextPrimary}"/>
+        <Setter Property="CornerRadius"    Value="6"/>
+    </Style>
+
+    <!-- ─── RejectButtonOutlined ──────────────────────────────────────────── -->
+    <Style Selector="Button.rejectBtnOutlined">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{StaticResource AccentRed}"/>
+        <Setter Property="BorderBrush"     Value="{StaticResource AccentRed}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Padding"         Value="0"/>
+        <Setter Property="FontSize"        Value="12"/>
+        <Setter Property="FontWeight"      Value="SemiBold"/>
+        
+    </Style>
+
+        
 </Styles>

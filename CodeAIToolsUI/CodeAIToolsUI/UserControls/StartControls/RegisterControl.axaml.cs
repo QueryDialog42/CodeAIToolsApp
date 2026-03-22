@@ -1,15 +1,15 @@
 using System;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Avalonia;
+using System.IO;
+using System.Net.Http;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Controls.ApplicationLifetimes;
 using CodeAIToolsUI.APIs;
-using CodeAIToolsWPF;
-using CodeAIToolsWPF.APIs.DTOs;
+using CodeAIToolsUI.Views;
+using Avalonia.Interactivity;
+using System.Threading.Tasks;
+using CodeAIToolsUI.APIs.DTOs;
 using static CodeAIToolsUI.GeneralRoutines;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace CodeAIToolsUI.UserControls.StartControls
 {
@@ -18,6 +18,7 @@ namespace CodeAIToolsUI.UserControls.StartControls
         public RegisterControl()
         {
             InitializeComponent();
+            HandleTextBoxPlaceholder(UserNameBox, UserNamePlaceholder);
             HandleTextBoxPlaceholder(EmailBox, EmailPlaceholder);
             HandleTextBoxPlaceholder(GitEmailBox, GitEmailPlaceholder);
             HandlePasswordBoxPlaceholder(PasswordBox, PasswordPlaceholder);
@@ -52,13 +53,19 @@ namespace CodeAIToolsUI.UserControls.StartControls
         {
             try
             {
-
-
+                var name = UserNameBox.Text?.Trim() ?? "";
                 var email = EmailBox.Text?.Trim() ?? "";
                 var gitEmail = GitEmailBox.Text?.Trim() ?? "";
                 // Avalonia'da PasswordBox yok; TextBox + PasswordChar kullanılır
                 var password = PasswordBox.Text ?? "";
 
+                if (string.IsNullOrEmpty(name))
+                {
+                    ShowError(ErrorText, "Name can not be empty");
+                    ShowWhereError(UserNameBox);
+                    return;
+                }
+                
                 if (string.IsNullOrEmpty(email))
                 {
                     ShowError(ErrorText, "Email can not be empty");
@@ -107,6 +114,7 @@ namespace CodeAIToolsUI.UserControls.StartControls
 
                 _ = RequestManager.SendRegisterRequest(new UserDto
                 {
+                    u_name = name,
                     u_email = email,
                     u_git_email = gitEmail,
                     u_email_pass = password,
@@ -115,7 +123,7 @@ namespace CodeAIToolsUI.UserControls.StartControls
             }
             catch (Exception ex)
             {
-                await GeneralRoutines.ShowException($"Register Error: {ex.Message}");
+                await ShowException($"Register Error: {ex.Message}");
             }
         }
 
@@ -123,26 +131,23 @@ namespace CodeAIToolsUI.UserControls.StartControls
         {
             try
             {
-                using HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("User-Agent", "CodeAITools");
-
-                string url = $"https://api.github.com/users/{Uri.EscapeDataString(username)}";
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                using (var client = new HttpClient())
                 {
-                    ShowError(ErrorText, "There is no account that matches with this Git username.");
-                    ShowWhereError(GitEmailBox);
-                    return false;
-                }
+                    var response = await client.GetAsync(ApiEndpoints.IS_GIT_EXI_API + Path.VolumeSeparatorChar + username);
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        ShowError(ErrorText, "There is no account that matches with this Git username.");
+                        ShowWhereError(GitEmailBox);
+                        return false;
+                    }
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    ShowError(ErrorText, "Unable to reach GitHub. Please check your connection.");
-                    ShowWhereError(GitEmailBox);
-                    return false;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        ShowError(ErrorText, "Unable to reach GitHub. Please check your connection.");
+                        ShowWhereError(GitEmailBox);
+                        return false;
+                    }
                 }
-
                 return true;
             }
             catch

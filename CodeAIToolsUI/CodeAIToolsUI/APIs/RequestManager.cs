@@ -1,100 +1,97 @@
 using System;
-using System.Linq;
 using System.Net;
+using System.Linq;
 using System.Text;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using MsBox.Avalonia;
-using MsBox.Avalonia.Enums;
 using Newtonsoft.Json;
-using CodeAIToolsWPF;
-using CodeAIToolsWPF.APIs.DTOs;
-using CodeAIToolsUI.UserControls.StartControls;
+using System.Net.Http;
+using CodeAIToolsUI.Views;
+using MsBox.Avalonia.Enums;
+using System.Threading.Tasks;
+using CodeAIToolsUI.APIs.DTOs;
 using MessageBox.Avalonia.Enums;
+using static Avalonia.Application;
 using static CodeAIToolsUI.GeneralRoutines;
+using Avalonia.Controls.ApplicationLifetimes;
+using CodeAIToolsUI.UserControls.StartControls;
 
 namespace CodeAIToolsUI.APIs
 {
-    class RequestManager
+    internal sealed class RequestManager
     {
-        public static UserDto? activeUserDto;
+        public static UserDto? ActiveUserDto;
+
+        private static readonly HttpClient Http = new();
 
         #region Login Methods
 
-        public static async Task SendLoginRequest(UserDto logindto, LoginControl loginControl)
+        public static async Task SendLoginRequest(UserDto loginDto, LoginControl loginControl)
         {
-            string json = JsonConvert.SerializeObject(logindto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            using var client = new HttpClient();
-            activeUserDto = await SetActiveUser(await client.PostAsync(ApiEndpoints.ACTIV_USER_API, content));
-            await HandleLoginResponse(await client.PostAsync(ApiEndpoints.LOG_API, content), loginControl);
+            var content = Serialize(loginDto);
+            ActiveUserDto = await SetActiveUser(await Http.PostAsync(ApiEndpoints.ACTIV_USER_API, content));
+            await HandleLoginResponse(await Http.PostAsync(ApiEndpoints.LOG_API, Serialize(loginDto)), loginControl);
         }
 
         private static async Task HandleLoginResponse(HttpResponseMessage response, LoginControl loginControl)
         {
             try
             {
-                if (response.IsSuccessStatusCode)
+                switch (response.StatusCode)
                 {
-                    // Application.Current.Windows → ApplicationLifetime üzerinden
-                    if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                    {
-                        var startWindow = desktop.Windows.OfType<StartWindow>().FirstOrDefault();
-                        new MainWindow().Show();
-                        startWindow?.Close();
-                    }
-                }
-                else if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    ShowError(loginControl.ErrorText, "Email Not Found.");
-                    ShowWhereError(loginControl.EmailBox);
-                }
-                else if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    ShowError(loginControl.ErrorText, "Incorrect Password.");
-                    ShowWhereError(loginControl.PasswordBox);
-                }
-                else
-                {
-                    var box = MessageBoxManager.GetMessageBoxStandard(
-                        "Error",
-                        "Login failed. Maybe server is down. Please try again later: " + response.ReasonPhrase,
-                        ButtonEnum.Ok, Icon.Error);
-                    await box.ShowAsync();
+                    case HttpStatusCode.OK:
+                        OpenRelatedWindow();
+                        break;
+                    case HttpStatusCode.NotFound:
+                        ShowError(loginControl.ErrorText, "Email Not Found.");
+                        ShowWhereError(loginControl.EmailBox);
+                        break;
+                    case HttpStatusCode.BadRequest:
+                        ShowError(loginControl.ErrorText, "Incorrect Password.");
+                        ShowWhereError(loginControl.PasswordBox);
+                        break;
+                    default:
+                        await ShowBox("Error",
+                            "Login failed. Maybe server is down. Please try again later: " + response.ReasonPhrase,
+                            Icon.Error);
+                        break;
                 }
             }
             catch (Exception ex)
             {
-                var box = MessageBoxManager.GetMessageBoxStandard(
-                    "Unknown Error",
-                    "An error occurred: " + ex.Message,
-                    ButtonEnum.Ok, Icon.Error);
-                await box.ShowAsync();
+                await ShowBox("Unknown Error", "An error occurred: " + ex.Message, Icon.Error);
             }
         }
 
         private static async Task<UserDto?> SetActiveUser(HttpResponseMessage response)
         {
-            if (response.IsSuccessStatusCode)
-            {
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<UserDto>(jsonResponse);
-            }
-            return null;
+            if (!response.IsSuccessStatusCode) return null;
+            return JsonConvert.DeserializeObject<UserDto>(await response.Content.ReadAsStringAsync());
         }
 
         #endregion
 
+        private static void OpenRelatedWindow()
+        {
+            if (Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+            var startWindow = desktop.Windows.OfType<StartWindow>().FirstOrDefault();
+
+            switch (ActiveUserDto!.u_role)
+            {
+                case Configs.ADMIN:  new AdminWindow().Show();  break;
+                case Configs.WORKER: new WorkerWindow().Show(); break;
+            }
+
+            startWindow?.Close();
+        }
+
         #region Register Methods
 
-        public static async Task SendRegisterRequest(UserDto requestdto, RegisterControl registerControl)
+        public static async Task SendRegisterRequest(UserDto userDto, RegisterControl registerControl)
         {
-            string json = JsonConvert.SerializeObject(requestdto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            using var client = new HttpClient();
-            await HandleRegisterResponse(await client.PostAsync(ApiEndpoints.REG_API, content), registerControl);
+            await HandleRegisterResponse(
+                await Http.PostAsync(ApiEndpoints.REG_API, Serialize(userDto)),
+                registerControl);
         }
 
         private static async Task HandleRegisterResponse(HttpResponseMessage response, RegisterControl registerControl)
@@ -103,19 +100,11 @@ namespace CodeAIToolsUI.APIs
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    var box = MessageBoxManager.GetMessageBoxStandard(
-                        "Success",
-                        "Registration successful! Now please log in.",
-                        ButtonEnum.Ok, Icon.Success);
-                    await box.ShowAsync();
+                    await ShowBox("Success", "Registration successful! Now please log in.", Icon.Success);
 
-                    // Application.Current.Windows → ApplicationLifetime üzerinden
-                    if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                    {
-                        var startWindow = desktop.Windows.OfType<StartWindow>().FirstOrDefault();
-                        if (startWindow != null)
-                            startWindow.startContent.Content = new LoginControl();
-                    }
+                    if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                        desktop.Windows.OfType<StartWindow>().FirstOrDefault()
+                            ?.startContent.Content = new LoginControl();
                 }
                 else if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
@@ -125,13 +114,21 @@ namespace CodeAIToolsUI.APIs
             }
             catch (Exception ex)
             {
-                var box = MessageBoxManager.GetMessageBoxStandard(
-                    "Error",
-                    "An error occurred: " + ex.Message,
-                    ButtonEnum.Ok, Icon.Error);
-                await box.ShowAsync();
+                await ShowBox("Error", "An error occurred: " + ex.Message, Icon.Error);
             }
         }
+
+        #endregion
+
+        #region Helpers
+
+        private static StringContent Serialize<T>(T obj) =>
+            new(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+
+        private static async Task ShowBox(string title, string message, Icon icon) =>
+            await MessageBoxManager
+                .GetMessageBoxStandard(title, message, ButtonEnum.Ok, icon)
+                .ShowAsync();
 
         #endregion
     }

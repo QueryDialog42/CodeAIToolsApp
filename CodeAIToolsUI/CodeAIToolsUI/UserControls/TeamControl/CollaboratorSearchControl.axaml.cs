@@ -1,26 +1,27 @@
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
+using System.Linq;
+using Avalonia.Media;
+using Avalonia.Layout;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Layout;
-using Avalonia.Media;
-using CodeAIToolsWPF;
-using CodeAIToolsWPF.APIs.DTOs;
+using CodeAIToolsUI.APIs.DTOs;
+using System.Collections.Generic;
+
 
 namespace CodeAIToolsUI.UserControls.TeamControl
 {
     public partial class CollaboratorSearchControl : UserControl
     {
+        private List<UserDto> _allUsers = new();
         public event EventHandler? CloseRequested;
         public event EventHandler<(UserDto user, Button btn)>? CollaboratorAdded;
-
-        private List<UserDto> _allUsers = new();
 
         public CollaboratorSearchControl()
         {
             InitializeComponent();
+            CloseRequested += (_, _) => IsVisible = false;
         }
 
         #region User Loading Methods
@@ -53,16 +54,17 @@ namespace CodeAIToolsUI.UserControls.TeamControl
                 Width        = 36,
                 Height       = 36,
                 CornerRadius = new CornerRadius(18),
-                Background   = new SolidColorBrush(Color.Parse(isAdmin ? "#1d4ed8" : "#065f46"))
+                Background   = new SolidColorBrush(Color.Parse(isAdmin ? Marks.ADM_COL : Marks.WORK_COL))
             };
             var avatarText = new TextBlock
             {
-                Text                = user.u_email?.Length > 0 ? user.u_email[0].ToString().ToUpper() : "?",
-                Foreground          = Brushes.White,
                 FontSize            = 14,
                 FontWeight          = FontWeight.Bold,
+                Foreground          = Brushes.White,
+                VerticalAlignment   = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment   = VerticalAlignment.Center
+                Text                = user.u_name?.Length > 0 ? user.u_name[0].ToString().ToUpper() : "?"
+                
             };
             avatar.Child = avatarText;
 
@@ -73,24 +75,26 @@ namespace CodeAIToolsUI.UserControls.TeamControl
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            var emailText = new TextBlock
+            var userText = new TextBlock
             {
-                Text         = user.u_email ?? "—",
-                Foreground   = new SolidColorBrush(Color.Parse("#f1f5f9")),
                 FontSize     = 12,
                 FontWeight   = FontWeight.Medium,
-                TextTrimming = TextTrimming.CharacterEllipsis
+                Text         = user.u_name ?? "—",
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                Foreground   = new SolidColorBrush(Color.Parse("#f1f5f9")),
+                
+                
             };
-            infoPanel.Children.Add(emailText);
+            infoPanel.Children.Add(userText);
 
             if (!string.IsNullOrEmpty(user.u_git_email))
             {
                 var gitEmail = new TextBlock
                 {
-                    Text         = $"🐱 {user.u_git_email}",
-                    Foreground   = new SolidColorBrush(Color.Parse("#6b7280")),
                     FontSize     = 10,
+                    Text         = $"🐱 {user.u_git_email}",
                     TextTrimming = TextTrimming.CharacterEllipsis,
+                    Foreground   = new SolidColorBrush(Color.Parse("#6b7280")),
                     Margin       = new Thickness(0, 2, 0, 0)
                 };
                 infoPanel.Children.Add(gitEmail);
@@ -106,14 +110,14 @@ namespace CodeAIToolsUI.UserControls.TeamControl
             {
                 CornerRadius = new CornerRadius(4),
                 Padding      = new Thickness(6, 2, 6, 2),
-                Background   = new SolidColorBrush(Color.Parse(isAdmin ? "#1e3a8a" : "#064e3b"))
+                Background   = new SolidColorBrush(Color.Parse(isAdmin ? Marks.ADM_DRK_COL : Marks.WORK_DRK_COL)),
             };
             var roleText = new TextBlock
             {
-                Text       = isAdmin ? "🛡️ Admin" : "👷 Worker",
-                Foreground = Brushes.White,
                 FontSize   = 10,
-                FontWeight = FontWeight.SemiBold
+                Foreground = Brushes.White,
+                FontWeight = FontWeight.SemiBold,
+                Text       = isAdmin ? "🛡️ Admin" : "👷 Worker"
             };
             roleBadge.Child = roleText;
             rolePanel.Children.Add(roleBadge);
@@ -123,8 +127,8 @@ namespace CodeAIToolsUI.UserControls.TeamControl
             var addBtn = new Button
             {
                 Content           = "+ Ekle",
-                VerticalAlignment = VerticalAlignment.Center,
-                Classes           = { "addBtn" }
+                Classes           = { "addBtn" },
+                VerticalAlignment = VerticalAlignment.Center
             };
             addBtn.Click += (_, _) =>
             {
@@ -166,14 +170,14 @@ namespace CodeAIToolsUI.UserControls.TeamControl
 
             if (string.IsNullOrEmpty(query))
             {
-                EmptyText.IsVisible   = true;
+                EmptyText.IsVisible    = false;
                 NotFoundText.IsVisible = false;
-                ResultsList.Children.Clear();
+                RenderUsers(_allUsers);  // Tüm kullanıcıları göster
                 return;
             }
 
             var filtered = _allUsers
-                .Where(u => (u.u_email?.ToLower().Contains(query) ?? false) ||
+                .Where(u => (u.u_name?.ToLower().Contains(query) ?? false) ||
                             (u.u_git_email?.ToLower().Contains(query) ?? false))
                 .ToList();
 

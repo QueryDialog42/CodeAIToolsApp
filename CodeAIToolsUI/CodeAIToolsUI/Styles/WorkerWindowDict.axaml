@@ -1,0 +1,41 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <SolidColorBrush x:Key="WAppBg"         Color="#1c1c1c"/>
+        <SolidColorBrush x:Key="WBgDark"        Color="#111111"/>
+        <SolidColorBrush x:Key="WBgPanel"       Color="#1c1c1c"/>
+        <SolidColorBrush x:Key="WBgCard"        Color="#252525"/>
+        <SolidColorBrush x:Key="WBgInput"       Color="#2e2e2e"/>
+        <SolidColorBrush x:Key="WTextPrimary"   Color="LightGray"/>
+        <SolidColorBrush x:Key="WTextSecondary" Color="DarkGray"/>
+        <SolidColorBrush x:Key="WTextMuted"     Color="#4f4f4f"/>
+        <SolidColorBrush x:Key="WBorderColor"        Color="#404040"/>
+        <SolidColorBrush x:Key="WSideBarBackground"  Color="#262626"/>
+        <SolidColorBrush x:Key="WMenubarBackground"  Color="#333333"/>
+        <SolidColorBrush x:Key="WMenubarForeground"  Color="#737373"/>
+    </Styles.Resources>
+    
+    <Style Selector="Border.WMenuBarColor">
+        <Setter Property="Background"  Value="{StaticResource WMenubarBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource WMenubarForeground}" /> 
+        <Setter Property="BorderThickness" Value="0,0,0,1"/> 
+    </Style>
+    
+    <!-- ─── NavButton ─────────────────────────────────────────────────────── -->
+    <Style Selector="Button.wNavBtn">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{StaticResource WTextSecondary}" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="12,12"/>
+        <Setter Property="FontSize"        Value="13"/>
+        <Setter Property="Cursor"          Value="Hand"/>
+        <Setter Property="CornerRadius"    Value="4"/>
+    </Style>
+    <Style Selector="Button.wNavBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource WBgDark}"/>
+    </Style>
+    <Style Selector="Button.wNavBtn:pointerover">
+        <Setter Property="Foreground" Value="{StaticResource WTextPrimary}"/>
+    </Style>
+    
+</Styles>

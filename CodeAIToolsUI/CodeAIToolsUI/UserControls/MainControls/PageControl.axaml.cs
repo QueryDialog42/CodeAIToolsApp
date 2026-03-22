@@ -2,8 +2,8 @@ using System;
 using System.Xml;
 using Avalonia.Controls;
 using Avalonia.Platform;
-using AvaloniaEdit.Highlighting;        // Avalonia.AvaloniaEdit paketi
-using AvaloniaEdit.Highlighting.Xshd;  // Avalonia.AvaloniaEdit paketi
+using AvaloniaEdit.Highlighting;        
+using AvaloniaEdit.Highlighting.Xshd;  
 
 namespace CodeAIToolsUI.UserControls.MainControls
 {

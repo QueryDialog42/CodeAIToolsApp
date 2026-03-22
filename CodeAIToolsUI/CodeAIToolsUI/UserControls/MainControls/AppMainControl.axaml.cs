@@ -1,26 +1,26 @@
 using System;
-using System.Collections.Generic;
+using Avalonia;
 using System.IO;
 using System.Text;
-using System.Net.Http;
-using System.Diagnostics;
 using System.Linq;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Threading;
 using Newtonsoft.Json;
-using CodeAIToolsWPF;
-using CodeAIToolsWPF.APIs.DTOs;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading;
+using Avalonia.Controls;
+using System.Diagnostics;
+using Avalonia.Threading;
+using System.Threading.Tasks;
+using Avalonia.Interactivity;
+using CodeAIToolsUI.APIs.DTOs;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
 
 namespace CodeAIToolsUI.UserControls.MainControls
 {
-    public partial class AdminMainControl : UserControl
+    public partial class AppMainControl : UserControl
     {
         private static readonly string LibsDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -54,7 +54,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
         private bool _explanationNeeded = true;
         private bool _terminalMaximized = false;
 
-        public AdminMainControl()
+        public AppMainControl()
         {
             InitializeComponent();
         }

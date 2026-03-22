@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using CodeAIToolsUI.UserControls.StartControls;
 
-namespace CodeAIToolsUI;
+namespace CodeAIToolsUI.Views;
 
 public partial class StartWindow : Window
 {

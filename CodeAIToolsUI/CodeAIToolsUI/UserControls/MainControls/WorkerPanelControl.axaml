@@ -1,0 +1,77 @@
+<local:BasePanelControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CodeAIToolsUI.UserControls.MainControls"
+             mc:Ignorable="d"
+             x:Class="CodeAIToolsUI.UserControls.MainControls.WorkerPanelControl"
+             d:DesignWidth="980" d:DesignHeight="620"
+             FontFamily="Segoe UI">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Body -->
+        <Grid Grid.Row="1">
+            <Grid Background="{DynamicResource MAppBg}">
+                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="24,16,24,24">
+
+                    <!-- Header Row -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Margin="0,0,10,0"
+                                Click="RefreshButton_Click"
+                                Background="Transparent">
+                            <TextBlock Text="↻" FontSize="20" Foreground="#e2e8f0" VerticalAlignment="Center"/>
+                        </Button>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="Proje Yönetim Paneli"
+                                   Foreground="#e2e8f0"
+                                   FontSize="20" FontWeight="Bold"
+                                   VerticalAlignment="Center"/>
+
+                        <!-- Search -->
+                        <Border Grid.Column="2" x:Name="SearchInputGrid"
+                                Background="{DynamicResource MMenubarBackground}"
+                                BorderBrush="{DynamicResource MMenubarBorderColor}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="10,0"
+                                Margin="0,0,10,0"
+                                Width="180" Height="36">
+                            <StackPanel x:Name="NewProjectBtn"  Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="🔍" FontSize="12" Margin="0,0,6,0" 
+                                           Classes="search"/>
+                                           
+                                <TextBlock Text="Projeleri ara..." Classes="search"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Divider -->
+                    <Border Height="1" Background="{DynamicResource MMenubarBorderColor}" Margin="0,0,0,20"/>
+
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <WrapPanel x:Name="ProjectCardsPanel" Orientation="Horizontal"/>
+                    </ScrollViewer>
+
+                </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</local:BasePanelControl>

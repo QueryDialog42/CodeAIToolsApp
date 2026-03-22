@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:CodeAIToolsUI.UserControls.MainControls"
              mc:Ignorable="d"
-             x:Class="CodeAIToolsUI.UserControls.MainControls.AdminMainControl"
+             x:Class="CodeAIToolsUI.UserControls.MainControls.AppMainControl"
              d:DesignHeight="680" d:DesignWidth="980"
-             Background="#1a1d23"
+             Background="{DynamicResource MAppBg}"
              FontFamily="Segoe UI">
 
     <Grid x:Name="mainGrid">
@@ -34,7 +34,7 @@
 
             <!-- Akış Sayfası -->
             <Border Grid.Column="0" Grid.Row="0"
-                    Background="{StaticResource BgCard}" CornerRadius="6" Margin="0,0,3,3">
+                    Background="{DynamicResource MBgCard}" CornerRadius="6" Margin="0,0,3,3">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -43,7 +43,7 @@
                     <Border Grid.Row="0" Padding="14,10,14,6">
                         <Grid>
                             <TextBlock Text="Flow Page"
-                                       Foreground="{StaticResource TextPrimary}"
+                                       Foreground="{DynamicResource MTextPrimary}"
                                        FontSize="14" FontWeight="SemiBold"
                                        VerticalAlignment="Center"/>
                             <Button x:Name="btnMaxFlow"
@@ -52,7 +52,7 @@
                                     ToolTip.Tip="Maximize"
                                     Classes="navBtn" Padding="4,2">
                                 <TextBlock x:Name="iconMaxFlow" Text="⛶" FontSize="12"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                                           Foreground="{DynamicResource MTextSecondary}"/>
                             </Button>
                         </Grid>
                     </Border>
@@ -72,7 +72,7 @@
 
             <!-- Kod Sayfası -->
             <Border Grid.Column="2" Grid.Row="0"
-                    Background="{StaticResource BgCard}" CornerRadius="6" Margin="3,0,0,3">
+                    Background="{DynamicResource MBgCard}" CornerRadius="6" Margin="3,0,0,3">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -81,7 +81,7 @@
                     <Border Grid.Row="0" Padding="14,10,14,6">
                         <Grid>
                             <TextBlock Text="Code Page"
-                                       Foreground="{StaticResource TextPrimary}"
+                                       Foreground="{DynamicResource MTextPrimary}"
                                        FontSize="14" FontWeight="SemiBold"
                                        VerticalAlignment="Center"/>
                             <Button x:Name="btnMaxCode"
@@ -90,7 +90,7 @@
                                     ToolTip.Tip="Maximize"
                                     Classes="navBtn" Padding="4,2">
                                 <TextBlock x:Name="iconMaxCode" Text="⛶" FontSize="12"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                                           Foreground="{DynamicResource MTextSecondary}"/>
                             </Button>
                         </Grid>
                     </Border>
@@ -101,7 +101,7 @@
                           IsVisible="False" Background="#80000000">
                         <Ellipse Width="50" Height="50"
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
-                                 Stroke="{StaticResource TextPrimary}"
+                                 Stroke="{DynamicResource MTextPrimary}"
                                  StrokeThickness="4"
                                  RenderTransformOrigin="0.5,0.5">
                             <Ellipse.RenderTransform>
@@ -123,22 +123,22 @@
 
             <!-- Akış Comment -->
             <Border Grid.Column="0" Grid.Row="2"
-                    Background="{StaticResource BgCard}" CornerRadius="6"
+                    Background="{DynamicResource MBgCard}" CornerRadius="6"
                     Margin="0,3,3,0" Padding="14,10">
                 <TextBox TextWrapping="Wrap" AcceptsReturn="True"
                          Classes="flowCodeCommentTextBox"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         Foreground="{StaticResource TextSecondary}"/>
+                         Foreground="{DynamicResource MTextSecondary}"/>
             </Border>
 
             <!-- Kod Comment -->
             <Border Grid.Column="2" Grid.Row="2"
-                    Background="{StaticResource BgCard}" CornerRadius="6"
+                    Background="{DynamicResource MBgCard}" CornerRadius="6"
                     Margin="3,3,0,0" Padding="14,10">
                 <TextBox TextWrapping="Wrap" AcceptsReturn="True"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          Classes="flowCodeCommentTextBox"
-                         Foreground="{StaticResource TextSecondary}"/>
+                         Foreground="{DynamicResource  MTextSecondary}"/>
             </Border>
         </Grid>
 
@@ -151,7 +151,7 @@
                       Cursor="SizeNorthSouth" Margin="12,0"/>
 
         <!-- Terminal -->
-        <Border Grid.Row="2" Background="{StaticResource BgCard}"
+        <Border Grid.Row="2" Background="{DynamicResource MBgCard}"
                 CornerRadius="6" Margin="12,0,12,12">
             <Grid>
                 <Grid.RowDefinitions>
@@ -172,7 +172,7 @@
                                 ToolTip.Tip="Maximize"
                                 Classes="navBtn" Padding="4,2">
                             <TextBlock x:Name="iconMaxTerminal" Text="⛶" FontSize="12"
-                                       Foreground="{StaticResource TextSecondary}"/>
+                                       Foreground="{DynamicResource MTextSecondary}"/>
                         </Button>
                     </Grid>
                 </Border>
@@ -187,7 +187,7 @@
 
                 <!-- Toolbar -->
                 <Border Grid.Row="2" Padding="10,6"
-                        BorderBrush="{StaticResource BorderColor}"
+                        BorderBrush="{DynamicResource MMenubarBorderColor}"
                         BorderThickness="0,1,0,0">
                     <Grid>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -198,7 +198,7 @@
                                     Classes="navBtn" Padding="6,1"
                                     ToolTip.Tip="Çalıştır">
                                 <TextBlock x:Name="executeIcon" Text="▶"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource MTextSecondary}"
                                            FontSize="18"/>
                             </Button>
 
@@ -209,7 +209,7 @@
                                     Classes="navBtn" Padding="6,1"
                                     ToolTip.Tip="Durdur">
                                 <TextBlock x:Name="stopIcon" Text="■"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource MTextSecondary}"
                                            FontSize="18"/>
                             </Button>
 
@@ -219,14 +219,14 @@
                                     Classes="navBtn" Padding="6,4"
                                     ToolTip.Tip="Yenile">
                                 <TextBlock Text="🔄"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource MTextSecondary}"
                                            FontSize="14"/>
                             </Button>
 
                             <!-- Kaydet -->
                             <Button Classes="navBtn" Padding="6,4" ToolTip.Tip="Kaydet">
                                 <TextBlock Text="🔖"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource MTextSecondary}"
                                            FontSize="14"/>
                             </Button>
 
@@ -239,7 +239,7 @@
                                     ToolTip.Tip="Temizle"
                                     Click="ClearTerminal_Clicked">
                                 <TextBlock Text="🗑"
-                                           Foreground="{StaticResource TextSecondary}"
+                                           Foreground="{DynamicResource MTextSecondary}"
                                            FontSize="18"/>
                             </Button>
 
@@ -249,7 +249,7 @@
                                     ToolTip.Tip="Work Mode"
                                     Classes="navBtn" Padding="6,1">
                                 <TextBlock x:Name="iconWorkMode" Text="⊞" FontSize="20"
-                                           Foreground="{StaticResource TextSecondary}"/>
+                                           Foreground="{DynamicResource MTextSecondary}"/>
                             </Button>
 
                         </StackPanel>

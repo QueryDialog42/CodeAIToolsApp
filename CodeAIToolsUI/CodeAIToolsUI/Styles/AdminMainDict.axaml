@@ -1,0 +1,21 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+        <Styles.Resources>
+                <SolidColorBrush x:Key="MAppBg"         Color="#1a1d23"/>
+                <SolidColorBrush x:Key="MBgDark"        Color="#1a1d23"/>
+                <SolidColorBrush x:Key="MBgPanel"       Color="#22262e"/>
+                <SolidColorBrush x:Key="MBgCard"        Color="#2a2f3a"/>
+                <SolidColorBrush x:Key="MBgInput"       Color="#323847"/>
+                <SolidColorBrush x:Key="MTextPrimary"   Color="#e2e8f0"/>
+                <SolidColorBrush x:Key="MTextSecondary" Color="#94a3b8"/>
+                <SolidColorBrush x:Key="MTextMuted"     Color="#64748b"/>
+                <SolidColorBrush x:Key="MMenubarBorderColor"   Color="#374151"/>   
+                <SolidColorBrush x:Key="MMenubarBackground"    Color="#22262e"/>
+        </Styles.Resources>
+        
+        <Style Selector="Button.navBtn">
+                <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+</Styles>

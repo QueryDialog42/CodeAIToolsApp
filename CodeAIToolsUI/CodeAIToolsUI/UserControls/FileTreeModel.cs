@@ -1,9 +1,8 @@
+using Avalonia;
 using System.IO;
+using Avalonia.Media;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using Avalonia;
-using Avalonia.Media;
-using CodeAIToolsWPF;
 
 namespace CodeAIToolsUI.UserControls
 {

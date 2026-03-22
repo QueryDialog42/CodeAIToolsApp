@@ -1,58 +1,59 @@
 <SyntaxDefinition name="Java" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-	<Color name="Comment" foreground="#FF595959"/>
-	<Color name="String" foreground="#FFCC9619"/>
-	<Color name="Keyword" foreground="#FFFB00E9" fontWeight="bold"/>
-	<Color name="Politics" foreground="#FFFB809C"/>
+	
 	<Color name="Type" foreground="#4EC9B0"/>
+	<Color name="Import" foreground="#f5903d"/>
+	<Color name="String" foreground="#FFCC9619"/>
 	<Color name="Number" foreground="#FF88CC82"/>
-	<Color name="Variables" foreground="#FFCBCC3E" />
-	<Color name="Booleans" foreground="#FF4B50FF" />
-	<Color name="functions" foreground="#FF0EFBFF" />
-	<Color name="functionBody" foreground="#FFF5FF37" fontStyle="italic"/>
+	<Color name="Comment" foreground="#FF595959"/>
+	<Color name="Classes" foreground="#FF8EFBA1"/>
+	<Color name="Booleans" foreground="#FF4B50FF"/>
+	<Color name="Politics" foreground="#FFFB809C"/>
+	<Color name="Operators" foreground="#FFD1F5FB"/>
+	<Color name="functions" foreground="#FF0EFBFF"/>
+	<Color name="Variables" foreground="#FFCBCC3E"/>
 	<Color name="Main" foreground="#306eff" fontWeight="bold"/>
 	<Color name="Exit" foreground="#FFFB484B" fontWeight="bold"/>
-	<Color name="Classes" foreground="#FF8EFBA1"/>
-	<Color name="Operators" foreground="#FFD1F5FB"/>
-	<Color name="Import" foreground="#f5903d"/>
+	<Color name="Keyword" foreground="#FFFB00E9" fontWeight="bold"/>
+	<Color name="functionBody" foreground="#FFF5FF37" fontStyle="italic"/>
 
 	<RuleSet>
+	    <Rule color="Number">\b[0-9]+\b</Rule>
 		<Span color="Comment" begin="//" end="\n"/>
 		<Span color="Comment" begin="#.*" end="\n"/>
-		<Span color="Comment" multiline="true" begin="/\*" end="\*/"/>
-		<Span color="String" begin="&quot;" end="&quot;"/>
-		<Rule color="Number">\b[0-9]+\b</Rule>
 		<Rule color="functionBody">\b\w+(?=\s*\()</Rule>
+		<Span color="String" begin="&quot;" end="&quot;"/>
+		<Span color="Comment" multiline="true" begin="/\*" end="\*/"/>
 
 		<Keywords color="Keyword">	
 			<Word>if</Word>
-			<Word>IF:</Word>
-			<Word>ELIF:</Word>
-			<Word>ELSE:</Word>
-			<Word>else</Word>
-			<Word>END</Word>
 			<Word>for</Word>
+			<Word>IF:</Word>
+			<Word>END</Word>
+			<Word>new</Word>
+			<Word>NO:</Word>
+			<Word>YES:</Word>
+			<Word>DONE</Word>
 			<Word>FOR:</Word>
 			<Word>NEXT</Word>
-			<Word>while</Word>
-			<Word>WHILE:</Word>
-			<Word>BREAK</Word>
-			<Word>RETURN:</Word>
-			<Word>UNTIL:</Word>
-			<Word>DONE</Word>
-			<Word>return</Word>
-			<Word>new</Word>
-			<Word>CHECK:</Word>
-			<Word>YES:</Word>
-			<Word>NO:</Word>
+			<Word>else</Word>
 			<Word>BUT:</Word>
+			<Word>while</Word>
+			<Word>BREAK</Word>			
+			<Word>ELIF:</Word>
+			<Word>ELSE:</Word>
+			<Word>CHECK:</Word>
+			<Word>return</Word>
+			<Word>WHILE:</Word>
+			<Word>UNTIL:</Word>
+			<Word>RETURN:</Word>
 		</Keywords>
 			
 		<Keywords color="Politics">
+			<Word>class</Word>
+			<Word>await</Word>
+			<Word>static</Word>
 			<Word>public</Word>
 			<Word>private</Word>
-			<Word>static</Word>
-			<Word>await</Word>
-			<Word>class</Word>
 		</Keywords>
 
 		<Keywords color="Import">
@@ -73,9 +74,9 @@
 			<Word>DEF:</Word>
 			<Word>SAY:</Word>
 			<Word>GET:</Word>
-			<Word>CALL:</Word>
 			<Word>void</Word>
 			<Word>async</Word>
+			<Word>CALL:</Word>
 			<Word>protected</Word>
 		</Keywords>
 
@@ -88,15 +89,15 @@
 		</Keywords>
 
 		<Keywords color="Classes">
+		    <Word>USE:</Word>
+		    <Word>AGAIN</Word>
 			<Word>String</Word>
 			<Word>Integer</Word>
-			<Word>USE:</Word>
-			<Word>AGAIN</Word>
 		</Keywords>
 
 		<Keywords color="Operators">
+		    <Word>OR</Word>
 			<Word>AND</Word>
-			<Word>OR</Word>
 		</Keywords>
 	</RuleSet>
 </SyntaxDefinition>

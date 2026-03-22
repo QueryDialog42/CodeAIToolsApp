@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 	    <AvaloniaResource Include="Java.xshd" />
+	    <AvaloniaResource Include="Styles/**"/>
 	</ItemGroup>
 
     <ItemGroup>
@@ -26,5 +27,32 @@
         <PackageReference Include="MsBox.Avalonia" Version="3.0.0-rc2"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1"/>
         <PackageReference Include="Octokit" Version="14.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\StartWindow.axaml.cs">
+        <DependentUpon>StartWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\WorkerWindow.axaml.cs">
+        <DependentUpon>WorkerWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\AdminWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\NewProjectWindow.axaml.cs">
+        <DependentUpon>NewProjectWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UserControls\MainControls\AppMainControl.axaml.cs">
+        <DependentUpon>AppMainControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UserControls\MainControls\WorkerPanelControl.axaml.cs">
+        <DependentUpon>AppPanelControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

@@ -1,11 +1,12 @@
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Controls.ApplicationLifetimes;
 using CodeAIToolsUI.APIs;
-using CodeAIToolsWPF.APIs.DTOs;
+using CodeAIToolsUI.Views;
+using Avalonia.Interactivity;
+using System.Threading.Tasks;
+using CodeAIToolsUI.APIs.DTOs;
 using static CodeAIToolsUI.GeneralRoutines;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace CodeAIToolsUI.UserControls.StartControls
 {

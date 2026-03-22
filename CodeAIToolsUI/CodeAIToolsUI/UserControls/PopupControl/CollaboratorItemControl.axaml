@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="CodeAIToolsUI.UserControls.PopupControl.CollaboratorItemControl">
+
+    <Grid Margin="4,3,4,3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Avatar -->
+        <Border Grid.Column="0"
+                x:Name="Avatar"
+                Width="24"
+                Height="24"
+                CornerRadius="12"
+                Margin="0,0,6,0"
+                VerticalAlignment="Center">
+            <TextBlock x:Name="AvatarText"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="White"
+                       FontSize="10"
+                       FontWeight="SemiBold"/>
+        </Border>
+
+        <TextBlock x:Name="UserNameText"
+                   Grid.Column="1"
+                   Foreground="#f1f5f9"
+                   FontSize="11"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis"/>
+
+        <Button x:Name="RemoveBtn"
+                Grid.Column="2"
+                Classes="removeBtn">
+            <TextBlock Text="✕"
+                       FontSize="10"
+                       Foreground="#f87171"/>
+        </Button>
+    </Grid>
+
+</UserControl>

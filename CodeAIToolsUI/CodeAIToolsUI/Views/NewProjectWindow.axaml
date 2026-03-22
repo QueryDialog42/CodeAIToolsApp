@@ -1,0 +1,308 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:CodeAIToolsUI.Views.Items"
+        mc:Ignorable="d"
+        Width="560" SizeToContent="Height"
+        x:Class="CodeAIToolsUI.Views.NewProjectWindow"
+        WindowStartupLocation="CenterScreen"
+        Title="NewProjectWindow">
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+
+    <Border CornerRadius="14"
+            Background="#1A1A1F"
+            Padding="32,28"
+            BoxShadow="0 4 40 0 #99000000">
+
+        <StackPanel>
+
+            <!-- Title -->
+            <TextBlock Text="Yeni Proje Oluştur"
+                       Foreground="#FFFFFF"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       FontFamily="Segoe UI"
+                       Margin="0,0,0,24"/>
+
+            <!-- Project Name -->
+            <TextBlock Text="Proje adı" Classes="fieldLabel"/>
+            <Grid Margin="0,0,0,20">
+                <TextBox x:Name="TxtProjectName"
+                         Classes="darkInput"
+                         Height="44"
+                         VerticalContentAlignment="Center"
+                         TextChanged="TxtProjectName_TextChanged"/>
+                <TextBlock x:Name="PlaceholderName"
+                           Text="Proje adını girin"
+                           Classes="darkPlaceholder"/>
+            </Grid>
+
+            <!-- Description -->
+            <TextBlock Text="Açıklama" Classes="fieldLabel"/>
+            <Grid Margin="0,0,0,20">
+                <TextBox x:Name="TxtDescription"
+                         Classes="darkInput"
+                         VerticalContentAlignment="Top"
+                         Height="110"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         Padding="12,10"
+                         TextChanged="TxtDescription_TextChanged"/>
+                <TextBlock x:Name="PlaceholderDesc"
+                           Text="Proje açıklaması"
+                           Foreground="#555555"
+                           FontSize = "14"
+                           FontFamily = "Segoe UI" 
+                           Margin = "14, 12, 0, 0"
+                           IsHitTestVisible = "False" />
+            </Grid>
+
+            <!-- Advanced Section -->
+            <TextBlock Text="Gelişmiş" Classes="fieldLabel" Margin="0,0,0,8"/>
+
+            <Border Background="#0D0D0D"
+                    BorderBrush="#2A2A2A"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Margin="0,0,0,20">
+                <StackPanel>
+
+                    <!-- Advanced Toggle Header -->
+                    <Button Classes="iconBtn"
+                            HorizontalAlignment="Stretch"
+                            Padding="12,10"
+                            Click="BtnAdvancedToggle_Click">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="GitHub Entegrasyonu (Opsiyonel)"
+                                       Foreground="#AAAAAA"
+                                       FontSize="13"
+                                       FontFamily="Segoe UI"
+                                       VerticalAlignment="Center"/>
+                            <Path x:Name="AdvancedArrow"
+                                  Grid.Column="1"
+                                  Data="M6 9l6 6 6-6"
+                                  Stroke="#AAAAAA"
+                                  StrokeThickness="1.5"
+                                  Width="16" Height="16"
+                                  Stretch="Uniform"
+                                  VerticalAlignment="Center"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Collapsible Content -->
+                    <StackPanel x:Name="AdvancedPanel"
+                                IsVisible="False"
+                                Margin="12,0,12,12">
+
+                        <Border Background="#161616"
+                                CornerRadius="6"
+                                Padding="10"
+                                Margin="0,0,0,12">
+                            <TextBlock Text="Token girerek projenizi otomatik olarak GitHub'a yükleyebilirsiniz. Bu adım tamamen opsiyoneldir."
+                                       Foreground="#777777"
+                                       FontSize="12"
+                                       FontFamily="Segoe UI"
+                                       TextWrapping="Wrap"/>
+                        </Border>
+
+                        <TextBlock Text="GitHub Token"
+                                   Classes="fieldLabel"
+                                   Margin="0,0,0,8"/>
+                        <Grid>
+                            <TextBox x:Name="TxtGitHubToken"
+                                     Classes="darkInput"
+                                     Height="44"
+                                     VerticalContentAlignment="Center"
+                                     PasswordChar="●"
+                                     TextChanged="TxtGitHubToken_TextChanged"/>
+                            <TextBlock x:Name="PlaceholderToken"
+                                       Text="ghp_xxxxxxxxxxxxxxxxxxxx"
+                                       Foreground="#555555"
+                                       FontSize="14"
+                                       FontFamily="Segoe UI"
+                                       Margin="14,0,0,0"
+                                       VerticalAlignment="Center"
+                                       IsHitTestVisible="False"/>
+                        </Grid>
+
+                        <!-- Token hata mesajı -->
+                        <TextBlock x:Name="TxtTokenError"
+                                   Foreground="#FF4D4D"
+                                   FontSize="12"
+                                   FontFamily="Segoe UI"
+                                   Margin="4,6,0,0"
+                                   IsVisible="False"
+                                   TextWrapping="Wrap"/>
+
+                        <!-- Link Button -->
+                        <Button Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0,8,0,0"
+                                Cursor="Hand"
+                                Click="BtnOpenLink_Click">
+                            <TextBlock Text="No Token? Get one here"
+                                       Foreground="#5B5FC7"
+                                       FontSize="12"
+                                       FontFamily="Segoe UI"
+                                       TextDecorations="Underline"/>
+                        </Button>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
+
+            <!-- Collaborators -->
+            <TextBlock Text="İşbirlikçiler" Classes="fieldLabel"/>
+
+            <!-- Selected collaborator avatars -->
+            <ItemsControl x:Name="SelectedAvatarList"
+                          Margin="0,0,0,8">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="6"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type views:CollaboratorItem}">
+                        <Button Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0"
+                                ToolTip.Tip="{Binding Username}"
+                                Click="BtnAvatarRemove_Click"
+                                Tag="{Binding}">
+                            <Panel>
+                                <Border Width="36" Height="36"
+                                        CornerRadius="18"
+                                        Background="#5B5FC7">
+                                    <TextBlock Text="{Binding Initial}"
+                                               Foreground="White"
+                                               FontSize="14" FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <!-- X işareti -->
+                                <Border Width="14" Height="14"
+                                        CornerRadius="7"
+                                        Background="#FF4D4D"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top">
+                                    <TextBlock Text="×"
+                                               Foreground="White"
+                                               FontSize="10" FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Margin="0,-1,0,0"/>
+                                </Border>
+                            </Panel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            
+            
+            <!-- Collaborator search field -->
+            <Border Background="#0D0D0D"
+                    BorderBrush="#2A2A2A"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Margin="0,0,0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TxtSearch"
+                             Classes="darkInput"
+                             Grid.Column="1"
+                             Height="44"
+                             VerticalContentAlignment="Center"
+                             TextChanged="TxtSearch_TextChanged"/>
+                    <TextBlock x:Name="PlaceholderSearch"
+                               Classes="darkPlaceholder"
+                               Grid.Column="1"
+                               Text="İşbirlikçi ara..."/>
+                </Grid>
+            </Border>
+            
+            
+
+            <!-- Collaborators list -->
+            <ScrollViewer MaxHeight="200"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled"
+              Margin="0,0,0,28">
+                <ItemsControl x:Name="CollaboratorList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type views:CollaboratorItem}">
+                            <Border Background="#0D0D0D"
+                                    BorderBrush="#2A2A2A"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="10,8"
+                                    Margin="0,0,0,6"
+                                    Cursor="Hand">
+                                <Border.Styles>
+                                    <Style Selector="Border:pointerover">
+                                        <Setter Property="Background" Value="#16161C"/>
+                                    </Style>
+                                </Border.Styles>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0"
+                                            Width="34" Height="34"
+                                            CornerRadius="17"
+                                            Background="#5B5FC7"
+                                            Margin="0,0,10,0">
+                                        <TextBlock Text="{Binding Initial}"
+                                                   Foreground="White"
+                                                   FontSize="14" FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Username}"
+                                               Foreground="#CCCCCC"
+                                               FontSize="14" FontFamily="Segoe UI"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Footer buttons -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Classes="cancelBtn"
+                        Content="İptal"
+                        MinWidth="90"
+                        Margin="0,0,10,0"
+                        Click="BtnCancel_Click"/>
+                <Button x:Name="BtnCreate"
+                        Classes="createBtn"
+                        Content="Oluştur"
+                        MinWidth="100"
+                        Click="BtnCreate_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Border>
+</ScrollViewer>
+</Window>

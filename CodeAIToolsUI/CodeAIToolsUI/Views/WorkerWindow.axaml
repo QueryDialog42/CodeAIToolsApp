@@ -1,15 +1,16 @@
-<Window xmlns="https://github.com/avaloniaui"
+<local:BaseAppWindow xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         xmlns:userControls="clr-namespace:CodeAIToolsUI.UserControls"
-        mc:Ignorable="d"
-        x:Class="CodeAIToolsUI.MainWindow"
+        xmlns:local="clr-namespace:CodeAIToolsUI.Views"
+        xmlns:popupControl="clr-namespace:CodeAIToolsUI.UserControls.PopupControl"
+        x:Class="CodeAIToolsUI.Views.WorkerWindow"
         Title="CodeAIToolsUI"
-        Background="#1a1d23"
+        Background="#262626"
         WindowStartupLocation="CenterScreen"
         Height="680" Width="980">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,9 +18,7 @@
         </Grid.RowDefinitions>
 
         <!-- Top Menu Bar -->
-        <Border Grid.Row="0" Background="#22262e"
-                BorderBrush="{StaticResource BorderColor}"
-                BorderThickness="0,0,0,1">
+        <Border Grid.Row="0" Classes="WMenuBarColor">
             <Grid Margin="0,0,12,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -40,19 +39,18 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
                     </Border>
-                    <Button x:Name="projectButton"
+                    <Button x:Name="ProjectButton"
                             Click="ProjectButton_Clicked"
-                            Classes="navBtn"
-                            Foreground="{StaticResource TextPrimary}"
+                            Classes="wNavBtn"
                             FontWeight="SemiBold">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="📋" FontSize="13" Margin="0,0,5,0"/>
                             <TextBlock Text="Projeler"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="panelButton"
+                    <Button x:Name="PanelButton"
                             Click="PanelButton_Clicked"
-                            Classes="navBtn">
+                            Classes="wNavBtn">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="📄" FontSize="13" Margin="0,0,5,0"/>
                             <TextBlock Text="Panel"/>
@@ -62,7 +60,7 @@
 
                 <!-- Menus -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0">
-                    <Button Classes="navBtn" Click="File_Click">
+                    <Button Classes="wNavBtn" Click="File_Click">
                         <Button.ContextMenu>
                             <ContextMenu x:Name="DosyaContextMenu">
                                 <MenuItem Header="Kaydet" Click="Save_Click"/>
@@ -70,19 +68,19 @@
                             </ContextMenu>
                         </Button.ContextMenu>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Dosya" Margin="0,0,4,0"/>
-                            <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="Dosya"  Margin="0,0,4,0"/>
+                            <TextBlock Text="∨"  FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Classes="navBtn">
+                    <Button Classes="wNavBtn">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Düzenle" Margin="0,0,4,0"/>
-                            <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
+                            <TextBlock Text="Düzenle"  Margin="0,0,4,0"/>
+                            <TextBlock Text="∨"  FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Classes="navBtn">
+                    <Button Classes="wNavBtn">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Yardım" Margin="0,0,4,0"/>
+                            <TextBlock Text="Yardım"  Margin="0,0,4,0"/>
                             <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -92,7 +90,7 @@
                 <StackPanel Grid.Column="3" Orientation="Horizontal"
                             VerticalAlignment="Center" Margin="0,6">
                     <Grid Margin="0,0,12,0">
-                        <Button Classes="navBtn" Padding="6">
+                        <Button Classes="wNavBtn" Padding="6">
                             <TextBlock Text="🔔" FontSize="16"/>
                         </Button>
                         <Border Background="{StaticResource AccentRed}"
@@ -107,11 +105,11 @@
                     </Grid>
 
                     <!-- MouseLeftButtonUp → PointerReleased -->
-                    <Border x:Name="accountButton"
+                    <Border x:Name="AccountButton"
                             Width="32" Height="32" CornerRadius="16"
                             Background="#7c3aed" Cursor="Hand"
                             PointerPressed="AccountButton_Click">
-                        <TextBlock x:Name="accountLetter"
+                        <TextBlock x:Name="AccountLetter"
                                    Foreground="White" FontWeight="Bold"
                                    FontSize="14"
                                    HorizontalAlignment="Center"
@@ -120,11 +118,11 @@
                 </StackPanel>
 
                 <!-- Popup: AllowsTransparency ve PopupAnimation yok Avalonia'da -->
-                <Popup x:Name="accountPopup"
-                       PlacementTarget="{Binding ElementName=accountButton}"
+                <Popup x:Name="AccountPopup"
+                       PlacementTarget="{Binding ElementName=AccountButton}"
                        Placement="Bottom"
                        IsLightDismissEnabled="True">
-                    <userControls:AccountPopupContent x:Name="accountPopupContent"/>
+                    <popupControl:WorkerPopupControl x:Name="AccountPopupContent"/>
                 </Popup>
 
             </Grid>
@@ -139,8 +137,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar -->
-            <Border Grid.Column="0" Background="#22262e"
-                    BorderBrush="{StaticResource BorderColor}"
+            <Border Grid.Column="0" Background="{StaticResource WSideBarBackground}"
+                    BorderBrush="{StaticResource WBorderColor}"
                     BorderThickness="0,0,1,0">
                 <StackPanel>
                     <Border Padding="12,10">
@@ -149,12 +147,12 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="activeProject" Text=""
-                                       Foreground="{StaticResource TextSecondary}"
+                            <TextBlock x:Name="ActiveProject" Text=""
+                                       Foreground="{StaticResource WTextSecondary}"
                                        FontSize="12"/>
                         </Grid>
                     </Border>
-                    <userControls:FileTreeControl x:Name="fileTree"/>
+                    <userControls:FileTreeControl x:Name="FileTree"/>
                 </StackPanel>
             </Border>
 
@@ -167,7 +165,7 @@
                           Background="Transparent"
                           Cursor="SizeWestEast"/>
 
-            <ContentControl x:Name="mainContent" Grid.Column="2"/>
+            <ContentControl x:Name="MainContent" Grid.Column="2"/>
         </Grid>
     </Grid>
-</Window>
+</local:BaseAppWindow>

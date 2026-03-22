@@ -1,21 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Renkler / Brush'lar ResourceDictionary içinde kalır -->
-    <Styles.Resources>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="PopupBg"       Color="#1e2228"/>
-            <SolidColorBrush x:Key="PopupBorder"   Color="#2d323c"/>
-            <SolidColorBrush x:Key="CardBg"        Color="#22262e"/>
-            <SolidColorBrush x:Key="AccentGreen"   Color="#22c55e"/>
-            <SolidColorBrush x:Key="AccentPurple"  Color="#7c3aed"/>
-            <SolidColorBrush x:Key="TextPrimary"   Color="#f1f5f9"/>
-            <SolidColorBrush x:Key="TextSecondary" Color="#94a3b8"/>
-            <SolidColorBrush x:Key="TextMuted"     Color="#64748b"/>
-            <SolidColorBrush x:Key="DividerColor"  Color="#2d323c"/>
-        </ResourceDictionary>
-    </Styles.Resources>
-
     <!-- BadgeStyle → Classes="badge" -->
     <Style Selector="Border.badge">
         <Setter Property="CornerRadius" Value="10"/>

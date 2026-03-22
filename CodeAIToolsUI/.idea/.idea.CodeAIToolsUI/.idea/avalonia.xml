@@ -8,22 +8,47 @@
         <entry key="CodeAIToolsUI/MainWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/NewProjectWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/StartWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Styles/AdminMainDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Styles/AdminMainStyle.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Styles/AdminWindowDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/GeneralStyleDicr.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/GeneralStyleDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/LoginStyleDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/MainWindowDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Styles/NewProjectDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/PopupContentStyleDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/ProjectCardStyleDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/Styles/RegisterStyleDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Styles/WorkerMainDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Styles/WorkerWindowDict.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/AccountPopupContent.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/FileTreeItem.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/AdminControl/AdminMainControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/AdminControl/AdminPanelControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/AdminControl/AppPanelControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/MainControls/AdminMainControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/MainControls/AdminPanelControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/AppMainControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/AppPanelControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/MainControls/PageControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/MainControls/ProjectCardControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/WorkerControl/WorkerMainControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/WorkerControl/WorkerPanelControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/MainControls/WorkerPanelControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/PopupControl/AdminPopupContent.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/PopupControl/BasePopupControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/PopupControl/CollaboratorItemControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/PopupControl/CollaboratorPopupControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/UserControls/PopupControl/WorkerPopupControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/StartControls/LoginControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/StartControls/RegisterControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
         <entry key="CodeAIToolsUI/UserControls/TeamControl/CollaboratorSearchControl.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Views/AdminWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Views/MainWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Views/NewProjectWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Views/StartWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/Views/WorkerWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
+        <entry key="CodeAIToolsUI/WorkerWindow.axaml" value="CodeAIToolsUI/CodeAIToolsUI.csproj" />
       </map>
     </option>
   </component>

@@ -3,13 +3,13 @@ package com.example.codeai.Entities;
 import lombok.Data;
 import java.sql.Timestamp;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.CreationTimestamp;
 
 
+@Data
 @Entity
 @Table(name = "projects")
-@Data
 public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

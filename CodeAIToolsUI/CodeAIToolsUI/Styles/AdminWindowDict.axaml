@@ -1,0 +1,53 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        <Styles.Resources>
+                <!--Main-->
+                <SolidColorBrush x:Key="AppBg"         Color="#1a1d23"/>
+                <SolidColorBrush x:Key="BgDark"        Color="#1a1d23"/>
+                <SolidColorBrush x:Key="BgPanel"       Color="#22262e"/>
+                <SolidColorBrush x:Key="BgCard"        Color="#2a2f3a"/>
+                <SolidColorBrush x:Key="BgInput"       Color="#323847"/>
+                <SolidColorBrush x:Key="TextPrimary"   Color="#e2e8f0"/>
+                <SolidColorBrush x:Key="TextSecondary" Color="#94a3b8"/>
+                <SolidColorBrush x:Key="TextMuted"     Color="#64748b"/>
+                <SolidColorBrush x:Key="MenubarBorderColor"   Color="#374151"/>   
+                <SolidColorBrush x:Key="MenubarBackground"    Color="#22262e"/>
+                
+                
+                <!--PopupContent-->
+                <SolidColorBrush x:Key="PopupBg"       Color="#1e2228"/>
+                <SolidColorBrush x:Key="PopupBorder"   Color="#2c323b"/> 
+                <SolidColorBrush x:Key="CardBg"        Color="#242e3d"/>
+                <SolidColorBrush x:Key="DividerColor"  Color="#2d323c"/>
+                
+        </Styles.Resources>
+        
+        <Style Selector="Border.MenuBarColor">
+                <Setter Property="Background"  Value="{StaticResource MenubarBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource MenubarBorderColor}" /> 
+                <Setter Property="BorderThickness" Value="0,0,0,1" /> 
+        </Style>
+        
+        <!-- ─── NavButton ─────────────────────────────────────────────────────── -->
+        <Style Selector="Button.aNavBtn">
+                <Setter Property="Background"      Value="Transparent"/>
+                <Setter Property="Foreground"      Value="{StaticResource TextSecondary}" />
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding"         Value="12,12"/>
+                <Setter Property="FontSize"        Value="13"/>
+                <Setter Property="Cursor"          Value="Hand"/>
+                <Setter Property="CornerRadius"    Value="4"/>
+        </Style>
+        <Style Selector="Button.aNavBtn:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="{StaticResource BgDark}"/>
+        </Style>
+        <Style Selector="Button.aNavBtn:pointerover">
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        </Style>
+        
+        <!--Side Bar-->
+        <Style Selector="Border.sideBarPattern">
+                <Setter Property="BorderBrush" Value="{StaticResource MenubarBackground}" />
+                <Setter Property="BorderThickness" Value="0, 0, 1, 0" /> 
+        </Style>
+</Styles>

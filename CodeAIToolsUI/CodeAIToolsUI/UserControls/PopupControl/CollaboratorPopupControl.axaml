@@ -1,0 +1,106 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="CodeAIToolsUI.UserControls.PopupControl.CollaboratorPopupWindow"
+        Width="320"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False"
+        Title=""
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent">
+
+    <Border Background="#1E2228"
+            BorderBrush="#2d323c"
+            BorderThickness="1"
+            CornerRadius="10"
+            BoxShadow="0 4 20 0 #8C000000"
+            Padding="24">
+        <StackPanel>
+
+            <!-- Header -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="İşbirlikçi Detayı"
+                           Foreground="#94a3b8"
+                           FontSize="11"
+                           VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="4"
+                        Cursor="Hand"
+                        Click="BtnClose_Click">
+                    <TextBlock Text="✕" Foreground="#64748b" FontSize="11"/>
+                </Button>
+            </Grid>
+
+            <!-- Avatar + İsim -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" Spacing="10">
+                <Border Width="40" Height="40" CornerRadius="20" Background="#1d4ed8">
+                    <TextBlock x:Name="TxtInitial"
+                               Foreground="White"
+                               FontSize="16" FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtUsername"
+                               Foreground="#f1f5f9"
+                               FontSize="13" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="TxtRole"
+                               Foreground="#64748b"
+                               FontSize="10"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Ayırıcı -->
+            <Border Height="1" Background="#2d323c" Margin="0,0,0,12"/>
+
+            <!-- GitHub -->
+            <StackPanel Margin="0,0,0,12">
+                <TextBlock Text="GitHub" Foreground="#64748b" FontSize="10" Margin="0,0,0,4"/>
+                <TextBlock x:Name="TxtGitHub"
+                           Foreground="#94a3b8"
+                           FontSize="12"
+                           TextTrimming="CharacterEllipsis"/>
+            </StackPanel>
+
+            <!-- Ayırıcı -->
+            <Border Height="1" Background="#2d323c" Margin="0,0,0,12"/>
+
+            <!-- Butonlar -->
+            <Button x:Name="BtnProfileLink"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="0,0,0,8"
+                    Cursor="Hand"
+                    HorizontalAlignment="Left"
+                    Click="BtnProfileLink_Click">
+                <TextBlock Text="🔗 GitHub Profiline Git"
+                           Foreground="#5B5FC7"
+                           FontSize="11"
+                           TextDecorations="Underline"/>
+            </Button>
+
+            <Button HorizontalAlignment="Stretch"
+                    Background="#2d1515"
+                    BorderThickness="0"
+                    CornerRadius="6"
+                    Padding="10,7"
+                    Cursor="Hand"
+                    Click="BtnRemove_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🗑️" FontSize="11" Margin="0,0,6,0"/>
+                    <TextBlock Text="Projeden Kaldır" Foreground="#f87171" FontSize="11"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+    </Border>
+</Window>

@@ -11,8 +11,8 @@
                        FontFamily="Cascadia Mono"
                        VerticalScrollBarVisibility="Auto"
                        HorizontalScrollBarVisibility="Disabled"
-                       Background="{StaticResource BgInput}"
-                       Foreground="{StaticResource TextPrimary}"
+                       Background="{DynamicResource MBgInput}"
+                       Foreground="{DynamicResource MTextPrimary}"
                        BorderThickness="0"
                        ShowLineNumbers="True"/>
 </UserControl>

@@ -5,9 +5,12 @@
 
     <Application.Styles>
         <FluentTheme/>
+        <StyleInclude Source="/Styles/AdminWindowDict.axaml"/>
+        <StyleInclude Source="/Styles/WorkerWindowDict.axaml"/>
         <StyleInclude Source="/Styles/GeneralStyleDict.axaml"/>
-        <StyleInclude Source="/Styles/MainWindowDict.axaml"/>
+        <StyleInclude Source="/Styles/AdminMainDict.axaml" />
         <StyleInclude Source="/Styles/LoginStyleDict.axaml"/>
+        <StyleInclude Source="/Styles/NewProjectDict.axaml" />
         <StyleInclude Source="/Styles/RegisterStyleDict.axaml"/>
         <StyleInclude Source="/Styles/ProjectCardStyleDict.axaml"/>
         <StyleInclude Source="/Styles/PopupContentStyleDict.axaml"/>

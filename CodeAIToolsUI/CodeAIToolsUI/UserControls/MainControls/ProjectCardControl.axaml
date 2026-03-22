@@ -3,8 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:views="clr-namespace:CodeAIToolsUI.Views.Items"
+             xmlns:control="clr-namespace:CodeAIToolsUI.UserControls.PopupControl"
              x:Class="CodeAIToolsUI.UserControls.MainControls.ProjectCardControl">
 
+    <Grid ClipToBounds="False">
     <Border Width="220" Margin="0,0,16,16"
             Background="#22262e"
             BorderBrush="#2d323c"
@@ -80,6 +83,45 @@
                                Foreground="#64748b" FontSize="11"/>
                 </StackPanel>
             </Grid>
+            
+            <!-- Ayırıcı -->
+            <Border Height="1" Background="#2d323c" Margin="0,0,0,10"/>
+
+            <!-- İşbirlikçi Avatarları -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="İşbirlikçiler"
+                           Foreground="#64748b"
+                           FontSize="10"
+                           Margin="0,0,0,6"/>
+                <ItemsControl x:Name="CollaboratorAvatarList">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type views:CollaboratorItem}">
+                            <Button Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="0"
+                                    ToolTip.Tip="{Binding Username}"
+                                    Click="BtnCollaboratorAvatar_Click"
+                                    Tag="{Binding}">
+                                <Border Width="28" Height="28"
+                                        CornerRadius="14"
+                                        Background="#03b53b">
+                                    <TextBlock Text="{Binding Initial}"
+                                               Foreground="White"
+                                               FontSize="11" FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            
 
             <!-- Butonlar -->
             <Grid>
@@ -111,4 +153,6 @@
 
         </StackPanel>
     </Border>
+        
+        </Grid>
 </UserControl>

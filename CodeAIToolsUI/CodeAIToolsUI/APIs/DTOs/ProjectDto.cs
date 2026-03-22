@@ -4,6 +4,7 @@ namespace CodeAIToolsUI.APIs.DTOs
 {
     public class ProjectDto
     {
+        public int? p_id {  get; set; }
         public long? belongs_to {  get; set; }
         public string? p_name { get; set; }
         public double? p_size { get; set; }

@@ -3,13 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CodeAIToolsUI.UserControls.AccountPopupContent">
-
+             x:Class="CodeAIToolsUI.UserControls.PopupControl.BasePopupControl">
     <Border Margin="0,4,0,0" Width="280" MaxHeight="500"
             BoxShadow="0 4 20 0 #8C000000">
 
-        <Border Background="{StaticResource PopupBg}"
-                BorderBrush="{StaticResource PopupBorder}"
+        <Border Background="{DynamicResource PopupBg}"
+                BorderBrush="{DynamicResource PopupBorder}"
                 BorderThickness="1"
                 CornerRadius="12">
 
@@ -24,13 +23,13 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Hesap Bilgileri"
-                                   Foreground="{StaticResource TextPrimary}"
+                                   Foreground="{DynamicResource TextPrimary}"
                                    FontSize="13" FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
                         <Button Grid.Column="1" Click="Close_Click"
                                 Classes="actionBtn" Padding="6,4">
                             <TextBlock Text="✕" FontSize="11"
-                                       Foreground="{StaticResource TextMuted}"/>
+                                       Foreground="{DynamicResource TextMuted}"/>
                         </Button>
                     </Grid>
 
@@ -44,7 +43,7 @@
                         </Border>
                         <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
                             <TextBlock x:Name="DisplayName" Text="Kullanıcı"
-                                       Foreground="{StaticResource TextPrimary}"
+                                       Foreground="{DynamicResource TextPrimary}"
                                        FontSize="14" FontWeight="SemiBold"/>
                             <Border x:Name="RoleBadge" Classes="badge"
                                     Background="#1d4ed8"
@@ -62,14 +61,14 @@
                     </StackPanel>
 
                     <!-- Divider -->
-                    <Border Height="1" Background="{StaticResource DividerColor}"
+                    <Border Height="1" Background="{DynamicResource DividerColor}"
                             Margin="16,14,16,0"/>
 
                     <!-- Info cards -->
                     <StackPanel Margin="16,12,16,0">
 
                         <!-- Email -->
-                        <Border Background="{StaticResource CardBg}"
+                        <Border Background="{DynamicResource CardBg}"
                                 CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -84,10 +83,10 @@
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                                     <TextBlock Text="E-posta"
-                                               Foreground="{StaticResource TextMuted}"
+                                               Foreground="{DynamicResource TextMuted}"
                                                FontSize="10"/>
                                     <TextBlock x:Name="EmailText" Text="—"
-                                               Foreground="{StaticResource TextPrimary}"
+                                               Foreground="{DynamicResource TextPrimary}"
                                                FontSize="12" FontWeight="Medium"
                                                TextTrimming="CharacterEllipsis"/>
                                 </StackPanel>
@@ -96,7 +95,7 @@
 
                         <!-- GitHub email -->
                         <Border x:Name="GithubCard" IsVisible="False"
-                                Background="{StaticResource CardBg}"
+                                Background="{DynamicResource CardBg}"
                                 CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -111,10 +110,10 @@
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                                     <TextBlock Text="GitHub E-posta"
-                                               Foreground="{StaticResource TextMuted}"
+                                               Foreground="{DynamicResource TextMuted}"
                                                FontSize="10"/>
                                     <TextBlock x:Name="GithubEmailText" Text=""
-                                               Foreground="{StaticResource TextPrimary}"
+                                               Foreground="{DynamicResource TextPrimary}"
                                                FontSize="12" FontWeight="Medium"
                                                TextTrimming="CharacterEllipsis"/>
                                 </StackPanel>
@@ -122,7 +121,7 @@
                         </Border>
 
                         <!-- Durum -->
-                        <Border Background="{StaticResource CardBg}"
+                        <Border Background="{DynamicResource CardBg}"
                                 CornerRadius="8" Padding="12,10">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -138,7 +137,7 @@
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
                                     <TextBlock Text="Durum"
-                                               Foreground="{StaticResource TextMuted}"
+                                               Foreground="{DynamicResource TextMuted}"
                                                FontSize="10"/>
                                     <TextBlock Text="Aktif"
                                                Foreground="{StaticResource AccentGreen}"
@@ -153,8 +152,48 @@
                     </StackPanel>
 
                     <!-- Divider -->
-                    <Border Height="1" Background="{StaticResource DividerColor}"
+                    <Border Height="1" Background="{DynamicResource DividerColor}"
                             Margin="16,12,16,0"/>
+                    
+                    <!-- Divider -->
+                    <Border Height="1" Background="{DynamicResource DividerColor}"
+                            Margin="16,12,16,0"/>
+
+                    <!-- Adminler -->
+                    <StackPanel x:Name="AdminStack" Margin="16,12,16,0" IsVisible="False">
+
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="🛡️" FontSize="12" Foreground="#1d4ed8"
+                                           Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Adminler"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           FontSize="12" FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Classes="actionBtn" Padding="8,4">
+                            </Button>
+                        </Grid>
+
+                        <Border Background="{DynamicResource CardBg}"
+                                CornerRadius="8" Padding="4">
+                            <ScrollViewer MaxHeight="140"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="AdminList"/>
+                            </ScrollViewer>
+                        </Border>
+
+                        <TextBlock x:Name="NoAdminsText"
+                                   Text="Henüz admin yok."
+                                   Foreground="{DynamicResource TextMuted}"
+                                   FontSize="11" HorizontalAlignment="Center"
+                                   Margin="0,6,0,0" IsVisible="True"/>
+                    </StackPanel>
 
                     <!-- İşbirlikçiler -->
                     <StackPanel Margin="16,12,16,0">
@@ -172,7 +211,7 @@
                                            FontSize="12" FontWeight="SemiBold"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
-                            <Button Grid.Column="1" Click="AddCollaborator_Click"
+                            <Button Grid.Column="1" x:Name="AddCollabButton" Click="AddCollaborator_Click"
                                     Classes="actionBtn" Padding="8,4">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="+" FontSize="14" Margin="0,0,4,0"
@@ -183,7 +222,7 @@
                             </Button>
                         </Grid>
 
-                        <Border Background="{StaticResource CardBg}"
+                        <Border Background="{DynamicResource CardBg}"
                                 CornerRadius="8" Padding="4">
                             <ScrollViewer MaxHeight="140"
                                           ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -193,13 +232,13 @@
 
                         <TextBlock x:Name="NoCollaboratorsText"
                                    Text="Henüz işbirlikçi yok."
-                                   Foreground="{StaticResource TextMuted}"
+                                   Foreground="{DynamicResource TextMuted}"
                                    FontSize="11" HorizontalAlignment="Center"
                                    Margin="0,6,0,0" IsVisible="True"/>
                     </StackPanel>
 
                     <!-- Divider -->
-                    <Border Height="1" Background="{StaticResource DividerColor}"
+                    <Border Height="1" Background="{DynamicResource DividerColor}"
                             Margin="16,12,16,0"/>
 
                     <!-- Footer buttons -->

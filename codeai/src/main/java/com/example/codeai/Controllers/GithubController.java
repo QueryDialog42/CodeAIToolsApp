@@ -1,32 +1,72 @@
 package com.example.codeai.Controllers;
 
-import com.example.codeai.Dtos.ProjectDto;
-import com.example.codeai.Entities.GitTokens;
-import com.example.codeai.Repositories.IGitTokensRepository;
-import com.example.codeai.Repositories.IUserRepository;
+import java.io.IOException;
 import lombok.AllArgsConstructor;
-import org.kohsuke.github.GHCreateRepositoryBuilder;
-import org.kohsuke.github.GHFileNotFoundException;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+import com.example.codeai.Dtos.ProjectDto;
 import org.springframework.http.HttpStatus;
+import com.example.codeai.Entities.GitTokens;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.kohsuke.github.GHFileNotFoundException;
+import org.springframework.web.client.RestTemplate;
+import org.kohsuke.github.GHCreateRepositoryBuilder;
+import com.example.codeai.Repositories.IUserRepository;
+import com.example.codeai.Repositories.IGitTokensRepository;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.io.IOException;
-
-@AllArgsConstructor
 @RestController
+@AllArgsConstructor
 @RequestMapping("/github")
 public class GithubController {
 
-    private final IGitTokensRepository gitTokensRepository;
     private final IUserRepository userRepository;
+    private final IGitTokensRepository gitTokensRepository;
+
+
+    @GetMapping("/isExist/{github_username}")
+    private ResponseEntity<Void> checkIfGithubExist(@PathVariable String github_username) {
+
+        String githubApiUrl = "https://api.github.com/users/" + github_username;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(githubApiUrl, String.class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return ResponseEntity.ok().build();
+            }
+
+            return ResponseEntity.notFound().build();
+
+        } catch (HttpClientErrorException.NotFound e) {
+            return ResponseEntity.notFound().build();
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
     @GetMapping("/token/{u_id}")
     private ResponseEntity<String> getGithubToken(@PathVariable Integer u_id){
         var token = gitTokensRepository.findById(u_id);
         return token.map(gitTokens -> ResponseEntity.ok(gitTokens.getGit_token())).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/token/update/{u_id}")
+    private ResponseEntity<Void> updateToken(@PathVariable Integer u_id, @RequestHeader("token") String new_token){
+        try {
+
+            saveOrUpdateGitToken(u_id, new_token);
+
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build(); // 500
+        }
+
     }
 
     @GetMapping("/isValid")
@@ -58,7 +98,7 @@ public class GithubController {
 
             repoBuilder.create();
 
-            saveGitTokenIfNotExist(githubToken, projectDto.getBelongs_to());
+            saveOrUpdateGitToken(projectDto.getBelongs_to(), githubToken);
 
             return ResponseEntity.status(HttpStatus.CREATED).build(); // 201
         } catch (GHFileNotFoundException e) {
@@ -91,18 +131,21 @@ public class GithubController {
         }
     }
 
-    private void saveGitTokenIfNotExist(String gitToken, Integer belongs_to) {
-        var git_token = gitTokensRepository.findToken(gitToken);
+    private void saveOrUpdateGitToken(Integer u_id, String git_token) {
+        var existingToken = gitTokensRepository.findById(u_id);
 
-        if (git_token.isEmpty()) {
-            var user = userRepository.findById(belongs_to).orElse(null);
-            if (user == null) return;
+        if (existingToken.isPresent()) {
+            GitTokens token = existingToken.get();
+            token.setGit_token(git_token);
+            gitTokensRepository.save(token);
+        } else {
+            var user = userRepository.findById(u_id);
+            if (user.isEmpty()) return;
 
-            var savedToken = new GitTokens();
-            savedToken.setUser(user);        // Users nesnesini set et
-            savedToken.setGit_token(gitToken);
-
-            gitTokensRepository.save(savedToken);
+            GitTokens token = new GitTokens();
+            token.setUser(user.get());  // ← @MapsId için user set edilmeli
+            token.setGit_token(git_token);
+            gitTokensRepository.save(token);
         }
     }
 }

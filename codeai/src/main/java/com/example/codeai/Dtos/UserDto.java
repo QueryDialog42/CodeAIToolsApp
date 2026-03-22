@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserDto {
     private Integer u_id;
+    private String u_name;
     private String u_email;
     private String u_git_email;
     private String u_email_pass;

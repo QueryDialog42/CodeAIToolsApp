@@ -1,11 +1,11 @@
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Media;
-using MessageBox.Avalonia.Enums;
 using MsBox.Avalonia;
+using Avalonia.Media;
+using Avalonia.Controls;
 using MsBox.Avalonia.Enums;
+using System.Threading.Tasks;
+using MessageBox.Avalonia.Enums;
+using Avalonia.Controls.Primitives;
+using System.Text.RegularExpressions;
 
 namespace CodeAIToolsUI
 {

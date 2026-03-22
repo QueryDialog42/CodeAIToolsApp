@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import com.example.codeai.Dtos.UserDto;
 import com.example.codeai.Entities.Teams;
+import com.example.codeai.Dtos.AdminCollabDto;
 import com.example.codeai.Mappers.IUserMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,28 @@ public class TeamController {
 
     private final IUserMapper userMapper;
     private final ITeamRepository teamRepository;
+
+    @GetMapping("/getAdmins/{collab_id}")
+    private ResponseEntity<AdminCollabDto> sendAdmins(@PathVariable("collab_id") Integer collab_id){
+        var admins = teamRepository.getAdminsById(collab_id);
+        var adminDtos = userMapper.toDtos(admins);
+
+        var collaborators = admins.stream()
+                .flatMap(admin -> teamRepository
+                        .getAllCollaboratorsByIds(List.of(admin.getU_id()))
+                        .stream()
+                ).toList();
+
+        var collaboratorDtos = userMapper.toDtos(collaborators);
+
+        var adminCollabDto = new AdminCollabDto();
+        adminCollabDto.setAdmins(adminDtos);
+        adminCollabDto.setCollaborators(collaboratorDtos);
+
+
+        return ResponseEntity.ok(adminCollabDto);
+    }
+
 
     @GetMapping("/getCollaborators/{admin_id}")
     private ResponseEntity<List<UserDto>> sendCollaborators(@PathVariable Integer admin_id) {

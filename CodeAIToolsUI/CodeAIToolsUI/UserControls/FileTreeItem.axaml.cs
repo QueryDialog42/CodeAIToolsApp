@@ -1,20 +1,17 @@
 using System;
-using System.IO;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Interactivity;
-using CodeAIToolsUI.APIs;
-using CodeAIToolsWPF;
-using MessageBox.Avalonia.Enums;
+using System.IO;
+using System.Linq;
 using MsBox.Avalonia;
+using Avalonia.Controls;
+using CodeAIToolsUI.Views;
 using MsBox.Avalonia.Enums;
-using Newtonsoft.Json;
+using Avalonia.Interactivity;
+using MessageBox.Avalonia.Enums;
+using System.Collections.ObjectModel;
+using Avalonia.Controls.ApplicationLifetimes;
+
+
 
 namespace CodeAIToolsUI.UserControls
 {
@@ -137,7 +134,6 @@ namespace CodeAIToolsUI.UserControls
                 if (result == ButtonResult.Yes && item != null)
                 {
                     Directory.Delete(item.FilePath, true);
-                    await DeleteProjectFromDatabase(item.Name);
                 }
 
                 Clear();
@@ -145,7 +141,7 @@ namespace CodeAIToolsUI.UserControls
                 // Application.Current.Windows → ApplicationLifetime
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 {
-                    desktop.Windows.OfType<MainWindow>().FirstOrDefault()?.LoadProjects();
+                    desktop.Windows.OfType<AdminWindow>().FirstOrDefault()?.LoadProjectsAsync();
                 }
             }
             catch (Exception ex)
@@ -194,23 +190,6 @@ namespace CodeAIToolsUI.UserControls
         {
             var box = MessageBoxManager.GetMessageBoxStandard(title, message, ButtonEnum.Ok, Icon.Info);
             await box.ShowAsync();
-        }
-
-        private static async Task DeleteProjectFromDatabase(string projectName)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var response =
-                        await client.DeleteAsync(ApiEndpoints.DEL_PROJ_API + Path.VolumeSeparatorChar + projectName);
-                }
-            }
-            catch (IOException e)
-            {
-                await GeneralRoutines.ShowException($"An error occured while deleting the project: {e.Message}");
-            }
-            
         }
 
         #endregion

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CodeAIToolsWPF.APIs.DTOs
+namespace CodeAIToolsUI.APIs.DTOs
 {
     public class AIRequestDto
     {

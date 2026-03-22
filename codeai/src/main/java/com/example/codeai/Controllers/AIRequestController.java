@@ -2,8 +2,6 @@ package com.example.codeai.Controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import com.example.codeai.Dtos.AIResponseDto;
 import lombok.RequiredArgsConstructor;
 import java.nio.charset.StandardCharsets;
 import org.springframework.http.MediaType;
@@ -11,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import com.example.codeai.Dtos.AIRequestDto;
 import org.springframework.core.io.Resource;
+import com.example.codeai.Dtos.AIResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("AI")
 public class AIRequestController {
 
-    private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${ai.model}")
     private String AIModel;
@@ -40,11 +39,11 @@ public class AIRequestController {
     @Value("${ai.api-url}")
     private String BaseUrl;
 
-    @Value("classpath:system-transform-prompt.txt")
-    private Resource systemTransformPrompt;
-
     @Value("classpath:system-explain-prompt.txt")
     private Resource systemExplainPrompt;
+
+    @Value("classpath:system-transform-prompt.txt")
+    private Resource systemTransformPrompt;
 
     @PostMapping("/transform")
     private ResponseEntity<AIResponseDto> AITransformRequest(@RequestBody AIRequestDto aiRequestDto)

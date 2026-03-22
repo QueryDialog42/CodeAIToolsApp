@@ -12,6 +12,7 @@ public interface IProjectMapper {
     @Mapping(target = "belongs_to", ignore = true)
     Projects toEntity(ProjectDto projectDto);
 
+    @Mapping(target = "p_id", source = "p_id")
     @Mapping(target = "belongs_to", source = "belongs_to.u_id")
     ProjectDto toDto(Projects projects);
 

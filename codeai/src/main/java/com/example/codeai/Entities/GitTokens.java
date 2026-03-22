@@ -1,17 +1,17 @@
 package com.example.codeai.Entities;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import jakarta.persistence.*;
 
-@Entity
 @Data
+@Entity
 @Table(name = "git_tokens")
 public class GitTokens {
     @Id
     @Column(name = "belongs_to")
     private Integer belongs_to;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "belongs_to", referencedColumnName = "u_id")
     private Users user;

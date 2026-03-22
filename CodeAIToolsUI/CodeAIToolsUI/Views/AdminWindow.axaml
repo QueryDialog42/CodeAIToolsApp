@@ -1,0 +1,171 @@
+<local:BaseAppWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:userControls="clr-namespace:CodeAIToolsUI.UserControls"
+        xmlns:local="clr-namespace:CodeAIToolsUI.Views"
+        xmlns:popupControl="clr-namespace:CodeAIToolsUI.UserControls.PopupControl"
+        mc:Ignorable="d"
+        x:Class="CodeAIToolsUI.Views.AdminWindow"
+        Title="CodeAIToolsUI"
+        Background="#1a1d23"
+        WindowStartupLocation="CenterScreen"
+        Height="680" Width="980">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Menu Bar -->
+        <Border Grid.Row="0" Classes="MenuBarColor">
+            <Grid Margin="0,0,12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo / App Name -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="16,0,0,0">
+                    <Border Background="{StaticResource AccentBlue}"
+                            Width="22" Height="22"
+                            CornerRadius="4"
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="A" Foreground="White" FontWeight="Bold"
+                                   FontSize="12"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <Button x:Name="ProjectButton"
+                            Click="ProjectButton_Clicked"
+                            Classes="aNavBtn"
+                            FontWeight="SemiBold">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📋" FontSize="13" Margin="0,0,5,0"/>
+                            <TextBlock Text="Projeler"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="PanelButton"
+                            Click="PanelButton_Clicked"
+                            Classes="aNavBtn">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📄" FontSize="13" Margin="0,0,5,0"/>
+                            <TextBlock Text="Panel"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- Menus -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="8,0">
+                    <Button Classes="aNavBtn" Click="File_Click">
+                        <Button.ContextMenu>
+                            <ContextMenu x:Name="DosyaContextMenu">
+                                <MenuItem Header="Kaydet" Click="Save_Click"/>
+                                <MenuItem Header="Düzenle" Click="Edit_Click"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Dosya" Margin="0,0,4,0"/>
+                            <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="aNavBtn">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Düzenle" Margin="0,0,4,0"/>
+                            <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="aNavBtn">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Yardım" Margin="0,0,4,0"/>
+                            <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- Right: Notification + Account -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal"
+                            VerticalAlignment="Center" Margin="0,6">
+                    <Grid Margin="0,0,12,0">
+                        <Button Classes="aNavBtn" Padding="6">
+                            <TextBlock Text="🔔" FontSize="16"/>
+                        </Button>
+                        <Border Background="{StaticResource AccentRed}"
+                                Width="16" Height="16" CornerRadius="8"
+                                HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Margin="0,0,-2,-2">
+                            <TextBlock Text="1" Foreground="White" FontSize="9"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- MouseLeftButtonUp → PointerReleased -->
+                    <Border x:Name="AccountButton"
+                            Width="32" Height="32" CornerRadius="16"
+                            Background="#7c3aed" Cursor="Hand"
+                            PointerPressed="AccountButton_Click">
+                        <TextBlock x:Name="AccountLetter"
+                                   Foreground="White" FontWeight="Bold"
+                                   FontSize="14"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Popup: AllowsTransparency ve PopupAnimation yok Avalonia'da -->
+                <Popup x:Name="AccountPopup"
+                       PlacementTarget="{Binding ElementName=AccountButton}"
+                       Placement="Bottom"
+                       IsLightDismissEnabled="True">
+                    <popupControl:AdminPopupControl x:Name="AccountPopupContent"/>
+                </Popup>
+
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" MinWidth="100" MaxWidth="400"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border Grid.Column="0" Background="#22262e"
+                    Classes="sideBarPattern">
+                <StackPanel>
+                    <Border Padding="12,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="ActiveProject" Text=""
+                                       Foreground="{StaticResource TextSecondary}"
+                                       FontSize="12"/>
+                        </Grid>
+                    </Border>
+                    <userControls:FileTreeControl x:Name="FileTree"/>
+                </StackPanel>
+            </Border>
+
+            <!-- GridSplitter: Avalonia'da ResizeDirection gerekli -->
+            <GridSplitter Grid.Column="1"
+                          Width="5"
+                          ResizeDirection="Columns"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"
+                          Background="Transparent"
+                          Cursor="SizeWestEast"/>
+
+            <ContentControl x:Name="MainContent" Grid.Column="2"/>
+        </Grid>
+    </Grid>
+</local:BaseAppWindow>
