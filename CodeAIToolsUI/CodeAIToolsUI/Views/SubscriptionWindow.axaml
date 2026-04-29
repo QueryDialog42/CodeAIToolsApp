@@ -1,0 +1,146 @@
+<local:BaseAppWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CodeAIToolsUI.Views"
+        xmlns:popupControl="clr-namespace:CodeAIToolsUI.UserControls.PopupControl"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+        x:Class="CodeAIToolsUI.Views.SubscriptionWindow"
+        Title="Subscription Plans - CodeAIToolsUI"
+        Background="#1a1d23"
+        WindowStartupLocation="CenterScreen"
+        Height="500" Width="600">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#22262e" Padding="20,15">
+            <StackPanel>
+                <TextBlock Text="Choose Your Plan" 
+                           FontSize="24" FontWeight="Bold"
+                           Foreground="#e2e8f0" HorizontalAlignment="Center"/>
+                <TextBlock Text="Unlock Python and Java code generation with premium features" 
+                           FontSize="14" Foreground="#94a3b8" 
+                           HorizontalAlignment="Center" Margin="0,8,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Plans Content -->
+        <ScrollViewer Grid.Row="1" Margin="20">
+            <StackPanel x:Name="PlansPanel" Spacing="20">
+                
+                <!-- Free Plan -->
+                <Border Background="#2a2f3a" CornerRadius="8" Padding="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="Free" FontSize="20" FontWeight="Bold" Foreground="#e2e8f0"/>
+                            <TextBlock Text="$0/month" FontSize="16" Foreground="#22c55e" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="1" Spacing="8">
+                            <TextBlock Text="✓ Basic C++ code generation" Foreground="#94a3b8"/>
+                            <TextBlock Text="✓ Flow diagram creation" Foreground="#94a3b8"/>
+                            <TextBlock Text="✓ Project management" Foreground="#94a3b8"/>
+                            <TextBlock Text="✗ Python code generation" Foreground="#ef4444"/>
+                            <TextBlock Text="✗ Java code generation" Foreground="#ef4444"/>
+                            <TextBlock Text="✗ Advanced AI features" Foreground="#ef4444"/>
+                        </StackPanel>
+                        
+                        <Button Grid.Row="2" Content="Current Plan" 
+                                Background="Transparent" BorderBrush="#374151"
+                                Foreground="#94a3b8" IsEnabled="False"
+                                Margin="0,15,0,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- Premium Plan -->
+                <Border Background="#2a2f3a" CornerRadius="8" Padding="20" BorderBrush="#3b82f6" BorderThickness="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="Premium" FontSize="20" FontWeight="Bold" Foreground="#e2e8f0"/>
+                            <TextBlock Text="$9.99/month" FontSize="16" Foreground="#22c55e" Margin="10,0,0,0"/>
+                            <Border Background="#3b82f6" CornerRadius="4" Margin="10,0,0,0">
+                                <TextBlock Text="POPULAR" Foreground="White" FontSize="10" 
+                                           FontWeight="Bold" Padding="6,2"/>
+                            </Border>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="1" Spacing="8">
+                            <TextBlock Text="✓ Everything in Free" Foreground="#94a3b8"/>
+                            <TextBlock Text="✓ Python code generation" Foreground="#22c55e"/>
+                            <TextBlock Text="✓ Java code generation" Foreground="#22c55e"/>
+                            <TextBlock Text="✓ Advanced AI features" Foreground="#22c55e"/>
+                            <TextBlock Text="✓ Priority support" Foreground="#22c55e"/>
+                        </StackPanel>
+                        
+                        <Button x:Name="PremiumButton" Grid.Row="2" Content="Upgrade to Premium" 
+                                Background="#3b82f6" Foreground="White"
+                                Click="PremiumButton_Click"
+                                Margin="0,15,0,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- Pro Plan -->
+                <Border Background="#2a2f3a" CornerRadius="8" Padding="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="Pro" FontSize="20" FontWeight="Bold" Foreground="#e2e8f0"/>
+                            <TextBlock Text="$19.99/month" FontSize="16" Foreground="#22c55e" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="1" Spacing="8">
+                            <TextBlock Text="✓ Everything in Premium" Foreground="#94a3b8"/>
+                            <TextBlock Text="✓ Unlimited AI requests" Foreground="#22c55e"/>
+                            <TextBlock Text="✓ Team collaboration" Foreground="#22c55e"/>
+                            <TextBlock Text="✓ Custom integrations" Foreground="#22c55e"/>
+                            <TextBlock Text="✓ 24/7 support" Foreground="#22c55e"/>
+                        </StackPanel>
+                        
+                        <Button x:Name="ProButton" Grid.Row="2" Content="Upgrade to Pro" 
+                                Background="#7c3aed" Foreground="White"
+                                Click="ProButton_Click"
+                                Margin="0,15,0,0"/>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="#22262e" Padding="20,15" BorderBrush="#374151" BorderThickness="0,1,0,0">
+            <StackPanel>
+                <Button x:Name="CancelButton" Content="Maybe Later" 
+                        Background="Transparent" BorderBrush="#374151"
+                        Foreground="#94a3b8" HorizontalAlignment="Center"
+                        Click="CancelButton_Click"/>
+                <TextBlock Text="You can upgrade anytime from the menu" 
+                           FontSize="12" Foreground="#64748b" 
+                           HorizontalAlignment="Center" Margin="0,8,0,0"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</local:BaseAppWindow>
