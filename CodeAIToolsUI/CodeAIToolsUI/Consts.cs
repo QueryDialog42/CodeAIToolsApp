@@ -64,5 +64,12 @@ namespace CodeAIToolsUI
         public const string ADD_COLL_API = "http://localhost:8080/teams/addCollaborator";
         public const string GET_COLLS_API = "http://localhost:8080/teams/getCollaborators";
         public const string REM_COLL_API = "http://localhost:8080/teams/removeCollaborator";
+        
+        // Subscription API endpoints
+        public const string GET_SUBSCRIPTION_API = "http://localhost:8080/subscription/get";
+        public const string CREATE_SUBSCRIPTION_API = "http://localhost:8080/subscription/create";
+        public const string UPDATE_SUBSCRIPTION_API = "http://localhost:8080/subscription/update";
+        public const string CANCEL_SUBSCRIPTION_API = "http://localhost:8080/subscription/cancel";
+        public const string GET_PLANS_API = "http://localhost:8080/subscription/plans";
     }
 }

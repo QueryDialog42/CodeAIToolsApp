@@ -211,27 +211,52 @@ namespace CodeAIToolsUI.Views
 
         private void SetupAccountArea()
         {
-            AccountLetter.Text  = GetInitial(RequestManager.ActiveUserDto?.u_email);
-            MainContent.Content = MainControl;
+            // Only setup account area if the controls exist
+            if (this.FindControl<TextBlock>("AccountLetter") != null)
+            {
+                AccountLetter.Text = GetInitial(RequestManager.ActiveUserDto?.u_email);
+            }
+            
+            if (this.FindControl<ContentControl>("MainContent") != null && MainControl != null)
+            {
+                MainContent.Content = MainControl;
+            }
 
-            PopupContent.CloseRequested  += (_, _) => AccountPopup.IsOpen = false;
-            PopupContent.LogoutRequested += (_, _) => { new StartWindow().Show(); Close(); };
+            if (this.FindControl<BasePopupControl>("AccountPopupContent") != null)
+            {
+                PopupContent.CloseRequested += (_, _) => AccountPopup?.IsOpen = false;
+                PopupContent.LogoutRequested += (_, _) => { new StartWindow().Show(); Close(); };
+            }
         }
 
         private void SetupFileTree()
         {
-            FileTree.OnFileSelected        += async (item) => await ShowMessage("Bilgi", $"Seçilen dosya: {item.FilePath}");
-            FileTree.ProjectChanged        += (item) => ActiveProject.Text = Path.GetFileName(item.FilePath);
-            FileTree.WriteFlowAndCodeLines += (flow, code) => { FlowText = ReadLines(flow); CodeText = ReadLines(code); };
+            // Only setup file tree if the controls exist
+            if (this.FindControl<FileTreeControl>("FileTree") != null)
+            {
+                FileTree.OnFileSelected += async (item) => await ShowMessage("Bilgi", $"Seçilen dosya: {item.FilePath}");
+                
+                if (this.FindControl<TextBlock>("ActiveProject") != null)
+                {
+                    FileTree.ProjectChanged += (item) => ActiveProject.Text = Path.GetFileName(item.FilePath);
+                }
+                
+                FileTree.WriteFlowAndCodeLines += (flow, code) => { FlowText = ReadLines(flow); CodeText = ReadLines(code); };
+            }
         }
 
         private void SetupPopupResize()
         {
-            PopupContent.SizeChanged += (_, _) =>
+            // Only setup popup resize if the controls exist
+            if (this.FindControl<BasePopupControl>("AccountPopupContent") != null && 
+                this.FindControl<Popup>("AccountPopup") != null)
             {
-                AccountPopup.HorizontalOffset += 1;
-                AccountPopup.HorizontalOffset -= 1;
-            };
+                PopupContent.SizeChanged += (_, _) =>
+                {
+                    AccountPopup.HorizontalOffset += 1;
+                    AccountPopup.HorizontalOffset -= 1;
+                };
+            }
         }
 
         private static string GetInitial(string? email) =>

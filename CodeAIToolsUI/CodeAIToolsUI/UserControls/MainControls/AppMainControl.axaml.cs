@@ -13,6 +13,7 @@ using System.Diagnostics;
 using Avalonia.Threading;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
+using CodeAIToolsUI.APIs;
 using CodeAIToolsUI.APIs.DTOs;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -486,8 +487,25 @@ namespace CodeAIToolsUI.UserControls.MainControls
             return assistantContent.Trim();
         }
 
-        private async Task HandleAiResponse(AIRequestDto aiRequestDto)
+        private bool IsUserSubscribed()
         {
+            var user = RequestManager.ActiveUserDto;
+            return user?.u_is_subscribed == true && 
+                   user.u_subscription_end > DateTime.Now &&
+                   (user.u_subscription_plan?.ToLower() == "premium" || 
+                    user.u_subscription_plan?.ToLower() == "pro");
+        }
+
+        private async Task HandleAiResponse(AIRequestDto aiRequestDto, String language)
+        {
+            // Check if user is subscribed for Python/Java
+            if ((language == "Python" || language == "Java") && !IsUserSubscribed())
+            {
+                ShowErrorLine($"{language} requires a premium subscription. Click 'Abonelik' in the menu to upgrade.");
+                return;
+            }
+
+            aiRequestDto.languageToParse = language;
             string json = JsonConvert.SerializeObject(aiRequestDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             using var client = new HttpClient();
@@ -540,13 +558,14 @@ namespace CodeAIToolsUI.UserControls.MainControls
             try
             {
                 var flowText = flowPage.editor.Document.Text;
+                var language = "Java";
                 if (string.IsNullOrEmpty(flowText)) return;
 
                 try
                 {
                     StartLoading();
                     DisableTransformButton();
-                    await HandleAiResponse(new AIRequestDto(flowText));
+                    await HandleAiResponse(new AIRequestDto(flowText), language);
                 }
                 catch (Exception ex)
                 {

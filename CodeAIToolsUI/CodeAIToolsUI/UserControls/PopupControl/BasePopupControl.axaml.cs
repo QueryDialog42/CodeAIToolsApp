@@ -90,6 +90,44 @@ namespace CodeAIToolsUI.UserControls.PopupControl
                 RoleIcon.Text = Icons.WORK_ICON;
                 RoleBadge.Background = new SolidColorBrush(Color.Parse(Marks.WORK_POP_TITLE_COL));
             }
+
+            // Set subscription information from active user
+            SetSubscriptionInfo();
+        }
+
+        private void SetSubscriptionInfo()
+        {
+            var user = RequestManager.ActiveUserDto;
+            if (user != null)
+            {
+                // Display subscription plan
+                string plan = user.u_subscription_plan ?? "free";
+                SubscriptionPlanText.Text = plan.ToUpper() == "FREE" ? "Free" : 
+                                          plan.ToUpper() == "PREMIUM" ? "Premium" : 
+                                          plan.ToUpper() == "PRO" ? "Pro" : plan;
+
+                // Display subscription status
+                bool isActive = user.u_is_subscribed == true && 
+                               user.u_subscription_end.HasValue && 
+                               user.u_subscription_end.Value > DateTime.Now;
+
+                if (isActive)
+                {
+                    SubscriptionBadgeText.Text = "AKTİF";
+                    SubscriptionBadge.Background = new SolidColorBrush(Color.Parse("#22c55e")); // Green
+                }
+                else
+                {
+                    SubscriptionBadgeText.Text = plan.ToUpper() == "FREE" ? "FREE" : "EXPIRED";
+                    SubscriptionBadge.Background = new SolidColorBrush(Color.Parse("#ef4444")); // Red
+                }
+            }
+            else
+            {
+                SubscriptionPlanText.Text = "Bilinmiyor";
+                SubscriptionBadgeText.Text = "—";
+                SubscriptionBadge.Background = new SolidColorBrush(Color.Parse("#6b7280")); // Gray
+            }
         }
         
         protected static string BuildUrl(string baseUrl, object id)

@@ -20,6 +20,7 @@ namespace CodeAIToolsUI.APIs
     internal sealed class RequestManager
     {
         public static UserDto? ActiveUserDto;
+        public static event EventHandler? SubscriptionUpdated;
 
         private static readonly HttpClient Http = new();
 
@@ -29,6 +30,13 @@ namespace CodeAIToolsUI.APIs
         {
             var content = Serialize(loginDto);
             ActiveUserDto = await SetActiveUser(await Http.PostAsync(ApiEndpoints.ACTIV_USER_API, content));
+            
+            // Load subscription data if user login is successful
+            if (ActiveUserDto != null)
+            {
+                await LoadUserSubscriptionData();
+            }
+            
             await HandleLoginResponse(await Http.PostAsync(ApiEndpoints.LOG_API, Serialize(loginDto)), loginControl);
         }
 
@@ -116,6 +124,96 @@ namespace CodeAIToolsUI.APIs
             {
                 await ShowBox("Error", "An error occurred: " + ex.Message, Icon.Error);
             }
+        }
+
+        #endregion
+
+        #region Subscription Methods
+
+        public static async Task<SubscriptionDto?> GetUserSubscriptionAsync(long userId)
+        {
+            try
+            {
+                var response = await Http.GetAsync($"{ApiEndpoints.GET_SUBSCRIPTION_API}?user_id={userId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<SubscriptionDto>(responseBody);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting subscription: {ex.Message}");
+            }
+            return null;
+        }
+
+        public static async Task<bool> CreateSubscriptionAsync(CreateSubscriptionDto subscriptionDto)
+        {
+            try
+            {
+                var content = Serialize(subscriptionDto);
+                var response = await Http.PostAsync(ApiEndpoints.CREATE_SUBSCRIPTION_API, content);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error creating subscription: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static async Task<bool> CancelSubscriptionAsync(long userId)
+        {
+            try
+            {
+                var response = await Http.DeleteAsync($"{ApiEndpoints.CANCEL_SUBSCRIPTION_API}?user_id={userId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error canceling subscription: {ex.Message}");
+                return false;
+            }
+        }
+
+        private static async Task LoadUserSubscriptionData()
+        {
+            try
+            {
+                if (ActiveUserDto?.u_id == null) return;
+                
+                var subscription = await GetUserSubscriptionAsync(ActiveUserDto.u_id.Value);
+                if (subscription != null)
+                {
+                    ActiveUserDto.u_subscription_plan = subscription.s_plan;
+                    ActiveUserDto.u_is_subscribed = subscription.s_is_active;
+                    ActiveUserDto.u_subscription_end = subscription.s_end_date;
+                }
+                else
+                {
+                    // No subscription found - set default values
+                    ActiveUserDto.u_subscription_plan = "free";
+                    ActiveUserDto.u_is_subscribed = false;
+                    ActiveUserDto.u_subscription_end = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading subscription data: {ex.Message}");
+                // Set default values on error
+                if (ActiveUserDto != null)
+                {
+                    ActiveUserDto.u_subscription_plan = "free";
+                    ActiveUserDto.u_is_subscribed = false;
+                    ActiveUserDto.u_subscription_end = null;
+                }
+            }
+        }
+
+        public static void TriggerSubscriptionUpdated()
+        {
+            SubscriptionUpdated?.Invoke(null, EventArgs.Empty);
         }
 
         #endregion

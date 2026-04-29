@@ -25,4 +25,6 @@ public class AIRequestDto {
 
     @JsonProperty("presence_penalty")
     private double presencePenalty = 0.0;
+
+    private String languageToParse;
 }

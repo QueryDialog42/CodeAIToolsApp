@@ -37,4 +37,8 @@ public class Users {
 
     @OneToMany(mappedBy = "belongs_to", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Projects> projects = new ArrayList<>();
+
+    // when user deleted, subscription will be also deleted
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Subs subscription;
 }

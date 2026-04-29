@@ -11,6 +11,7 @@ namespace CodeAIToolsUI.APIs.DTOs
         public double top_p { get; set; }
         public double frequency_penalty { get; set; }
         public double presence_penalty { get; set; }
+        public string languageToParse { get; set; }
 
         public class MessageDto
         {

@@ -120,6 +120,39 @@
                             </Grid>
                         </Border>
 
+                        <!-- Subscription Plan -->
+                        <Border Background="{DynamicResource CardBg}"
+                                CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="6"
+                                        Background="#7c3aed">
+                                    <TextBlock Text="💎" Foreground="White" FontSize="13"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                    <TextBlock Text="Abonelik"
+                                               Foreground="{DynamicResource TextMuted}"
+                                               FontSize="10"/>
+                                    <TextBlock x:Name="SubscriptionPlanText" Text="Free"
+                                               Foreground="{DynamicResource TextPrimary}"
+                                               FontSize="12" FontWeight="Medium"/>
+                                </StackPanel>
+                                <Border x:Name="SubscriptionBadge" Grid.Column="2"
+                                        Background="#22c55e" CornerRadius="4"
+                                        Padding="4,2" VerticalAlignment="Center">
+                                    <TextBlock x:Name="SubscriptionBadgeText" Text="AKTİF"
+                                               Foreground="White" FontSize="8"
+                                               FontWeight="Bold"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
                         <!-- Durum -->
                         <Border Background="{DynamicResource CardBg}"
                                 CornerRadius="8" Padding="12,10">

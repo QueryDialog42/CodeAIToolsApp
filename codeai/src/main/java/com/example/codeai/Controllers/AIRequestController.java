@@ -42,8 +42,14 @@ public class AIRequestController {
     @Value("classpath:system-explain-prompt.txt")
     private Resource systemExplainPrompt;
 
-    @Value("classpath:system-transform-prompt.txt")
-    private Resource systemTransformPrompt;
+    @Value("classpath:system-transform-prompt-java.txt")
+    private Resource systemTransformPromptForJava;
+
+    @Value("classpath:system-transform-prompt-cpp.txt")
+    private Resource systemTransformPromptForCpp;
+
+    @Value("classpath:system-transform-prompt-python.txt")
+    private Resource systemTransformPromptForPython;
 
     @PostMapping("/transform")
     private ResponseEntity<AIResponseDto> AITransformRequest(@RequestBody AIRequestDto aiRequestDto)
@@ -59,7 +65,7 @@ public class AIRequestController {
     }
 
     private AIRequestDto setAiTransformRequestDto(AIRequestDto aiRequestDto) throws IOException {
-        return setDtoBySystemPrompt(aiRequestDto, new String(systemTransformPrompt.getInputStream().readAllBytes(), StandardCharsets.UTF_8));
+        return setDtoBySystemPrompt(aiRequestDto, new String(ChooseLanguageToParse(aiRequestDto), StandardCharsets.UTF_8));
     }
 
     private AIRequestDto setAiExplainRequestDto(AIRequestDto aiRequestDto) throws IOException {
@@ -100,5 +106,13 @@ public class AIRequestController {
         aiRequestDto.setMessages(roleList);
 
         return aiRequestDto;
+    }
+
+    private byte[] ChooseLanguageToParse(AIRequestDto aiRequestDto) throws IOException {
+        return switch (aiRequestDto.getLanguageToParse()) {
+            case "C++" -> systemTransformPromptForPython.getInputStream().readAllBytes();
+            case "Python" -> systemTransformPromptForCpp.getInputStream().readAllBytes();
+            default -> systemTransformPromptForJava.getInputStream().readAllBytes();
+        };
     }
 }
