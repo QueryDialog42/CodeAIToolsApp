@@ -37,5 +37,23 @@
     <Style Selector="Button.wNavBtn:pointerover">
         <Setter Property="Foreground" Value="{StaticResource WTextPrimary}"/>
     </Style>
+
+    <!-- ─── ComboBox ─────────────────────────────────────────────────────── -->
+    <Style Selector="ComboBox.wNavBtn">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{StaticResource WTextSecondary}" />
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="8,8"/>
+        <Setter Property="FontSize"        Value="13"/>
+        <Setter Property="CornerRadius"    Value="4"/>
+        <Setter Property="MinHeight"       Value="32"/>
+    </Style>
+    <Style Selector="ComboBox.wNavBtn:pointerover">
+        <Setter Property="Background" Value="{StaticResource WBgDark}"/>
+        <Setter Property="Foreground" Value="{StaticResource WTextPrimary}"/>
+    </Style>
+    <Style Selector="ComboBox.wNavBtn /template/ Border#PART_BorderElement">
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
     
 </Styles>

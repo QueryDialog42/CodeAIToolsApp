@@ -44,6 +44,24 @@
         <Style Selector="Button.aNavBtn:pointerover">
                 <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
         </Style>
+
+        <!-- ─── ComboBox ─────────────────────────────────────────────────────── -->
+        <Style Selector="ComboBox.aNavBtn">
+                <Setter Property="Background"      Value="Transparent"/>
+                <Setter Property="Foreground"      Value="{StaticResource TextSecondary}" />
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding"         Value="8,8"/>
+                <Setter Property="FontSize"        Value="13"/>
+                <Setter Property="CornerRadius"    Value="4"/>
+                <Setter Property="MinHeight"       Value="32"/>
+        </Style>
+        <Style Selector="ComboBox.aNavBtn:pointerover">
+                <Setter Property="Background" Value="{StaticResource BgDark}"/>
+                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        </Style>
+        <Style Selector="ComboBox.aNavBtn /template/ Border#PART_BorderElement">
+                <Setter Property="BorderThickness" Value="0"/>
+        </Style>
         
         <!--Side Bar-->
         <Style Selector="Border.sideBarPattern">
