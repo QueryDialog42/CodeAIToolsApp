@@ -6,8 +6,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CodeAIToolsUI.UserControls.FileTreeControl">
 
-    <Border Padding="16,4,12,4">
-        <ItemsControl x:Name="FileTreeItems">
+    <Grid>
+    <!-- Refresh Button - Top Right Overlay -->
+        <!-- File Tree -->
+        <Border Padding="16,4,12,4">
+            <ItemsControl x:Name="FileTreeItems">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type uc:FileTreeItem}">
                     <Button Click="FileItem_Clicked"
@@ -47,5 +50,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Border>
+        </Border>
+    </Grid>
 </UserControl>

@@ -160,8 +160,95 @@ namespace CodeAIToolsUI.UserControls.MainControls
             }
         }
 
-        private void PullProject_Click(object sender, RoutedEventArgs e)
-            => PullRequested?.Invoke(this, _project);
+        private async void PullProject_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_project?.p_id == null || _project?.p_name == null)
+                {
+                    await MessageBoxManager.GetMessageBoxStandard("Error", "Project information is missing.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                    return;
+                }
+
+                // Step 1: Copy project files to CodeAI_Root
+                var pullFilesUrl = $"{ApiEndpoints.PULL_FILES_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}";
+                var pullFilesResponse = await Http.PostAsync(pullFilesUrl, null);
+                
+                string filesMessage = "";
+                if (pullFilesResponse.IsSuccessStatusCode)
+                {
+                    filesMessage = await pullFilesResponse.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    filesMessage = $"File copy failed: {pullFilesResponse.StatusCode}";
+                }
+
+                // Step 2: Pull Flow content from local server
+                var flowUrl = $"{ApiEndpoints.READ_FLOW_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}";
+                var flowResponse = await Http.GetAsync(flowUrl);
+                
+                // Step 3: Pull Code content from local server
+                var codeUrl = $"{ApiEndpoints.READ_CODE_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}";
+                var codeResponse = await Http.GetAsync(codeUrl);
+
+                if (flowResponse.IsSuccessStatusCode && codeResponse.IsSuccessStatusCode)
+                {
+                    var flowContent = await flowResponse.Content.ReadAsStringAsync();
+                    var codeContent = await codeResponse.Content.ReadAsStringAsync();
+
+                    // Debug: Log what we received
+                    System.Diagnostics.Debug.WriteLine($"DEBUG - Flow response: '{flowContent}' (Length: {flowContent.Length})");
+                    System.Diagnostics.Debug.WriteLine($"DEBUG - Code response: '{codeContent}' (Length: {codeContent.Length})");
+
+                    // Update ContentService with pulled content
+                    CodeAIToolsUI.Services.ContentService.FlowContent = flowContent ?? "";
+                    CodeAIToolsUI.Services.ContentService.CodeContent = codeContent ?? "";
+
+                    // Debug: Log what ContentService now contains
+                    System.Diagnostics.Debug.WriteLine($"DEBUG - ContentService.FlowContent: '{CodeAIToolsUI.Services.ContentService.FlowContent}'");
+                    System.Diagnostics.Debug.WriteLine($"DEBUG - ContentService.CodeContent: '{CodeAIToolsUI.Services.ContentService.CodeContent}'");
+
+                    // Show success message
+                    string message = "Project pulled successfully!";
+                    
+                    // Add file copy information
+                    message += $"\n\n{filesMessage}";
+                    
+                    // Add content information
+                    if (string.IsNullOrEmpty(flowContent) && string.IsNullOrEmpty(codeContent))
+                    {
+                        message += "\n\n(No content found on server - project may not exist yet)";
+                    }
+                    else
+                    {
+                        message += "\n\nContent loaded:";
+                        if (!string.IsNullOrEmpty(flowContent))
+                            message += $"\n• Flow content ({flowContent.Length} characters)";
+                        if (!string.IsNullOrEmpty(codeContent))
+                            message += $"\n• Code content ({codeContent.Length} characters)";
+                    }
+
+                    await MessageBoxManager.GetMessageBoxStandard("Success", message, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success).ShowAsync();
+                }
+                else
+                {
+                    string errorMsg = "Failed to pull project content.\n";
+                    if (!flowResponse.IsSuccessStatusCode)
+                        errorMsg += $"Flow pull failed: {flowResponse.StatusCode}\n";
+                    if (!codeResponse.IsSuccessStatusCode)
+                        errorMsg += $"Code pull failed: {codeResponse.StatusCode}";
+                    
+                    errorMsg += $"\n\n{filesMessage}";
+                    
+                    await MessageBoxManager.GetMessageBoxStandard("Error", errorMsg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await GeneralRoutines.ShowException("An error occurred while pulling project: " + ex.Message);
+            }
+        }
 
         private void PushProject_Click(object sender, RoutedEventArgs e)
             => PushRequested?.Invoke(this, _project);

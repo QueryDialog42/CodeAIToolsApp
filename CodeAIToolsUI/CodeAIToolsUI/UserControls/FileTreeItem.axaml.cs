@@ -181,6 +181,7 @@ namespace CodeAIToolsUI.UserControls
 
         #endregion
 
+        
         #region Unclassified Methods
 
         public void Clear() => AllItems.Clear();

@@ -55,6 +55,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
         private bool _workModeActive = false;
         private bool _explanationNeeded = true;
         private bool _terminalMaximized = false;
+        private bool _updatingFromService = false;
 
         public AppMainControl()
         {
@@ -62,10 +63,41 @@ namespace CodeAIToolsUI.UserControls.MainControls
             
             // Add text change handlers to update ContentService
             flowPage.editor.TextChanged += (sender, e) => 
-                ContentService.FlowContent = flowPage.editor.Text ?? "";
+            {
+                if (!_updatingFromService)
+                {
+                    ContentService.FlowContent = flowPage.editor.Text ?? "";
+                }
+            };
             
             codePage.editor.TextChanged += (sender, e) => 
-                ContentService.CodeContent = codePage.editor.Text ?? "";
+            {
+                if (!_updatingFromService)
+                {
+                    ContentService.CodeContent = codePage.editor.Text ?? "";
+                }
+            };
+
+            // Subscribe to ContentService events to update editors when content changes
+            ContentService.FlowContentChanged += (content) => 
+            {
+                if (flowPage.editor.Text != content)
+                {
+                    _updatingFromService = true;
+                    flowPage.editor.Text = content;
+                    _updatingFromService = false;
+                }
+            };
+            
+            ContentService.CodeContentChanged += (content) => 
+            {
+                if (codePage.editor.Text != content)
+                {
+                    _updatingFromService = true;
+                    codePage.editor.Text = content;
+                    _updatingFromService = false;
+                }
+            };
         }
 
         #region Execute Methods

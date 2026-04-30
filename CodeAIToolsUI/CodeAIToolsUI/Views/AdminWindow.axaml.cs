@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using CodeAIToolsUI.UserControls.MainControls;
 using CodeAIToolsUI.APIs;
+using MsBox.Avalonia;
+using MessageBox.Avalonia.Enums;
 
 namespace CodeAIToolsUI.Views
 {
@@ -27,6 +29,23 @@ namespace CodeAIToolsUI.Views
             if (languageSelector != null)
             {
                 languageSelector.Loaded += (_, _) => UpdateLanguageSelector();
+            }
+        }
+
+        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Clear current FileTree items
+                FileTree.Clear();
+                
+                // Reload projects
+                await LoadProjectsAsync();
+                
+            }
+            catch (Exception ex)
+            {
+                await GeneralRoutines.ShowException($"An error occurred while refreshing projects: {ex.Message}");
             }
         }
 
