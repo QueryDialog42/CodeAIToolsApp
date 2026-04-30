@@ -75,6 +75,7 @@ namespace CodeAIToolsUI
         // Local file server API endpoints
         public const string SAVE_FLOW_API = "http://localhost:8080/local/save/flow";
         public const string SAVE_CODE_API = "http://localhost:8080/local/save/code";
+        public const string SAVE_FOLDER_API = "http://localhost:8080/local/save/folder";
         public const string READ_FLOW_API = "http://localhost:8080/local/read/flow";
         public const string READ_CODE_API = "http://localhost:8080/local/read/code";
         public const string LIST_FILES_API = "http://localhost:8080/local/list";

@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequestMapping("/local")
 public class LocalFileController {
 
-    private static final String BASE_STORAGE_PATH = System.getProperty("user.home") + "/CodeAI_Root";
+    private static final String BASE_STORAGE_PATH = System.getProperty("user.home") + "/CodeAI_localhost";
     private static final String FLOW_FILE = "Flow.txt";
     private static final String CODE_FILE = "Code.txt";
 
@@ -145,25 +145,25 @@ public class LocalFileController {
     @PostMapping("/pull/{projectId}")
     public ResponseEntity<String> pullProjectFiles(@PathVariable Integer projectId, @RequestParam String projectName) {
         try {
-            // Source: Actual project location (user's CodeAI_Root with project name)
             String sanitizedProjectName = sanitizeFileName(projectName);
-            Path sourceDir = Paths.get(BASE_STORAGE_PATH, sanitizedProjectName);
             
-            if (!Files.exists(sourceDir) || !Files.isDirectory(sourceDir)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Project directory not found: " + sourceDir.toString() + "\nMake sure the project exists in your CodeAI_Root folder.");
+            // Create CodeAI_Root directory if it doesn't exist
+            Path codeAIRootBaseDir = Paths.get(System.getProperty("user.home") + "/CodeAI_Root");
+            if (!Files.exists(codeAIRootBaseDir)) {
+                Files.createDirectories(codeAIRootBaseDir);
             }
             
-            // Target: Current working directory CodeAI_Root (for local access)
-            Path localCodeAIRoot = Paths.get("CodeAI_Root");
-            Path targetDir = localCodeAIRoot.resolve(sanitizedProjectName);
-            
-            // Create target directory if it doesn't exist
+            // Source: User's home CodeAI_localhost directory
+            Path sourceDir = Paths.get(BASE_STORAGE_PATH, sanitizedProjectName);
+            if (!Files.exists(sourceDir) || !Files.isDirectory(sourceDir)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Project directory not found: " + sourceDir.toString() + "\nMake sure the project exists in your CodeAI_localhost folder.");
+            }
+            // Target: User's home CodeAI_Root directory
+            Path targetDir = Paths.get(System.getProperty("user.home") + "/CodeAI_Root").resolve(sanitizedProjectName);
             if (!Files.exists(targetDir)) {
                 Files.createDirectories(targetDir);
             }
-            
-            // Copy all files from source to target
             AtomicInteger filesCopied = new AtomicInteger(0);
             try (Stream<Path> paths = Files.walk(sourceDir)) {
                 paths.filter(Files::isRegularFile)
@@ -171,11 +171,7 @@ public class LocalFileController {
                          try {
                              Path relativePath = sourceDir.relativize(sourceFile);
                              Path targetFile = targetDir.resolve(relativePath);
-                             
-                             // Create parent directories if needed
                              Files.createDirectories(targetFile.getParent());
-                             
-                             // Copy the file
                              Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
                              filesCopied.incrementAndGet();
                          } catch (IOException e) {
@@ -183,12 +179,74 @@ public class LocalFileController {
                          }
                      });
             }
-            
             return ResponseEntity.ok("Project pulled successfully! Copied " + filesCopied.get() + " files from " + 
                                      sourceDir.toString() + " to " + targetDir.toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to pull project: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/save/folder/{projectId}")
+    public ResponseEntity<String> saveProjectFolder(@PathVariable Integer projectId, @RequestParam String projectName) {
+        try {
+            String sanitizedProjectName = sanitizeFileName(projectName);
+            
+            // Create CodeAI_localhost directory if it doesn't exist
+            Path localhostBaseDir = Paths.get(BASE_STORAGE_PATH);
+            if (!Files.exists(localhostBaseDir)) {
+                Files.createDirectories(localhostBaseDir);
+            }
+            
+            // Source: User's home CodeAI_Root directory where user is working
+            Path sourceDir = Paths.get(System.getProperty("user.home") + "/CodeAI_Root").resolve(sanitizedProjectName);
+            
+            // Target: User's home CodeAI_localhost directory
+            Path targetDir = Paths.get(BASE_STORAGE_PATH, sanitizedProjectName);
+            
+            if (!Files.exists(sourceDir) || !Files.isDirectory(sourceDir)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Project directory not found in ~/CodeAI_Root folder: " + sourceDir.toString());
+            }
+            
+            // Create target directory if it doesn't exist
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+            }
+            
+            // Copy all files and subdirectories recursively
+            AtomicInteger filesCopied = new AtomicInteger(0);
+            AtomicInteger dirsCreated = new AtomicInteger(0);
+            
+            try (Stream<Path> paths = Files.walk(sourceDir)) {
+                paths.forEach(sourcePath -> {
+                    try {
+                        Path relativePath = sourceDir.relativize(sourcePath);
+                        Path targetPath = targetDir.resolve(relativePath);
+                        
+                        if (Files.isDirectory(sourcePath)) {
+                            if (!Files.exists(targetPath)) {
+                                Files.createDirectory(targetPath);
+                                dirsCreated.incrementAndGet();
+                            }
+                        } else {
+                            // Copy file
+                            Files.createDirectories(targetPath.getParent());
+                            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                            filesCopied.incrementAndGet();
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to copy: " + sourcePath, e);
+                    }
+                });
+            }
+            
+            return ResponseEntity.ok("Project folder saved successfully! " +
+                                     "Copied " + filesCopied.get() + " files and " + dirsCreated.get() + " directories " +
+                                     "from " + sourceDir.toString() + " to " + targetDir.toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to save project folder: " + e.getMessage());
         }
     }
 
