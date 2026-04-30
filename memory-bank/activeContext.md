@@ -9,6 +9,10 @@ The project is in active development with a complete backend database service an
 - RESTful API endpoints for user management, project operations, and AI services
 - GitHub integration for repository management and collaboration
 - Subscription system implementation for premium features
+- Enhanced project card UI with 5-button layout (Open, Pull, Push, Save, Delete)
+- GitHub repository browser opening functionality integrated with project cards
+- Cross-platform browser support for Windows, macOS, and Linux
+- Improved error handling for GitHub API integration and token management
 
 ## Next Development Priorities
 1. **Testing and Validation**: Comprehensive testing of all API endpoints and UI workflows

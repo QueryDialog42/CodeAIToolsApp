@@ -8,7 +8,7 @@
              x:Class="CodeAIToolsUI.UserControls.MainControls.ProjectCardControl">
 
     <Grid ClipToBounds="False">
-    <Border Width="220" Margin="0,0,16,16"
+    <Border MinWidth="220" Margin="0,0,16,16"
             Background="#22262e"
             BorderBrush="#2d323c"
             BorderThickness="1"
@@ -125,28 +125,72 @@
 
             <!-- Butonlar -->
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <!-- Style="{StaticResource ...}" → Classes="..." -->
-                <Button Grid.Column="0"
-                        Classes="cardButton"
-                        Click="OpenProject_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="📂" Foreground="#94a3b8" FontSize="11" Margin="0,0,4,0"/>
-                        <TextBlock Text="Aç" Foreground="#94a3b8" FontSize="11"/>
-                    </StackPanel>
-                </Button>
+                <!-- First Row: Open, Pull, Push, Delete -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="2"
+                    <!-- Open Button (Yellow) -->
+                    <Button Grid.Column="0"
+                            Classes="cardButton"
+                            Click="OpenProject_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📂" Foreground="#fbbf24" FontSize="11" Margin="0,0,4,0"/>
+                            <TextBlock Text="Aç" Foreground="#fbbf24" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Pull Button (Blue) -->
+                    <Button Grid.Column="2"
+                            Classes="cardButton"
+                            Click="PullProject_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⬇️" Foreground="#3b82f6" FontSize="11" Margin="0,0,4,0"/>
+                            <TextBlock Text="Pull" Foreground="#3b82f6" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Push Button (Purple) -->
+                    <Button Grid.Column="4"
+                            Classes="cardButton"
+                            Click="PushProject_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⬆️" Foreground="#a855f7" FontSize="11" Margin="0,0,4,0"/>
+                            <TextBlock Text="Push" Foreground="#a855f7" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Delete Button (Red) -->
+                    <Button Grid.Column="6"
+                            Classes="cardButton"
+                            Click="DeleteProject_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="#ef4444" Text="🗑️" FontSize="11" Margin="0,0,4,0"/>
+                            <TextBlock Text="Sil" Foreground="#ef4444" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!-- Second Row: Save Button (Green) -->
+                <Button Grid.Row="2"
                         Classes="cardButton"
-                        Click="DeleteProject_Click">
+                        Click="SaveProject_Click">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Foreground="#f87171" Text="🗑️" FontSize="11" Margin="0,0,4,0"/>
-                        <TextBlock Text="Sil" Foreground="#f87171" FontSize="11"/>
+                        <TextBlock Text="💾" Foreground="#10b981" FontSize="11" Margin="0,0,4,0"/>
+                        <TextBlock Text="Save" Foreground="#10b981" FontSize="11"/>
                     </StackPanel>
                 </Button>
             </Grid>

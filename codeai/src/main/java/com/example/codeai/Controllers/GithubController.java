@@ -93,7 +93,7 @@ public class GithubController {
 
             GHCreateRepositoryBuilder repoBuilder = github.createRepository(projectDto.getP_name())
                     .description(projectDto.getP_description())
-                    .private_(false)
+                    .private_(true)
                     .autoInit(false);
 
             repoBuilder.create();

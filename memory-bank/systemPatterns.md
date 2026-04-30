@@ -66,6 +66,14 @@ The CodeAI Tools platform follows a client-server architecture with clear separa
 3. Backend processes with system prompts
 4. AI response returned and displayed in UI
 
+### GitHub Repository Access Flow
+1. User clicks 'Open' button on project card
+2. Frontend retrieves GitHub token from backend API
+3. Frontend calls GitHub API to get username using token
+4. Repository URL constructed (https://github.com/{username}/{project_name})
+5. Cross-platform browser opens repository URL
+6. Error handling for missing tokens or API failures
+
 ## Data Flow Patterns
 - **Request-Response**: Synchronous API calls for most operations
 - **Async Processing**: Non-blocking UI updates during API calls

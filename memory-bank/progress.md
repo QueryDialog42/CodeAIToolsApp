@@ -25,6 +25,10 @@ The CodeAI Tools project is in a functional state with core features implemented
 - GitHub token storage and validation
 - Repository creation and deletion
 - Git repository existence checking
+- Direct repository browser opening from project cards
+- GitHub API integration for username retrieval
+- Cross-platform browser support (Windows/macOS/Linux)
+- Enhanced error handling for GitHub API calls
 
 ✅ **AI Services**
 - Code explanation API with system prompts
@@ -61,6 +65,10 @@ The CodeAI Tools project is in a functional state with core features implemented
 - Reusable user controls
 - Custom styling and theming
 - Responsive layout design
+- Enhanced project card controls with 5-button layout
+- Color-coded action buttons (Open-yellow, Pull-blue, Push-purple, Save-green, Delete-red)
+- Cross-platform browser integration for GitHub repositories
+- Improved error handling and user feedback mechanisms
 
 ## What's Left to Build
 
