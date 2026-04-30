@@ -17,6 +17,7 @@ using CodeAIToolsUI.APIs;
 using CodeAIToolsUI.APIs.DTOs;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using CodeAIToolsUI.Services;
 
 
 namespace CodeAIToolsUI.UserControls.MainControls
@@ -58,6 +59,13 @@ namespace CodeAIToolsUI.UserControls.MainControls
         public AppMainControl()
         {
             InitializeComponent();
+            
+            // Add text change handlers to update ContentService
+            flowPage.editor.TextChanged += (sender, e) => 
+                ContentService.FlowContent = flowPage.editor.Text ?? "";
+            
+            codePage.editor.TextChanged += (sender, e) => 
+                ContentService.CodeContent = codePage.editor.Text ?? "";
         }
 
         #region Execute Methods

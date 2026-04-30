@@ -13,6 +13,11 @@ The project is in active development with a complete backend database service an
 - GitHub repository browser opening functionality integrated with project cards
 - Cross-platform browser support for Windows, macOS, and Linux
 - Improved error handling for GitHub API integration and token management
+- Local file server implementation for Flow and Code content persistence
+- ContentService pattern for cross-UI component data sharing
+- Fixed MapStruct dependency injection issues with proper Maven configuration
+- Resolved Java 17 compatibility issues and application startup problems
+- Enhanced save functionality with real-time content synchronization
 
 ## Next Development Priorities
 1. **Testing and Validation**: Comprehensive testing of all API endpoints and UI workflows
@@ -34,6 +39,8 @@ The project is in active development with a complete backend database service an
 - **Repository Pattern**: Spring Data JPA repositories for data access
 - **MVVM Pattern**: Model-View-ViewModel for frontend architecture
 - **Async Operations**: Asynchronous API calls in the frontend
+- **ContentService Pattern**: Static service for cross-UI component data sharing
+- **MapStruct Integration**: Annotation-based entity-DTO mapping with Spring DI
 
 ## Technical Debt and Known Issues
 - **Configuration Management**: Hardcoded API endpoints need environment-specific configuration
@@ -42,7 +49,7 @@ The project is in active development with a complete backend database service an
 - **Testing**: Unit and integration test coverage needs improvement
 
 ## Development Environment Setup
-- **Backend**: Java 21, Maven 3.x, MariaDB/MySQL database
+- **Backend**: Java 17, Maven 3.x, MariaDB/MySQL database
 - **Frontend**: .NET 10.0, Avalonia UI framework
 - **Development Tools**: IntelliJ IDEA/Eclipse for backend, Visual Studio/Rider for frontend
 - **Version Control**: Git with GitHub integration

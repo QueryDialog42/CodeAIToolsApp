@@ -96,7 +96,7 @@ public class AIRequestController {
 
         var userRole = new MessageDto();
         userRole.setRole("assistant");
-        userRole.setContent(aiRequestDto.getMessages().getLast().getContent()); // Flow.txt content
+        userRole.setContent(aiRequestDto.getMessages().get(aiRequestDto.getMessages().size() - 1).getContent()); // Flow.txt content
 
         var roleList = new ArrayList<MessageDto>();
         roleList.add(systemRole);

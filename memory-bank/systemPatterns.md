@@ -30,6 +30,7 @@ The CodeAI Tools platform follows a client-server architecture with clear separa
 - **Observer Pattern**: Property change notifications
 - **Factory Pattern**: Window and control creation
 - **Singleton Pattern**: Request manager and configuration
+- **ContentService Pattern**: Static service for cross-UI component data sharing
 
 ## Component Relationships
 
@@ -74,11 +75,27 @@ The CodeAI Tools platform follows a client-server architecture with clear separa
 5. Cross-platform browser opens repository URL
 6. Error handling for missing tokens or API failures
 
+### Local File Server Save Flow
+1. User clicks 'Save' button on project card
+2. Frontend retrieves Flow and Code content from ContentService
+3. Frontend sends content to backend local file server endpoints
+4. Backend creates project directory structure (CodeAI_Root/{projectId}_{projectName}/)
+5. Backend saves Flow.txt and Code.txt files
+6. Success/error response returned to user
+
+### ContentService Data Flow
+1. User types in Flow or Code editors in AppMainControl
+2. TextChanged events update ContentService static properties
+3. ProjectCardControl accesses content via ContentService when saving
+4. Real-time synchronization ensures latest content is always available
+
 ## Data Flow Patterns
 - **Request-Response**: Synchronous API calls for most operations
 - **Async Processing**: Non-blocking UI updates during API calls
 - **Event Propagation**: Property change notifications for UI updates
 - **State Management**: Centralized user session and project state
+- **Static Service Pattern**: ContentService provides global state for editor content
+- **Real-time Synchronization**: Content updates propagate across UI components instantly
 
 ## Security Patterns
 - **Role-Based Access Control**: Admin/Worker role validation

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using MsBox.Avalonia;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -14,6 +15,7 @@ using MessageBox.Avalonia.Enums;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CodeAIToolsUI.UserControls.PopupControl;
+using CodeAIToolsUI.UserControls.MainControls;
 
 namespace CodeAIToolsUI.UserControls.MainControls
 {
@@ -164,8 +166,61 @@ namespace CodeAIToolsUI.UserControls.MainControls
         private void PushProject_Click(object sender, RoutedEventArgs e)
             => PushRequested?.Invoke(this, _project);
 
-        private void SaveProject_Click(object sender, RoutedEventArgs e)
-            => SaveRequested?.Invoke(this, _project);
+        private async void SaveProject_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Get the Flow and Code content from ContentService
+                string flowContent = CodeAIToolsUI.Services.ContentService.FlowContent ?? "";
+                
+                // Get Code content  
+                string codeContent = CodeAIToolsUI.Services.ContentService.CodeContent ?? "";
+
+                // Create save requests
+                var flowRequest = new SaveContentRequestDto
+                {
+                    projectId = _project?.p_id,
+                    projectName = _project?.p_name,
+                    content = flowContent
+                };
+
+                var codeRequest = new SaveContentRequestDto
+                {
+                    projectId = _project?.p_id,
+                    projectName = _project?.p_name,
+                    content = codeContent
+                };
+
+                // Save Flow content
+                var flowJson = JsonConvert.SerializeObject(flowRequest);
+                var flowContentData = new StringContent(flowJson, Encoding.UTF8, "application/json");
+                var flowResponse = await Http.PostAsync(ApiEndpoints.SAVE_FLOW_API, flowContentData);
+
+                // Save Code content
+                var codeJson = JsonConvert.SerializeObject(codeRequest);
+                var codeContentData = new StringContent(codeJson, Encoding.UTF8, "application/json");
+                var codeResponse = await Http.PostAsync(ApiEndpoints.SAVE_CODE_API, codeContentData);
+
+                if (flowResponse.IsSuccessStatusCode && codeResponse.IsSuccessStatusCode)
+                {
+                    await MessageBoxManager.GetMessageBoxStandard("Success", "Project content saved successfully!", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success).ShowAsync();
+                }
+                else
+                {
+                    string errorMsg = "Failed to save project content.\n";
+                    if (!flowResponse.IsSuccessStatusCode)
+                        errorMsg += $"Flow save failed: {flowResponse.StatusCode}\n";
+                    if (!codeResponse.IsSuccessStatusCode)
+                        errorMsg += $"Code save failed: {codeResponse.StatusCode}";
+                    
+                    await MessageBoxManager.GetMessageBoxStandard("Error", errorMsg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await GeneralRoutines.ShowException("An error occurred while saving project: " + ex.Message);
+            }
+        }
 
         private void DeleteProject_Click(object sender, RoutedEventArgs e)
             => DeleteRequested?.Invoke(this, _project);

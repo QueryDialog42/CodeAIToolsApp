@@ -16,6 +16,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml.Styling;
 using CodeAIToolsUI.UserControls.MainControls;
 using CodeAIToolsUI.UserControls.PopupControl;
+using CodeAIToolsUI.Services;
 
 
 
@@ -48,13 +49,21 @@ namespace CodeAIToolsUI.Views
         private string FlowText
         {
             get => MainControl.flowPage.editor.Text;
-            set => MainControl.flowPage.editor.Text = value;
+            set 
+            { 
+                MainControl.flowPage.editor.Text = value;
+                ContentService.FlowContent = value;
+            }
         }
 
         private string CodeText
         {
             get => MainControl.codePage.editor.Text;
-            set => MainControl.codePage.editor.Text = value;
+            set 
+            { 
+                MainControl.codePage.editor.Text = value;
+                ContentService.CodeContent = value;
+            }
         }
 
         protected AppMainControl   MainControl   => _mainControl  ??= new AppMainControl();

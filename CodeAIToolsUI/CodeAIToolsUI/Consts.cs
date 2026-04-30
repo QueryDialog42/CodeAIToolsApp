@@ -71,5 +71,12 @@ namespace CodeAIToolsUI
         public const string UPDATE_SUBSCRIPTION_API = "http://localhost:8080/subscription/update";
         public const string CANCEL_SUBSCRIPTION_API = "http://localhost:8080/subscription/cancel";
         public const string GET_PLANS_API = "http://localhost:8080/subscription/plans";
+        
+        // Local file server API endpoints
+        public const string SAVE_FLOW_API = "http://localhost:8080/local/save/flow";
+        public const string SAVE_CODE_API = "http://localhost:8080/local/save/code";
+        public const string READ_FLOW_API = "http://localhost:8080/local/read/flow";
+        public const string READ_CODE_API = "http://localhost:8080/local/read/code";
+        public const string LIST_FILES_API = "http://localhost:8080/local/list";
     }
 }
