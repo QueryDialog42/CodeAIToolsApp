@@ -104,12 +104,22 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
         private async void OpenProject_Click(object sender, RoutedEventArgs e)
         {
+            var openButton = sender as Button;
+            var originalContent = openButton?.Content;
+            
             try
             {
+                // Change button text to "opening..." (keep original yellow color)
+                if (openButton != null) openButton.Content = new TextBlock { Text = "opening..." };
+
                 // Get the user's GitHub token
                 var tokenResponse = await Http.GetAsync(ApiEndpoints.GET_TOK_API + "/" + RequestManager.ActiveUserDto?.u_id);
                 if (!tokenResponse.IsSuccessStatusCode)
                 {
+                    if (openButton != null)
+                    {
+                        openButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
                     await MessageBoxManager.GetMessageBoxStandard("Error", "GitHub token not found. Please configure your GitHub token.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
                     return;
                 }
@@ -119,6 +129,10 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
                 if (string.IsNullOrEmpty(githubToken))
                 {
+                    if (openButton != null)
+                    {
+                        openButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
                     await MessageBoxManager.GetMessageBoxStandard("Error", "GitHub token not found. Please configure your GitHub token.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
                     return;
                 }
@@ -131,6 +145,10 @@ namespace CodeAIToolsUI.UserControls.MainControls
                 var userResponse = await client.GetAsync("https://api.github.com/user");
                 if (!userResponse.IsSuccessStatusCode)
                 {
+                    if (openButton != null)
+                    {
+                        openButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
                     await MessageBoxManager.GetMessageBoxStandard("Error", "Failed to get GitHub user information.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
                     return;
                 }
@@ -140,6 +158,10 @@ namespace CodeAIToolsUI.UserControls.MainControls
                 
                 if (userInfo?.login == null || _project?.p_name == null)
                 {
+                    if (openButton != null)
+                    {
+                        openButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
                     await MessageBoxManager.GetMessageBoxStandard("Error", "Unable to construct repository URL.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
                     return;
                 }
@@ -153,22 +175,47 @@ namespace CodeAIToolsUI.UserControls.MainControls
                     Process.Start(new ProcessStartInfo("open", repoUrl) { UseShellExecute = false });
                 else if (OperatingSystem.IsLinux())
                     Process.Start(new ProcessStartInfo("xdg-open", repoUrl) { UseShellExecute = false });
+                
+                // Change button text to "opened!" with light green color
+                if (openButton != null)
+                {
+                    openButton.Content = new TextBlock { Text = "opened!", Foreground = Avalonia.Media.Brushes.LightGreen };
+                }
+                
+                // Reset to original content after delay
+                await Task.Delay(2000);
+                if (openButton != null) openButton.Content = originalContent;
             }
             catch (Exception ex)
             {
+                if (openButton != null)
+                {
+                    openButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                }
+                await Task.Delay(2000);
+                if (openButton != null) openButton.Content = originalContent;
                 await GeneralRoutines.ShowException("An error occurred while opening repository: " + ex.Message);
             }
         }
 
         private async void PullProject_Click(object sender, RoutedEventArgs e)
         {
+            var pullButton = sender as Button;
+            var originalContent = pullButton?.Content;
+            
             try
             {
                 if (_project?.p_id == null || _project?.p_name == null)
                 {
-                    await MessageBoxManager.GetMessageBoxStandard("Error", "Project information is missing.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                    if (pullButton != null)
+                    {
+                        pullButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
                     return;
                 }
+
+                // Change button text to "pulling..." (keep original blue color)
+                if (pullButton != null) pullButton.Content = new TextBlock { Text = "pulling..." };
 
                 // Pull project folder to local CodeAI_Root for sidebar visibility
                 var pullFilesUrl = $"{ApiEndpoints.PULL_FILES_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}";
@@ -176,22 +223,37 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
                 if (pullFilesResponse.IsSuccessStatusCode)
                 {
-                    var result = await pullFilesResponse.Content.ReadAsStringAsync();
-                    await MessageBoxManager.GetMessageBoxStandard("Success", result, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success).ShowAsync();
+                    // Change button text to "pulled!" with light green color
+                    if (pullButton != null)
+                    {
+                        pullButton.Content = new TextBlock { Text = "pulled!", Foreground = Avalonia.Media.Brushes.LightGreen };
+                    }
+                    
+                    // Reset to original content after delay
+                    await Task.Delay(2000);
+                    if (pullButton != null) pullButton.Content = originalContent;
                 }
                 else
                 {
-                    string errorMsg = $"Failed to pull project folder: {pullFilesResponse.StatusCode}";
-                    var errorContent = await pullFilesResponse.Content.ReadAsStringAsync();
-                    if (!string.IsNullOrEmpty(errorContent))
-                        errorMsg += $"\n{errorContent}";
-
-                    await MessageBoxManager.GetMessageBoxStandard("Error", errorMsg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                    // Change button text to "Error!" with red color
+                    if (pullButton != null)
+                    {
+                        pullButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
+                    
+                    // Reset to original content after delay
+                    await Task.Delay(2000);
+                    if (pullButton != null) pullButton.Content = originalContent;
                 }
             }
             catch (Exception ex)
             {
-                await GeneralRoutines.ShowException("An error occurred while pulling project folder: " + ex.Message);
+                if (pullButton != null)
+                {
+                    pullButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                }
+                await Task.Delay(2000);
+                if (pullButton != null) pullButton.Content = originalContent;
             }
         }
 
@@ -200,13 +262,22 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
         private async void SaveProject_Click(object sender, RoutedEventArgs e)
         {
+            var saveButton = sender as Button;
+            var originalContent = saveButton?.Content;
+            
             try
             {
                 if (_project?.p_id == null || _project?.p_name == null)
                 {
-                    await MessageBoxManager.GetMessageBoxStandard("Error", "Project information is missing.", ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                    if (saveButton != null)
+                    {
+                        saveButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
                     return;
                 }
+
+                // Change button text to "saving..." (keep original green color)
+                if (saveButton != null) saveButton.Content = new TextBlock { Text = "saving..." };
 
                 // Save entire project folder to home folder
                 var saveFolderUrl = $"{ApiEndpoints.SAVE_FOLDER_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}";
@@ -214,27 +285,53 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
                 if (saveResponse.IsSuccessStatusCode)
                 {
-                    var result = await saveResponse.Content.ReadAsStringAsync();
-                    await MessageBoxManager.GetMessageBoxStandard("Success", result, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success).ShowAsync();
+                    // Change button text to "Saved!" with light green color
+                    if (saveButton != null)
+                    {
+                        saveButton.Content = new TextBlock { Text = "Saved!", Foreground = Avalonia.Media.Brushes.LightGreen };
+                    }
+                    
+                    // Reset to original content after delay
+                    await Task.Delay(2000);
+                    if (saveButton != null) saveButton.Content = originalContent;
                 }
                 else
                 {
-                    string errorMsg = $"Failed to save project folder: {saveResponse.StatusCode}";
-                    var errorContent = await saveResponse.Content.ReadAsStringAsync();
-                    if (!string.IsNullOrEmpty(errorContent))
-                        errorMsg += $"\n{errorContent}";
-
-                    await MessageBoxManager.GetMessageBoxStandard("Error", errorMsg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                    // Change button text to "Error!" with red color
+                    if (saveButton != null)
+                    {
+                        saveButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
+                    
+                    // Reset to original content after delay
+                    await Task.Delay(2000);
+                    if (saveButton != null) saveButton.Content = originalContent;
                 }
             }
             catch (Exception ex)
             {
-                await GeneralRoutines.ShowException("An error occurred while saving project folder: " + ex.Message);
+                if (saveButton != null)
+                {
+                    saveButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                }
+                await Task.Delay(2000);
+                if (saveButton != null) saveButton.Content = originalContent;
             }
         }
 
         private void DeleteProject_Click(object sender, RoutedEventArgs e)
-            => DeleteRequested?.Invoke(this, _project);
+        {
+            var deleteButton = sender as Button;
+            
+            // Change button text to "deleting..." with red color
+            if (deleteButton != null)
+            {
+                deleteButton.Content = new TextBlock { Text = "deleting...", Foreground = Avalonia.Media.Brushes.Red };
+            }
+            
+            // Invoke delete request
+            DeleteRequested?.Invoke(this, _project);
+        }
 
         #endregion
 

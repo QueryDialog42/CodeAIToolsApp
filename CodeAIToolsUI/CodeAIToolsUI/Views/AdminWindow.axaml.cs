@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using CodeAIToolsUI.UserControls.MainControls;
@@ -41,7 +42,6 @@ namespace CodeAIToolsUI.Views
                 
                 // Reload projects
                 await LoadProjectsAsync();
-                
             }
             catch (Exception ex)
             {
