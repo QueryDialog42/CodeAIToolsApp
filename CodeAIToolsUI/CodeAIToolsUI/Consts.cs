@@ -80,5 +80,6 @@ namespace CodeAIToolsUI
         public const string READ_CODE_API = "http://localhost:8080/local/read/code";
         public const string LIST_FILES_API = "http://localhost:8080/local/list";
         public const string PULL_FILES_API = "http://localhost:8080/local/pull";
+        public const string PUSH_FILES_API = "http://localhost:8080/local/push";
     }
 }

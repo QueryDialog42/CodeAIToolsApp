@@ -47,6 +47,13 @@ namespace CodeAIToolsUI.UserControls.MainControls
             CollaboratorAvatarList.ItemsSource = Collaborators;
             Populate(project);
             Loaded += async (_, _) => await LoadCollaborators();
+            
+            // Hide Push and Delete buttons for Worker users
+            if (RequestManager.ActiveUserDto?.u_role == Configs.WORKER)
+            {
+                PushButton.IsVisible = false;
+                DeleteButton.IsVisible = false;
+            }
         }
 
         private async void BtnCollaboratorAvatar_Click(object? sender, RoutedEventArgs e)
@@ -257,8 +264,86 @@ namespace CodeAIToolsUI.UserControls.MainControls
             }
         }
 
-        private void PushProject_Click(object sender, RoutedEventArgs e)
-            => PushRequested?.Invoke(this, _project);
+        private async void PushProject_Click(object sender, RoutedEventArgs e)
+        {
+            var pushButton = sender as Button;
+            var originalContent = pushButton?.Content;
+            
+            try
+            {
+                if (_project?.p_id == null || _project?.p_name == null || RequestManager.ActiveUserDto?.u_id == null)
+                {
+                    if (pushButton != null)
+                    {
+                        pushButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
+                    return;
+                }
+
+                // Change button text to "pushing..." (keep original purple color)
+                if (pushButton != null) pushButton.Content = new TextBlock { Text = "pushing..." };
+
+                // First save the project to ensure latest content is available, then push
+                var saveFolderUrl = $"{ApiEndpoints.SAVE_FOLDER_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}";
+                var saveResponse = await Http.PostAsync(saveFolderUrl, null);
+                
+                if (!saveResponse.IsSuccessStatusCode)
+                {
+                    if (pushButton != null)
+                    {
+                        pushButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
+                    await Task.Delay(2000);
+                    if (pushButton != null) pushButton.Content = originalContent;
+                    var saveError = await saveResponse.Content.ReadAsStringAsync();
+                    await MessageBoxManager.GetMessageBoxStandard("Save Error", "Failed to save project before pushing: " + saveError, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                    return;
+                }
+                
+                // Now push the saved files from CodeAI_Root to GitHub repository
+                var pushFilesUrl = $"{ApiEndpoints.PUSH_FILES_API}/{_project.p_id}?projectName={System.Uri.EscapeDataString(_project.p_name)}&userId={RequestManager.ActiveUserDto.u_id}";
+                var pushFilesResponse = await Http.PostAsync(pushFilesUrl, null);
+
+                if (pushFilesResponse.IsSuccessStatusCode)
+                {
+                    // Change button text to "pushed!" with light green color
+                    if (pushButton != null)
+                    {
+                        pushButton.Content = new TextBlock { Text = "pushed!", Foreground = Avalonia.Media.Brushes.LightGreen };
+                    }
+                    
+                    // Reset to original content after delay
+                    await Task.Delay(2000);
+                    if (pushButton != null) pushButton.Content = originalContent;
+                }
+                else
+                {
+                    // Change button text to "Error!" with red color
+                    if (pushButton != null)
+                    {
+                        pushButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                    }
+                    
+                    // Reset to original content after delay
+                    await Task.Delay(2000);
+                    if (pushButton != null) pushButton.Content = originalContent;
+                    
+                    // Show error message
+                    var errorContent = await pushFilesResponse.Content.ReadAsStringAsync();
+                    await MessageBoxManager.GetMessageBoxStandard("Push Error", errorContent, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (pushButton != null)
+                {
+                    pushButton.Content = new TextBlock { Text = "Error!", Foreground = Avalonia.Media.Brushes.Red };
+                }
+                await Task.Delay(2000);
+                if (pushButton != null) pushButton.Content = originalContent;
+                await GeneralRoutines.ShowException("An error occurred while pushing to GitHub: " + ex.Message);
+            }
+        }
 
         private async void SaveProject_Click(object sender, RoutedEventArgs e)
         {

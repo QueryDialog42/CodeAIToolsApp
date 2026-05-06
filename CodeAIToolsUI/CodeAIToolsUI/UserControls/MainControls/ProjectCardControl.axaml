@@ -163,8 +163,8 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Push Button (Purple) -->
-                    <Button Grid.Column="4"
+                    <!-- Push Button (Purple) - Hidden for Workers -->
+                    <Button x:Name="PushButton" Grid.Column="4"
                             Classes="cardButton"
                             Click="PushProject_Click">
                         <StackPanel Orientation="Horizontal">
@@ -173,8 +173,8 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Delete Button (Red) -->
-                    <Button Grid.Column="6"
+                    <!-- Delete Button (Red) - Hidden for Workers -->
+                    <Button x:Name="DeleteButton" Grid.Column="6"
                             Classes="cardButton"
                             Click="DeleteProject_Click">
                         <StackPanel Orientation="Horizontal">

@@ -103,8 +103,8 @@
                               Classes="aNavBtn"
                               ToolTip.Tip="Select Language">
                         <ComboBoxItem Content="Python"/>
-                        <ComboBoxItem Content="C++"/>
-                        <ComboBoxItem Content="Java" IsSelected="True"/>
+                        <ComboBoxItem Content="C++" IsSelected="True"/>
+                        <ComboBoxItem Content="Java"/>
                     </ComboBox>
 
                     <Grid Margin="0,0,12,0">

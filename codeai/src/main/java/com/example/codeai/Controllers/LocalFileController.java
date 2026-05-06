@@ -11,15 +11,26 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHContent;
+import org.kohsuke.github.GHCommitBuilder;
+import java.util.Base64;
+import com.example.codeai.Repositories.IGitTokensRepository;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/local")
 public class LocalFileController {
 
+    private final IGitTokensRepository gitTokensRepository;
     private static final String BASE_STORAGE_PATH = System.getProperty("user.home") + "/CodeAI_localhost";
     private static final String FLOW_FILE = "Flow.txt";
     private static final String CODE_FILE = "Code.txt";
+
+    public LocalFileController(IGitTokensRepository gitTokensRepository) {
+        this.gitTokensRepository = gitTokensRepository;
+    }
 
     @PostMapping("/save/flow")
     public ResponseEntity<String> saveFlowContent(@RequestBody SaveContentRequest request) {
@@ -247,6 +258,94 @@ public class LocalFileController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to save project folder: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/push/{projectId}")
+    public ResponseEntity<String> pushProjectToGitHub(@PathVariable Integer projectId, @RequestParam String projectName, @RequestParam Integer userId) {
+        try {
+            String sanitizedProjectName = sanitizeFileName(projectName);
+            
+            // Get user's GitHub token
+            var tokenOptional = gitTokensRepository.findById(userId);
+            if (tokenOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("GitHub token not found for user. Please configure your GitHub token first.");
+            }
+            
+            String githubToken = tokenOptional.get().getGit_token();
+            
+            // Connect to GitHub
+            GitHub github = new GitHubBuilder()
+                    .withOAuthToken(githubToken)
+                    .build();
+            
+            // Get user's GitHub username
+            String username = github.getMyself().getLogin();
+            
+            // Get the repository
+            GHRepository repository;
+            try {
+                repository = github.getRepository(username + "/" + sanitizedProjectName);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("GitHub repository '" + sanitizedProjectName + "' not found. Please create the repository first.");
+            }
+            
+            // Source: User's CodeAI_Root directory where user actually works
+            Path sourceDir = Paths.get(System.getProperty("user.home") + "/CodeAI_Root").resolve(sanitizedProjectName);
+            if (!Files.exists(sourceDir) || !Files.isDirectory(sourceDir)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Project directory not found in ~/CodeAI_Root folder: " + sourceDir.toString() + 
+                          "\nMake sure you have pulled the project first or saved your work.");
+            }
+            
+            AtomicInteger filesPushed = new AtomicInteger(0);
+            AtomicInteger filesSkipped = new AtomicInteger(0);
+            
+            // Walk through all files in the project directory
+            try (Stream<Path> paths = Files.walk(sourceDir)) {
+                paths.filter(Files::isRegularFile)
+                     .forEach(sourceFile -> {
+                         try {
+                             // Get relative path from project directory
+                             Path relativePath = sourceDir.relativize(sourceFile);
+                             String repoPath = relativePath.toString().replace("\\", "/");
+                             
+                             // Read file content as text
+                             String fileContent = Files.readString(sourceFile);
+                             
+                             try {
+                                 // Try to get existing file
+                                 GHContent existingContent = repository.getFileContent(repoPath);
+                                 
+                                 // Update existing file with raw text content
+                                 existingContent.update(fileContent, "Update " + repoPath + " via CodeAI Tools");
+                                 filesPushed.incrementAndGet();
+                                 
+                             } catch (Exception e) {
+                                // File doesn't exist, create new one with raw text content
+                                repository.createContent()
+                                    .content(fileContent)
+                                    .message("Add " + repoPath + " via CodeAI Tools")
+                                    .path(repoPath)
+                                    .commit();
+                                filesPushed.incrementAndGet();
+                            }
+                     } catch (Exception e) {
+                         filesSkipped.incrementAndGet();
+                     }
+                 });
+            }
+            
+            return ResponseEntity.ok("Project pushed successfully! " +
+                                     "Pushed " + filesPushed.get() + " files to GitHub repository " +
+                                     username + "/" + sanitizedProjectName +
+                                     (filesSkipped.get() > 0 ? " (skipped " + filesSkipped.get() + " files)" : ""));
+                                     
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to push project to GitHub: " + e.getMessage());
         }
     }
 
