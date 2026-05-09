@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeAiApplication",
+            "request": "launch",
+            "mainClass": "com.example.codeai.CodeAiApplication",
+            "projectName": "codeai"
+        },
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/CodeAIToolsUI/CodeAIToolsUI/bin/Debug/net10.0/CodeAIToolsUI.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CodeAIToolsUI/CodeAIToolsUI",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}

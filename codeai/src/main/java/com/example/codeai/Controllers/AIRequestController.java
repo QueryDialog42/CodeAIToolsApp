@@ -1,7 +1,13 @@
 package com.example.codeai.Controllers;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import java.nio.charset.StandardCharsets;
 import org.springframework.http.MediaType;
@@ -12,13 +18,20 @@ import org.springframework.core.io.Resource;
 import com.example.codeai.Dtos.AIResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.codeai.Dtos.innerDtos.MessageDto;
+import com.example.codeai.Repositories.ISettingsRepository;
+
 import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -51,6 +64,8 @@ public class AIRequestController {
     @Value("classpath:system-transform-prompt-python.txt")
     private Resource systemTransformPromptForPython;
 
+    private ISettingsRepository settingsRepository;
+
     @PostMapping("/transform")
     private ResponseEntity<AIResponseDto> AITransformRequest(@RequestBody AIRequestDto aiRequestDto)
             throws IOException {
@@ -62,6 +77,56 @@ public class AIRequestController {
     private ResponseEntity<AIResponseDto> AIExplainRequest(@RequestBody AIRequestDto aiRequestDto)
             throws IOException {
         return ResponseEntity.ok(handleAIResponse(setAiExplainRequestDto(aiRequestDto)));
+    }
+
+    @GetMapping("/getModels")
+    private ResponseEntity<List<String>> GetAiModels(
+            @RequestParam String apiKey,
+            @RequestParam String baseUrl) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(baseUrl + "/v1/models"))
+                    .header("Authorization", "Bearer " + apiKey)
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                return ResponseEntity.status(response.statusCode()).build();
+            }
+
+            // Parse JSON → extract model IDs
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response.body());
+            JsonNode data = root.path("data");
+
+            List<String> models = new ArrayList<>();
+            if (data.isArray()) {
+                for (JsonNode node : data) {
+                    String id = node.path("id").asText(null);
+                    if (id != null) models.add(id);
+                }
+            }
+
+            return ResponseEntity.ok(models);
+
+        } catch (Exception ex) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/getBaseKey/{userId}")
+    private ResponseEntity<List<String>> GetBaseUrlAndApiKey(@RequestParam String userId) {
+        var setting = settingsRepository.findByUserId(userId);
+        if (setting.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(List.of(setting.get(0), setting.get(1)));
     }
 
     private AIRequestDto setAiTransformRequestDto(AIRequestDto aiRequestDto) throws IOException {

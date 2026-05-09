@@ -17,6 +17,7 @@ using Avalonia.Markup.Xaml.Styling;
 using CodeAIToolsUI.UserControls.MainControls;
 using CodeAIToolsUI.UserControls.PopupControl;
 using CodeAIToolsUI.Services;
+using Newtonsoft.Json;
 
 
 
@@ -265,6 +266,41 @@ namespace CodeAIToolsUI.Views
                     AccountPopup.HorizontalOffset += 1;
                     AccountPopup.HorizontalOffset -= 1;
                 };
+            }
+        }
+
+        protected virtual async Task LoadAiSelectorCore(ComboBox aiSelector)
+        {
+           var response = await Http.GetAsync(ApiEndpoints.GET_AI_MODS_API);
+           if (response.IsSuccessStatusCode)
+           {
+               var content = await response.Content.ReadAsStringAsync();
+               var models = JsonConvert.DeserializeObject<List<string>>(content);
+               aiSelector.ItemsSource = models;
+           }
+        }
+
+        public async Task OpenSettingsDialog(){
+            var baseUrl = string.Empty;
+            var apikey = string.Empty;
+
+            var response = await Http.GetAsync(ApiEndpoints.GET_BAS_URL_AND_KEY_API + RequestManager.ActiveUserDto?.u_id);
+            if (response.IsSuccessStatusCode){
+                var content = await response.Content.ReadAsStringAsync();
+                var baseUrlAndKey = JsonConvert.DeserializeObject<List<string>>(content);
+                baseUrl = baseUrlAndKey[0];
+                apikey = baseUrlAndKey[1];
+            }
+        
+           var dialog = new SettingsWindow(
+            currentBaseUrl: baseUrl,
+            currentApiKey: apikey
+           );
+            
+            var result = await dialog.ShowDialog<bool>(this);
+            if (result == true)
+            {
+                // Settings were saved - update stored values if needed
             }
         }
 

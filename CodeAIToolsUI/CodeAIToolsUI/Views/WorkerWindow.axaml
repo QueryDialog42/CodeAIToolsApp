@@ -78,15 +78,9 @@
                             <TextBlock Text="∨"  FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Classes="wNavBtn">
+                    <Button Classes="wNavBtn" Click="Settings_Click">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Düzenle"  Margin="0,0,4,0"/>
-                            <TextBlock Text="∨"  FontSize="10" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Classes="wNavBtn">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Yardım"  Margin="0,0,4,0"/>
+                            <TextBlock Text="Ayarlar"  Margin="0,0,4,0"/>
                             <TextBlock Text="∨"  FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -95,6 +89,15 @@
                 <!-- Right: Language Selector + Notification + Account -->
                 <StackPanel Grid.Column="3" Orientation="Horizontal"
                             VerticalAlignment="Center" Margin="0,6">
+
+                    <!-- AI Selector -->
+                    <ComboBox x:Name="aiSelector"
+                              Width="300"
+                              Margin="0,0,12,0"
+                              Classes="aNavBtn"
+                              ToolTip.Tip="Select AI">
+                    </ComboBox>
+
                     <!-- Language Selector -->
                     <ComboBox x:Name="languageSelector"
                               Width="100"

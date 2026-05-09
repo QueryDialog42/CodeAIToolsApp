@@ -79,15 +79,9 @@
                             <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Classes="aNavBtn">
+                    <Button Classes="aNavBtn" Click="Settings_Click">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Düzenle" Margin="0,0,4,0"/>
-                            <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Classes="aNavBtn">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Yardım" Margin="0,0,4,0"/>
+                            <TextBlock Text="Ayarlar" Margin="0,0,4,0"/>
                             <TextBlock Text="∨" FontSize="10" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -105,6 +99,13 @@
                         <ComboBoxItem Content="Python"/>
                         <ComboBoxItem Content="C++" IsSelected="True"/>
                         <ComboBoxItem Content="Java"/>
+                    </ComboBox>
+
+                    <ComboBox x:Name="aiSelector"
+                              Width="300"
+                              Margin="0,0,12,0"
+                              Classes="aNavBtn"
+                              ToolTip.Tip="Select AI">
                     </ComboBox>
 
                     <Grid Margin="0,0,12,0">

@@ -22,6 +22,7 @@ namespace CodeAIToolsUI.Views
             RequestManager.SubscriptionUpdated += (_, _) => UpdateLanguageSelector();
             
             SetupLanguageSelector();
+            LoadAiSelectorCore(aiSelector);
         }
 
         private void SetupLanguageSelector()
@@ -85,6 +86,11 @@ namespace CodeAIToolsUI.Views
                     }
                 }
             }
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            OpenSettingsDialog();
         }
 
         private void Subscription_Click(object sender, RoutedEventArgs e)

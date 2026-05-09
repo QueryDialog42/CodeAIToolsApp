@@ -64,6 +64,8 @@ namespace CodeAIToolsUI
         public const string ADD_COLL_API = "http://localhost:8080/teams/addCollaborator";
         public const string GET_COLLS_API = "http://localhost:8080/teams/getCollaborators";
         public const string REM_COLL_API = "http://localhost:8080/teams/removeCollaborator";
+        public const string GET_AI_MODS_API = "http://localhost:8080/AI/getModels";
+        public const string GET_BAS_URL_AND_KEY_API = "http://localhost:8080/AI/getBaseKey/";
         
         // Subscription API endpoints
         public const string GET_SUBSCRIPTION_API = "http://localhost:8080/subscription/get";
