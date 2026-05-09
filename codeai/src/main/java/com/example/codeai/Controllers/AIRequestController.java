@@ -17,11 +17,13 @@ import com.example.codeai.Dtos.AIRequestDto;
 import org.springframework.core.io.Resource;
 import com.example.codeai.Dtos.AIResponseDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.codeai.Dtos.innerDtos.MessageDto;
+import com.example.codeai.Entities.Settings;
 import com.example.codeai.Repositories.ISettingsRepository;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +66,7 @@ public class AIRequestController {
     @Value("classpath:system-transform-prompt-python.txt")
     private Resource systemTransformPromptForPython;
 
-    private ISettingsRepository settingsRepository;
+    private final ISettingsRepository settingsRepository;
 
     @PostMapping("/transform")
     private ResponseEntity<AIResponseDto> AITransformRequest(@RequestBody AIRequestDto aiRequestDto)
@@ -121,12 +123,29 @@ public class AIRequestController {
     }
 
     @GetMapping("/getBaseKey/{userId}")
-    private ResponseEntity<List<String>> GetBaseUrlAndApiKey(@RequestParam String userId) {
+    private ResponseEntity<List<String>> GetBaseUrlAndApiKey(
+        @PathVariable Long userId) {
         var setting = settingsRepository.findByUserId(userId);
-        if (setting.isEmpty()) {
+        if (setting == null) {
+            System.out.println("Setting not found for user: " + userId);
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(List.of(setting.get(0), setting.get(1)));
+        return ResponseEntity.ok(List.of(setting.getBaseUrl(), setting.getApiKey()));
+    }
+
+    @PostMapping("/saveBaseKey/{userId}")
+    private ResponseEntity<Void> SaveBaseUrlAndApiKey(
+        @PathVariable Long userId,
+        @RequestBody List<String> baseUrlAndApiKey
+    ){
+
+        var setting = new Settings();
+        setting.setUserId(userId);
+        setting.setBaseUrl(baseUrlAndApiKey.get(0));
+        setting.setApiKey(baseUrlAndApiKey.get(1));
+
+        settingsRepository.save(setting);
+        return ResponseEntity.ok().build();
     }
 
     private AIRequestDto setAiTransformRequestDto(AIRequestDto aiRequestDto) throws IOException {

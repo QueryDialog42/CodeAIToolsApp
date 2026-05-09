@@ -271,13 +271,34 @@ namespace CodeAIToolsUI.Views
 
         protected virtual async Task LoadAiSelectorCore(ComboBox aiSelector)
         {
-           var response = await Http.GetAsync(ApiEndpoints.GET_AI_MODS_API);
-           if (response.IsSuccessStatusCode)
-           {
-               var content = await response.Content.ReadAsStringAsync();
-               var models = JsonConvert.DeserializeObject<List<string>>(content);
-               aiSelector.ItemsSource = models;
-           }
+            // Get user's API settings first
+            var baseUrl = string.Empty;
+            var apiKey = string.Empty;
+
+            var settingsResponse = await Http.GetAsync(ApiEndpoints.GET_BAS_URL_AND_KEY_API + RequestManager.ActiveUserDto?.u_id);
+            if (settingsResponse.IsSuccessStatusCode)
+            {
+                var content = await settingsResponse.Content.ReadAsStringAsync();
+                var baseUrlAndKey = JsonConvert.DeserializeObject<List<string>>(content);
+                Console.WriteLine(baseUrlAndKey);
+                baseUrl = baseUrlAndKey[0];
+                apiKey = baseUrlAndKey[1];
+            }
+
+            if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
+            {
+                var encodedBaseUrl = System.Uri.EscapeDataString(baseUrl);
+                var encodedApiKey = System.Uri.EscapeDataString(apiKey);
+                var modelsUrl = $"{ApiEndpoints.GET_AI_MODS_API}?apiKey={encodedApiKey}&baseUrl={encodedBaseUrl}";
+                
+                var response = await Http.GetAsync(modelsUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var models = JsonConvert.DeserializeObject<List<string>>(content);
+                    aiSelector.ItemsSource = models;
+                }
+            }
         }
 
         public async Task OpenSettingsDialog(){
@@ -297,11 +318,7 @@ namespace CodeAIToolsUI.Views
             currentApiKey: apikey
            );
             
-            var result = await dialog.ShowDialog<bool>(this);
-            if (result == true)
-            {
-                // Settings were saved - update stored values if needed
-            }
+            await dialog.ShowDialog<bool>(this);
         }
 
         private static string GetInitial(string? email) =>
