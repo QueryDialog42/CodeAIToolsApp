@@ -27,4 +27,5 @@ public class AIRequestDto {
     private double presencePenalty = 0.0;
 
     private String languageToParse;
+    private Integer activeUserId;
 }

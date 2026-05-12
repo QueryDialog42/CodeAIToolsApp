@@ -536,7 +536,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
                     user.u_subscription_plan?.ToLower() == "pro");
         }
 
-        private async Task HandleAiResponse(AIRequestDto aiRequestDto, String language)
+        private async Task HandleAiResponse(AIRequestDto aiRequestDto, String language, String modelToTransform)
         {
             // Check if user is subscribed for Python/Java
             if ((language == "Python" || language == "Java") && !IsUserSubscribed())
@@ -546,6 +546,8 @@ namespace CodeAIToolsUI.UserControls.MainControls
             }
 
             aiRequestDto.languageToParse = language;
+            aiRequestDto.model = modelToTransform;
+            aiRequestDto.activeUserId = RequestManager.ActiveUserDto?.u_id.ToString() ?? "";
             string json = JsonConvert.SerializeObject(aiRequestDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             using var client = new HttpClient();
@@ -595,17 +597,24 @@ namespace CodeAIToolsUI.UserControls.MainControls
 
         public async void TransformButton_Clicked(object sender, RoutedEventArgs e)
         {
+            
+
             try
             {
                 var flowText = flowPage.editor.Document.Text;
-                var language = "Java";
+                
+                // Access ComboBoxes through parent window using TopLevel.GetTopLevel
+                var parentWindow = TopLevel.GetTopLevel(this) as Window;
+                var language = ((ComboBoxItem)parentWindow?.FindControl<ComboBox>("languageSelector")?.SelectedItem)?.Content?.ToString() ?? "C++";
+                var modelToTransform = parentWindow?.FindControl<ComboBox>("aiSelector")?.SelectedItem?.ToString() ?? string.Empty;
+
                 if (string.IsNullOrEmpty(flowText)) return;
 
                 try
                 {
                     StartLoading();
                     DisableTransformButton();
-                    await HandleAiResponse(new AIRequestDto(flowText), language);
+                    await HandleAiResponse(new AIRequestDto(flowText), language, modelToTransform);
                 }
                 catch (Exception ex)
                 {

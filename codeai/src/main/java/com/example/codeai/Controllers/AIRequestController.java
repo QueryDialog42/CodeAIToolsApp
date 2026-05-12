@@ -7,8 +7,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.var;
+
 import java.nio.charset.StandardCharsets;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpEntity;
@@ -16,6 +19,8 @@ import org.springframework.http.HttpHeaders;
 import com.example.codeai.Dtos.AIRequestDto;
 import org.springframework.core.io.Resource;
 import com.example.codeai.Dtos.AIResponseDto;
+import com.example.codeai.Dtos.SettingDto;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
@@ -24,9 +29,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.codeai.Dtos.innerDtos.MessageDto;
 import com.example.codeai.Entities.Settings;
+import com.example.codeai.Mappers.ISettingMapper;
 import com.example.codeai.Repositories.ISettingsRepository;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,16 +51,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AIRequestController {
 
     private final ObjectMapper objectMapper;
+    private final ISettingMapper settingMapper;
+    private final ISettingsRepository settingsRepository;
     private final RestTemplate restTemplate = new RestTemplate();
-
-    @Value("${ai.model}")
-    private String AIModel;
-
-    @Value("${ai.api-key}")
-    private String APIKey;
-
-    @Value("${ai.api-url}")
-    private String BaseUrl;
 
     @Value("classpath:system-explain-prompt.txt")
     private Resource systemExplainPrompt;
@@ -65,8 +66,6 @@ public class AIRequestController {
 
     @Value("classpath:system-transform-prompt-python.txt")
     private Resource systemTransformPromptForPython;
-
-    private final ISettingsRepository settingsRepository;
 
     @PostMapping("/transform")
     private ResponseEntity<AIResponseDto> AITransformRequest(@RequestBody AIRequestDto aiRequestDto)
@@ -81,16 +80,19 @@ public class AIRequestController {
         return ResponseEntity.ok(handleAIResponse(setAiExplainRequestDto(aiRequestDto)));
     }
 
-    @GetMapping("/getModels")
+    @GetMapping("/getModels/{userId}")
     private ResponseEntity<List<String>> GetAiModels(
-            @RequestParam String apiKey,
-            @RequestParam String baseUrl) {
+            @PathVariable Integer userId) {
         try {
+
+            Settings setting = settingsRepository.findByUserId(userId);
+            SettingDto settingDto = settingMapper.ToDto(setting);         
+
             HttpClient client = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(baseUrl + "/v1/models"))
-                    .header("Authorization", "Bearer " + apiKey)
+                    .uri(URI.create(settingDto.getBaseUrl()))
+                    .header("Authorization", "Bearer " + settingDto.getApiKey())
                     .header("Content-Type", "application/json")
                     .GET()
                     .build();
@@ -98,7 +100,40 @@ public class AIRequestController {
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() != 200) {
+            if (response.statusCode() == 308) {
+                // Handle redirect - get new location
+                String location = response.headers().firstValue("Location").orElse(null);
+                if (location != null) {
+                    // Follow redirect with new location
+                    HttpRequest redirectRequest = HttpRequest.newBuilder()
+                            .uri(URI.create(location))
+                            .header("Authorization", "Bearer " + settingDto.getApiKey())
+                            .header("Content-Type", "application/json")
+                            .GET()
+                            .build();
+                    
+                    HttpResponse<String> redirectResponse = client.send(redirectRequest,
+                            HttpResponse.BodyHandlers.ofString());
+                    
+                    if (redirectResponse.statusCode() == 200) {
+                        // Parse JSON → extract model IDs
+                        ObjectMapper mapper = new ObjectMapper();
+                        JsonNode root = mapper.readTree(redirectResponse.body());
+                        JsonNode data = root.path("data");
+
+                        List<String> models = new ArrayList<>();
+                        if (data.isArray()) {
+                            for (JsonNode node : data) {
+                                String id = node.path("id").asText(null);
+                                if (id != null) models.add(id);
+                            }
+                        }
+
+                        return ResponseEntity.ok(models);
+                    }
+                }
+                return ResponseEntity.status(response.statusCode()).build();
+            } else if (response.statusCode() != 200) {
                 return ResponseEntity.status(response.statusCode()).build();
             }
 
@@ -124,8 +159,8 @@ public class AIRequestController {
 
     @GetMapping("/getBaseKey/{userId}")
     private ResponseEntity<List<String>> GetBaseUrlAndApiKey(
-        @PathVariable Long userId) {
-        var setting = settingsRepository.findByUserId(userId);
+        @PathVariable Integer userId) {
+        Settings setting = settingsRepository.findByUserId(userId);
         if (setting == null) {
             System.out.println("Setting not found for user: " + userId);
             return ResponseEntity.notFound().build();
@@ -135,15 +170,19 @@ public class AIRequestController {
 
     @PostMapping("/saveBaseKey/{userId}")
     private ResponseEntity<Void> SaveBaseUrlAndApiKey(
-        @PathVariable Long userId,
+        @PathVariable Integer userId,
         @RequestBody List<String> baseUrlAndApiKey
     ){
 
-        var setting = new Settings();
+        Settings setting = new Settings();
         setting.setUserId(userId);
         setting.setBaseUrl(baseUrlAndApiKey.get(0));
-        setting.setApiKey(baseUrlAndApiKey.get(1));
+        setting.setApiKey(baseUrlAndApiKey.get(1));   
 
+        Settings existingUser = settingsRepository.findByUserId(userId);
+        if (existingUser != null) {
+            settingsRepository.delete(existingUser);
+        }
         settingsRepository.save(setting);
         return ResponseEntity.ok().build();
     }
@@ -158,14 +197,16 @@ public class AIRequestController {
 
     private AIResponseDto handleAIResponse(AIRequestDto aiRequestDto) throws JsonProcessingException {
 
+        Settings setting = settingsRepository.findByUserId(aiRequestDto.getActiveUserId());
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(APIKey);
+        headers.setBearerAuth(setting.getApiKey());
 
         HttpEntity<AIRequestDto> requestEntity = new HttpEntity<>(aiRequestDto, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                BaseUrl,
+                setting.getBaseUrl(),
                 requestEntity,
                 String.class
         );
@@ -174,6 +215,7 @@ public class AIRequestController {
     }
 
     private AIRequestDto setDtoBySystemPrompt(AIRequestDto aiRequestDto, String systemPrompt) {
+
         var systemRole = new MessageDto();
         systemRole.setRole("system");
         systemRole.setContent(systemPrompt); // the system prompt
@@ -186,7 +228,7 @@ public class AIRequestController {
         roleList.add(systemRole);
         roleList.add(userRole);
 
-        aiRequestDto.setModel(AIModel);
+        aiRequestDto.setModel(aiRequestDto.getModel()); // ai model
         aiRequestDto.setMessages(roleList);
 
         return aiRequestDto;

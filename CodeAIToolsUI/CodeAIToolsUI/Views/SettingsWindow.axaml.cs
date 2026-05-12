@@ -17,9 +17,6 @@ namespace CodeAIToolsUI.Views
             InitializeComponent();
             BaseUrlBox.Text = currentBaseUrl;
             ApiKeyBox.Text  = currentApiKey;
-
-            Console.WriteLine(currentBaseUrl);
-            Console.WriteLine(currentApiKey);
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)

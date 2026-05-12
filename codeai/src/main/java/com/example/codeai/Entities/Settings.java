@@ -17,7 +17,7 @@ public class Settings {
     private Long id;
     
     @Column(name = "user_id")
-    private Long userId;
+    private Integer userId;
 
     @Column(name = "base_url")
     private String baseUrl;

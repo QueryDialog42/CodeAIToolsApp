@@ -18,6 +18,7 @@ using CodeAIToolsUI.UserControls.MainControls;
 using CodeAIToolsUI.UserControls.PopupControl;
 using CodeAIToolsUI.Services;
 using Newtonsoft.Json;
+using CodeAIToolsUI.APIs.DTOs;
 
 
 
@@ -280,16 +281,14 @@ namespace CodeAIToolsUI.Views
             {
                 var content = await settingsResponse.Content.ReadAsStringAsync();
                 var baseUrlAndKey = JsonConvert.DeserializeObject<List<string>>(content);
-                Console.WriteLine(baseUrlAndKey);
+
                 baseUrl = baseUrlAndKey[0];
                 apiKey = baseUrlAndKey[1];
             }
 
             if (!string.IsNullOrEmpty(baseUrl) && !string.IsNullOrEmpty(apiKey))
             {
-                var encodedBaseUrl = System.Uri.EscapeDataString(baseUrl);
-                var encodedApiKey = System.Uri.EscapeDataString(apiKey);
-                var modelsUrl = $"{ApiEndpoints.GET_AI_MODS_API}?apiKey={encodedApiKey}&baseUrl={encodedBaseUrl}";
+                var modelsUrl = $"{ApiEndpoints.GET_AI_MODS_API}/{RequestManager.ActiveUserDto?.u_id}";
                 
                 var response = await Http.GetAsync(modelsUrl);
                 if (response.IsSuccessStatusCode)
