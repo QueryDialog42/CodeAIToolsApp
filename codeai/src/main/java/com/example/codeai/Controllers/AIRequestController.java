@@ -7,7 +7,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.var;
@@ -142,14 +144,19 @@ public class AIRequestController {
             JsonNode root = mapper.readTree(response.body());
             JsonNode data = root.path("data");
 
-            List<String> models = new ArrayList<>();
+            // Sort models by created timestamp (newest first)
+            List<Map.Entry<String, Long>> modelEntries = new ArrayList<>();
             if (data.isArray()) {
                 for (JsonNode node : data) {
                     String id = node.path("id").asText(null);
-                    if (id != null) models.add(id);
+                    long created = node.path("created").asLong(0);
+                    if (id != null) modelEntries.add(Map.entry(id, created));
                 }
             }
-
+            modelEntries.sort((a, b) -> Long.compare(b.getValue(), a.getValue()));
+            List<String> models = modelEntries.stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
             return ResponseEntity.ok(models);
 
         } catch (Exception ex) {
@@ -165,7 +172,7 @@ public class AIRequestController {
             System.out.println("Setting not found for user: " + userId);
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(List.of(setting.getBaseUrl(), setting.getApiKey()));
+        return ResponseEntity.ok(List.of(setting.getBaseUrl(), setting.getApiKey(), setting.getSendUrl()));
     }
 
     @PostMapping("/saveBaseKey/{userId}")
@@ -177,7 +184,8 @@ public class AIRequestController {
         Settings setting = new Settings();
         setting.setUserId(userId);
         setting.setBaseUrl(baseUrlAndApiKey.get(0));
-        setting.setApiKey(baseUrlAndApiKey.get(1));   
+        setting.setApiKey(baseUrlAndApiKey.get(1)); 
+        setting.setSendUrl(baseUrlAndApiKey.get(2));  
 
         Settings existingUser = settingsRepository.findByUserId(userId);
         if (existingUser != null) {
@@ -196,27 +204,32 @@ public class AIRequestController {
     }
 
     private AIResponseDto handleAIResponse(AIRequestDto aiRequestDto) throws JsonProcessingException {
-
         Settings setting = settingsRepository.findByUserId(aiRequestDto.getActiveUserId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(setting.getApiKey());
+        headers.set("Authorization", "Bearer " + setting.getApiKey());
 
-        HttpEntity<AIRequestDto> requestEntity = new HttpEntity<>(aiRequestDto, headers);
+        // Sadece OpenRouter'ın beklediği field'lar
+        Map<String, Object> body = new java.util.LinkedHashMap<>();
+        body.put("model", aiRequestDto.getModel());
+        body.put("messages", aiRequestDto.getMessages());
+        body.put("temperature", 0.7);
+        body.put("max_tokens", 2048);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                setting.getBaseUrl(),
-                requestEntity,
-                String.class
-        );
+        String bodyJson = objectMapper.writeValueAsString(body);
 
+        HttpEntity<String> requestEntity = new HttpEntity<>(bodyJson, headers);
+
+        String chatUrl = setting.getSendUrl();
+
+        ResponseEntity<String> response = restTemplate.postForEntity(chatUrl, requestEntity, String.class);
         return objectMapper.readValue(response.getBody(), AIResponseDto.class);
     }
 
     private AIRequestDto setDtoBySystemPrompt(AIRequestDto aiRequestDto, String systemPrompt) {
 
-        var systemRole = new MessageDto();
+        MessageDto systemRole = new MessageDto();
         systemRole.setRole("system");
         systemRole.setContent(systemPrompt); // the system prompt
 
@@ -236,8 +249,8 @@ public class AIRequestController {
 
     private byte[] ChooseLanguageToParse(AIRequestDto aiRequestDto) throws IOException {
         return switch (aiRequestDto.getLanguageToParse()) {
-            case "C++" -> systemTransformPromptForPython.getInputStream().readAllBytes();
-            case "Python" -> systemTransformPromptForCpp.getInputStream().readAllBytes();
+            case "C++" -> systemTransformPromptForCpp.getInputStream().readAllBytes();
+            case "Python" -> systemTransformPromptForPython.getInputStream().readAllBytes();
             default -> systemTransformPromptForJava.getInputStream().readAllBytes();
         };
     }

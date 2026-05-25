@@ -4,7 +4,7 @@
         x:Class="CodeAIToolsUI.Views.SettingsWindow"
         x:DataType="Views:SettingsWindow"
         Title="Settings"
-        Width="400" Height="220"
+        Width="400" Height="280"
         WindowStartupLocation="CenterOwner"
         CanResize="False"
         ShowInTaskbar="False">
@@ -16,6 +16,13 @@
             <TextBox x:Name="BaseUrlBox"
                      Watermark="https://api.example.com"
                      Text="{Binding BaseUrl}"/>
+        </StackPanel>
+
+        <StackPanel Spacing="6">
+            <TextBlock Text="Base URL" FontWeight="SemiBold"/>
+            <TextBox x:Name="SendUrlBox"
+                     Watermark="https://api.example.com"
+                     Text="{Binding SendUrl}"/>
         </StackPanel>
 
         <StackPanel Spacing="6">

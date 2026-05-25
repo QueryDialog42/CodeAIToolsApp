@@ -10,6 +10,9 @@ namespace CodeAIToolsUI.Services
         public static event Action<string>? FlowContentChanged;
         public static event Action<string>? CodeContentChanged;
 
+        public static string FlowComment { get; set; } = "";
+        public static string CodeComment { get; set; } = "";
+
         public static string FlowContent
         {
             get => _flowContent;

@@ -67,6 +67,7 @@ namespace CodeAIToolsUI
         public const string GET_AI_MODS_API = "http://localhost:8080/AI/getModels";
         public const string GET_BAS_URL_AND_KEY_API = "http://localhost:8080/AI/getBaseKey/";
         public const string SAV_BAS_URL_AND_KEY_API = "http://localhost:8080/AI/saveBaseKey/";
+        public const string DEN_PROJ = "http://localhost:8080/denie/create";
         
         // Subscription API endpoints
         public const string GET_SUBSCRIPTION_API = "http://localhost:8080/subscription/get";

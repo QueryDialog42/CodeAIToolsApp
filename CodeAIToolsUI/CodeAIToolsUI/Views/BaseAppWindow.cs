@@ -303,6 +303,7 @@ namespace CodeAIToolsUI.Views
         public async Task OpenSettingsDialog(){
             var baseUrl = string.Empty;
             var apikey = string.Empty;
+            var sendUrl = string.Empty;
 
             var response = await Http.GetAsync(ApiEndpoints.GET_BAS_URL_AND_KEY_API + RequestManager.ActiveUserDto?.u_id);
             if (response.IsSuccessStatusCode){
@@ -310,11 +311,13 @@ namespace CodeAIToolsUI.Views
                 var baseUrlAndKey = JsonConvert.DeserializeObject<List<string>>(content);
                 baseUrl = baseUrlAndKey[0];
                 apikey = baseUrlAndKey[1];
+                sendUrl = baseUrlAndKey[2];
             }
         
            var dialog = new SettingsWindow(
             currentBaseUrl: baseUrl,
-            currentApiKey: apikey
+            currentApiKey: apikey,
+            currentSendUrl: sendUrl
            );
             
             await dialog.ShowDialog<bool>(this);

@@ -13,6 +13,7 @@ namespace CodeAIToolsUI.APIs.DTOs
         public double presence_penalty { get; set; }
         public string languageToParse { get; set; }
         public string activeUserId { get; set; }
+        public string sendUrl { get; set; }
 
         public class MessageDto
         {

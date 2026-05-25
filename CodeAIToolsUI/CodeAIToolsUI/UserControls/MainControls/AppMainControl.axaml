@@ -125,7 +125,8 @@
             <Border Grid.Column="0" Grid.Row="2"
                     Background="{DynamicResource MBgCard}" CornerRadius="6"
                     Margin="0,3,3,0" Padding="14,10">
-                <TextBox TextWrapping="Wrap" AcceptsReturn="True"
+                <TextBox x:Name="flowCommentTextBox" 
+                        TextWrapping="Wrap" AcceptsReturn="True"
                          Classes="flowCodeCommentTextBox"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          Foreground="{DynamicResource MTextSecondary}"/>
@@ -135,7 +136,8 @@
             <Border Grid.Column="2" Grid.Row="2"
                     Background="{DynamicResource MBgCard}" CornerRadius="6"
                     Margin="3,3,0,0" Padding="14,10">
-                <TextBox TextWrapping="Wrap" AcceptsReturn="True"
+                <TextBox x:Name="codeCommentTextBox"
+                         TextWrapping="Wrap" AcceptsReturn="True"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          Classes="flowCodeCommentTextBox"
                          Foreground="{DynamicResource  MTextSecondary}"/>

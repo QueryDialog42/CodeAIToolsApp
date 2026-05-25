@@ -11,21 +11,24 @@ namespace CodeAIToolsUI.Views
     {
         public string BaseUrl { get; private set; } = string.Empty;
         public string ApiKey  { get; private set; } = string.Empty;
+        public string SendUrl { get; private set; } = string.Empty;
 
-        public SettingsWindow(string currentBaseUrl = "", string currentApiKey = "")
+        public SettingsWindow(string currentBaseUrl = "", string currentApiKey = "", string currentSendUrl = "")
         {
             InitializeComponent();
             BaseUrlBox.Text = currentBaseUrl;
             ApiKeyBox.Text  = currentApiKey;
+            SendUrlBox.Text = currentSendUrl;
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
             BaseUrl = BaseUrlBox.Text?.Trim() ?? string.Empty;
             ApiKey  = ApiKeyBox.Text?.Trim()  ?? string.Empty;
+            SendUrl = SendUrlBox.Text?.Trim() ?? string.Empty;
 
             var Http = new HttpClient();
-            var jsonContent = $"[\"{BaseUrl}\", \"{ApiKey}\"]";
+            var jsonContent = $"[\"{BaseUrl}\", \"{ApiKey}\", \"{SendUrl}\"]";
             var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
             var response = Http.PostAsync(ApiEndpoints.SAV_BAS_URL_AND_KEY_API + RequestManager.ActiveUserDto?.u_id, content).Result;
             if (!response.IsSuccessStatusCode)

@@ -98,6 +98,9 @@ namespace CodeAIToolsUI.UserControls.MainControls
                     _updatingFromService = false;
                 }
             };
+
+            GetComments();
+
         }
 
         #region Execute Methods
@@ -754,6 +757,15 @@ namespace CodeAIToolsUI.UserControls.MainControls
             {
                 return null;
             }
+        }
+
+        private void GetComments()
+        {
+            flowCommentTextBox.TextChanged += (s, e) => 
+                ContentService.FlowComment = flowCommentTextBox.Text ?? "";
+
+            codeCommentTextBox.TextChanged += (s, e) => 
+                ContentService.CodeComment = codeCommentTextBox.Text ?? "";
         }
 
         #endregion

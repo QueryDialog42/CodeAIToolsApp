@@ -16,6 +16,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CodeAIToolsUI.UserControls.PopupControl;
 using CodeAIToolsUI.UserControls.MainControls;
+using Avalonia.Media;
+using Avalonia.VisualTree;
+using CodeAIToolsUI.Services;
 
 namespace CodeAIToolsUI.UserControls.MainControls
 {
@@ -37,6 +40,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
         public event EventHandler<ProjectDto>? PullRequested;
         public event EventHandler<ProjectDto>? PushRequested;
         public event EventHandler<ProjectDto>? SaveRequested;
+        public event EventHandler<ProjectDto>? DeniedRequested;
 
         public ProjectCardControl() : this(new ProjectDto()) { }
 
@@ -53,6 +57,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
             {
                 PushButton.IsVisible = false;
                 DeleteButton.IsVisible = false;
+                RejectButton.IsVisible = false;
             }
         }
 
@@ -449,6 +454,53 @@ namespace CodeAIToolsUI.UserControls.MainControls
             }).ToList();
         }
 
+        private async void Denied_Click(object sender, RoutedEventArgs e)
+        {
+
+            string denieMessage = $"{ContentService.FlowComment}</@/>{ContentService.CodeComment}";
+
+            var denieDto = new DenieDto
+            {
+                project_id = _project.p_id,  
+                admin_id = RequestManager.ActiveUserDto?.u_id,
+                denieReason = denieMessage,
+                deniedAt = DateTime.UtcNow
+            };
+
+            SetDenieStatusDenieing();
+            var http = new HttpClient();
+
+
+            var json = JsonConvert.SerializeObject(denieDto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await http.PostAsync(ApiEndpoints.DEN_PROJ, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    SetDenieStatusDenied();
+                }
+                else
+                {
+                    SetDenieStatusFailed();
+                }
+        }
+
+        public void SetDenieStatusDenieing()
+        {
+            denieTextbox.Text = "Reddediliyor...";
+        }
+
+        public void SetDenieStatusDenied()
+        {
+            denieTextbox.Foreground = Brushes.Lime;
+            denieTextbox.Text = "Reddedildi";
+        }
+
+        public void SetDenieStatusFailed()
+        {
+            denieTextbox.Foreground = Brushes.Red;
+            denieTextbox.Text = "Reddedilemedi";
+        }
         #endregion
     }
 }

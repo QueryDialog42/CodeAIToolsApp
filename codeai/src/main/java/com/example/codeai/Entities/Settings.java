@@ -22,6 +22,9 @@ public class Settings {
     @Column(name = "base_url")
     private String baseUrl;
 
+    @Column(name = "send_url")
+    private String sendUrl;
+
     @Column(name = "api_key")
     private String apiKey;
 }

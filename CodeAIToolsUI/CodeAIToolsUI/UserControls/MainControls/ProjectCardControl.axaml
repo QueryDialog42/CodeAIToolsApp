@@ -131,6 +131,12 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
                 <!-- First Row: Open, Pull, Push, Delete -->
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
@@ -185,14 +191,32 @@
                 </Grid>
 
                 <!-- Second Row: Save Button (Green) -->
-                <Button Grid.Row="2"
-                        Classes="cardButton"
-                        Click="SaveProject_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="💾" Foreground="#10b981" FontSize="11" Margin="0,0,4,0"/>
-                        <TextBlock Text="Save" Foreground="#10b981" FontSize="11"/>
-                    </StackPanel>
-                </Button>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Classes="cardButton"
+                            Click="SaveProject_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💾" Foreground="#10b981" FontSize="11" Margin="0,0,4,0"/>
+                            <TextBlock Text="Save" Foreground="#10b981" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="RejectButton"
+                            Grid.Column="2"
+                            Classes="cardButton"
+                            Click="Denied_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🚫" Foreground="#ef4444" FontSize="11" Margin="0,0,4,0"/>
+                            <TextBlock x:Name="denieTextbox" Text="Reddet" Foreground="#ef4444" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
             </Grid>
 
         </StackPanel>
