@@ -457,7 +457,7 @@ namespace CodeAIToolsUI.UserControls.MainControls
         private async void Denied_Click(object sender, RoutedEventArgs e)
         {
 
-            string denieMessage = $"{ContentService.FlowComment}</@/>{ContentService.CodeComment}";
+            string denieMessage = $"{ContentService.FlowComment}{SplitChars.DEN_SPLIT}{ContentService.CodeComment}";
 
             var denieDto = new DenieDto
             {

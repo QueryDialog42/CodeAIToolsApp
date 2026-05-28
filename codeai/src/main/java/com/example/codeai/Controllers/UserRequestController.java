@@ -55,4 +55,10 @@ public class UserRequestController {
         return ResponseEntity.ok(userDtos);
     }
 
+    @GetMapping("/getAdmins/{workerId}")
+    private ResponseEntity<List<Integer>> sendAdminsByWorkerId(@PathVariable Integer workerId){
+        var admins = userRepository.getAllAdminsByWorkerId(workerId);
+
+        return ResponseEntity.ok(admins);
+    }
 }

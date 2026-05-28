@@ -6,6 +6,7 @@ using CodeAIToolsUI.UserControls.MainControls;
 using CodeAIToolsUI.APIs;
 using MsBox.Avalonia;
 using MessageBox.Avalonia.Enums;
+using System.Collections.ObjectModel;
 
 namespace CodeAIToolsUI.Views
 {
@@ -23,6 +24,8 @@ namespace CodeAIToolsUI.Views
             
             SetupLanguageSelector();
             LoadAiSelectorCore(aiSelector);
+
+            InitializeNotifications();
         }
 
         private void SetupLanguageSelector()
@@ -96,6 +99,34 @@ namespace CodeAIToolsUI.Views
         private void Subscription_Click(object sender, RoutedEventArgs e)
         {
             new SubscriptionWindow().Show();
+        }
+
+        private void InitializeNotifications()
+        {
+            NotificationList.ItemsSource = _notifications;
+            _notifications.CollectionChanged += (_, _) => UpdateBadge();
+        }
+        public void AddNotification(string message)
+        {
+            _notifications.Add(message);
+        }
+
+        public void RemoveNotification(string message)
+        {
+            _notifications.Remove(message);
+        }
+
+        // Badge'i güncel tutar — doğrudan çağrılmaz
+        private void UpdateBadge()
+        {
+            int count = _notifications.Count;
+            NotificationBadge.IsVisible = count > 0;
+            NotificationCount.Text = count > 9 ? "9+" : count.ToString();
+        }
+
+        private void NotificationButton_Click(object? sender, RoutedEventArgs e)
+        {
+            NotificationPopup.IsOpen = !NotificationPopup.IsOpen;
         }
     }
 }

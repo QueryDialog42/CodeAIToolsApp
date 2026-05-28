@@ -19,6 +19,8 @@ using CodeAIToolsUI.UserControls.PopupControl;
 using CodeAIToolsUI.Services;
 using Newtonsoft.Json;
 using CodeAIToolsUI.APIs.DTOs;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 
 
@@ -78,6 +80,7 @@ namespace CodeAIToolsUI.Views
             Configs.ROOT_DIR);
 
         private static readonly HashSet<string> SecretFolders = [Configs.LIBS_DIR];
+        public ObservableCollection<string> _notifications = new();
 
         protected virtual void OnWindowInitialized() { }
 
@@ -253,6 +256,11 @@ namespace CodeAIToolsUI.Views
                 }
                 
                 FileTree.WriteFlowAndCodeLines += (flow, code) => { FlowText = ReadLines(flow); CodeText = ReadLines(code); };
+                FileTree.WriteDenieMessages += (flowDenie, codeDenie) =>
+                {
+                    MainControl.flowCommentTextBox.Text = flowDenie;
+                    MainControl.codeCommentTextBox.Text = codeDenie;
+                };
             }
         }
 
@@ -327,5 +335,32 @@ namespace CodeAIToolsUI.Views
             email?.Length > 0 ? email[0].ToString().ToUpper() : "U";
 
         #endregion
+
+        public async Task<ObservableCollection<string>> GetNotifications(List<int> adminIds)
+        {
+            var allNotifications = new List<string>();
+
+            foreach (var adminId in adminIds)
+            {
+                var response = await Http.GetAsync(ApiEndpoints.GET_NOTS_API + "/" + adminId);
+                if (!response.IsSuccessStatusCode) continue;
+
+                var content = await response.Content.ReadAsStringAsync();
+                var notifications = JsonConvert.DeserializeObject<List<NotificationDto>>(content);
+
+                if (notifications == null) continue;
+
+                // Her admin'in bildirimlerini listeye ekle
+                allNotifications.AddRange(
+                    notifications.Select(n => $"📋 {n.project_name} is denied by your admin")
+                );
+            }
+
+            // Mevcut _notifications'a ekle (replace değil)
+            foreach (var item in allNotifications)
+                _notifications.Add(item);
+
+            return _notifications;
+        }
     }
 }

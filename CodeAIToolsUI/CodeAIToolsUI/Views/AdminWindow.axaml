@@ -109,18 +109,60 @@
                     </ComboBox>
 
                     <Grid Margin="0,0,12,0">
-                        <Button Classes="aNavBtn" Padding="6">
+                        <Button x:Name="NotificationButton"
+                                Classes="aNavBtn" Padding="6"
+                                Click="NotificationButton_Click">
                             <TextBlock Text="🔔" FontSize="16"/>
                         </Button>
-                        <Border Background="{StaticResource AccentRed}"
+                        <Border x:Name="NotificationBadge"
+                                Background="{StaticResource AccentRed}"
                                 Width="16" Height="16" CornerRadius="8"
                                 HorizontalAlignment="Right" VerticalAlignment="Top"
-                                Margin="0,0,-2,-2">
-                            <TextBlock Text="1" Foreground="White" FontSize="9"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"/>
+                                Margin="0,0,-2,-2"
+                                IsVisible="False">
+                            <TextBlock x:Name="NotificationCount"
+                                    Text="0" Foreground="White" FontSize="9"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold"/>
                         </Border>
+
+                        <Popup x:Name="NotificationPopup"
+                            PlacementTarget="{Binding ElementName=NotificationButton}"
+                            Placement="Bottom"
+                            IsLightDismissEnabled="True">
+                            <Border Background="#22262e"
+                                    BorderBrush="#3a3f4b"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Width="280"
+                                    MaxHeight="320"
+                                    Padding="0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Bildirimler"
+                                            Foreground="#e2e8f0"
+                                            FontWeight="SemiBold"
+                                            FontSize="13"
+                                            Margin="12,8,12,4"/>
+                                    <Separator Background="#3a3f4b" Height="1" Margin="0,4"/>
+                                    <ScrollViewer MaxHeight="240">
+                                        <ItemsControl x:Name="NotificationList">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Padding="12,8"
+                                                            Background="Transparent">
+                                                        <TextBlock Text="{Binding}"
+                                                                Foreground="#cbd5e1"
+                                                                FontSize="12"
+                                                                TextWrapping="Wrap"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
                     </Grid>
 
                     <!-- MouseLeftButtonUp → PointerReleased -->

@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "denies")
+@Table(name = "denied_table")
 public class Denies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

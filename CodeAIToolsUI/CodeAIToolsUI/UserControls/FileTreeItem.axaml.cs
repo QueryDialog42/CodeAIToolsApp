@@ -10,6 +10,10 @@ using Avalonia.Interactivity;
 using MessageBox.Avalonia.Enums;
 using System.Collections.ObjectModel;
 using Avalonia.Controls.ApplicationLifetimes;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
+using CodeAIToolsUI.APIs.DTOs;
 
 
 
@@ -19,6 +23,7 @@ namespace CodeAIToolsUI.UserControls
     {
         public event Action<FileTreeItem>? OnFileSelected;
         public event Action<FileTreeItem>? ProjectChanged;
+        public event Action<string, string>? WriteDenieMessages;
         public event Action<string[], string[]>? WriteFlowAndCodeLines;
         private ObservableCollection<FileTreeItem> AllItems { get; set; } = new();
 
@@ -110,6 +115,27 @@ namespace CodeAIToolsUI.UserControls
             }
 
             WriteFlowAndCodeLines?.Invoke(flowLines, codeLines);
+            WriteDenieMessagesIfExist(rootPath);
+        }
+
+        private async void WriteDenieMessagesIfExist(string rootPath)
+        {
+            var projectName = Path.GetFileName(rootPath);
+            
+            using var client = new HttpClient();
+            var response = await client.GetAsync(ApiEndpoints.GET_DEN + "/" + projectName);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var denieMessages = JsonConvert.DeserializeObject<DenieDto>(content);
+                string[]? flowDenieAndCodeDenie = denieMessages?.denieReason?.Split(SplitChars.DEN_SPLIT);
+                WriteDenieMessages?.Invoke(flowDenieAndCodeDenie?[0] ?? string.Empty, flowDenieAndCodeDenie?[1] ?? string.Empty);   
+            }
+            else
+            {
+                await GeneralRoutines.ShowException(response.ReasonPhrase ?? "Unkown error");
+            }
         }
 
         private async void DeleteProject_Clicked(object sender, RoutedEventArgs e)

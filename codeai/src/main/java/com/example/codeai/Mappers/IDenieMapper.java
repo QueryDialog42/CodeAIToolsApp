@@ -10,4 +10,6 @@ import com.example.codeai.Entities.Denies;
 public interface IDenieMapper {
     @Mapping(target = "id", ignore = true)
     Denies toEntity(DenieDto denieDto);
+
+    DenieDto toDto(Denies denies);
 }

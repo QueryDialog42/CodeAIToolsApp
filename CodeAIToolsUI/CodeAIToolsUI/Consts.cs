@@ -68,6 +68,9 @@ namespace CodeAIToolsUI
         public const string GET_BAS_URL_AND_KEY_API = "http://localhost:8080/AI/getBaseKey/";
         public const string SAV_BAS_URL_AND_KEY_API = "http://localhost:8080/AI/saveBaseKey/";
         public const string DEN_PROJ = "http://localhost:8080/denie/create";
+        public const string GET_DEN = "http://localhost:8080/denie/get";
+        public const string GET_NOTS_API = "http://localhost:8080/notification/get";
+        public const string GET_ADMS_API = "http://localhost:8080/getAdmins";
         
         // Subscription API endpoints
         public const string GET_SUBSCRIPTION_API = "http://localhost:8080/subscription/get";
@@ -85,5 +88,10 @@ namespace CodeAIToolsUI
         public const string LIST_FILES_API = "http://localhost:8080/local/list";
         public const string PULL_FILES_API = "http://localhost:8080/local/pull";
         public const string PUSH_FILES_API = "http://localhost:8080/local/push";
+    }
+
+    public struct SplitChars
+    {
+        public const string DEN_SPLIT = "</@/>";
     }
 }

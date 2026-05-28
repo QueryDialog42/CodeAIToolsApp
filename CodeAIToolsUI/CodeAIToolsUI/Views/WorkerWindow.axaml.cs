@@ -5,6 +5,8 @@ using Avalonia.Media;
 using System.Collections.Generic;
 using CodeAIToolsUI.UserControls.MainControls;
 using CodeAIToolsUI.APIs;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace CodeAIToolsUI.Views
 {
@@ -24,6 +26,7 @@ namespace CodeAIToolsUI.Views
             SetWorkerPanel();
             SetupLanguageSelector();
             LoadAiSelectorCore(aiSelector);
+            InitializeNotifications();
         }
 
         private void SetupLanguageSelector()
@@ -75,7 +78,7 @@ namespace CodeAIToolsUI.Views
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            
+            OpenSettingsDialog();
         }
 
         private void Subscription_Click(object sender, RoutedEventArgs e)
@@ -105,6 +108,45 @@ namespace CodeAIToolsUI.Views
         {
             PanelControl.SearchButtonGrid?.IsVisible = false;
             PanelControl.SearchInputGrid?.IsVisible = false;
+        }
+
+        private async void InitializeNotifications()
+        {
+            List<int> adminIds = await findAdminsByWorkerId();
+            NotificationList.ItemsSource = await GetNotifications(adminIds);
+            _notifications.CollectionChanged += (_, _) => UpdateBadge();
+        }
+        public void AddNotification(string message)
+        {
+            _notifications.Add(message);
+        }
+        public void RemoveNotification(string message)
+        {
+            _notifications.Remove(message);
+        }
+
+        // Badge'i güncel tutar — doğrudan çağrılmaz
+        private void UpdateBadge()
+        {
+            int count = _notifications.Count;
+            NotificationBadge.IsVisible = count > 0;
+            NotificationCount.Text = count > 9 ? "9+" : count.ToString();
+        }
+
+        private void NotificationButton_Click(object? sender, RoutedEventArgs e)
+        {
+            NotificationPopup.IsOpen = !NotificationPopup.IsOpen;
+        }
+
+        private async Task<List<int>> findAdminsByWorkerId()
+        {
+            var response = await Http.GetAsync(ApiEndpoints.GET_ADMS_API);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<int>>(content) ?? [];
+            }
+            return [];
         }
     }
 }

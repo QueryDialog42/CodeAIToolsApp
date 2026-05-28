@@ -1,5 +1,6 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
-    "dotnet.defaultSolution": "CodeAIToolsUI/CodeAIToolsUI/CodeAIToolsUI.sln"
+    "dotnet.defaultSolution": "CodeAIToolsUI/CodeAIToolsUI/CodeAIToolsUI.sln",
+    "java.debug.settings.onBuildFailureProceed": true
 }
