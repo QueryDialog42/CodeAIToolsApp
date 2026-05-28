@@ -338,7 +338,8 @@ namespace CodeAIToolsUI.Views
 
         public async Task<ObservableCollection<string>> GetNotifications(List<int> adminIds)
         {
-            var allNotifications = new List<string>();
+            _notifications.Clear();
+            long? currentWorkerId = RequestManager.ActiveUserDto?.u_id;
 
             foreach (var adminId in adminIds)
             {
@@ -347,18 +348,13 @@ namespace CodeAIToolsUI.Views
 
                 var content = await response.Content.ReadAsStringAsync();
                 var notifications = JsonConvert.DeserializeObject<List<NotificationDto>>(content);
-
                 if (notifications == null) continue;
 
-                // Her admin'in bildirimlerini listeye ekle
-                allNotifications.AddRange(
-                    notifications.Select(n => $"📋 {n.project_name} is denied by your admin")
-                );
+                foreach (var n in notifications.Where(n => n.worker_id == currentWorkerId))
+                {
+                    _notifications.Add($"📋 Project {n.p_name} is denied by your admin");
+                }
             }
-
-            // Mevcut _notifications'a ekle (replace değil)
-            foreach (var item in allNotifications)
-                _notifications.Add(item);
 
             return _notifications;
         }

@@ -65,7 +65,6 @@
                         <Button.ContextMenu>
                             <ContextMenu x:Name="DosyaContextMenu">
                                 <MenuItem Header="Kaydet" Click="Save_Click"/>
-                                <MenuItem Header="Düzenle" Click="Edit_Click"/>
                             </ContextMenu>
                         </Button.ContextMenu>
                         <StackPanel Orientation="Horizontal">

@@ -134,7 +134,7 @@ namespace CodeAIToolsUI.UserControls
             }
             else
             {
-                await GeneralRoutines.ShowException(response.ReasonPhrase ?? "Unkown error");
+                // there is no denie message for this project
             }
         }
 

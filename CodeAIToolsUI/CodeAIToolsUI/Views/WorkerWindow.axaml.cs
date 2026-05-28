@@ -140,7 +140,7 @@ namespace CodeAIToolsUI.Views
 
         private async Task<List<int>> findAdminsByWorkerId()
         {
-            var response = await Http.GetAsync(ApiEndpoints.GET_ADMS_API);
+            var response = await Http.GetAsync(ApiEndpoints.GET_ADMS_API + "/" + RequestManager.ActiveUserDto?.u_id);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

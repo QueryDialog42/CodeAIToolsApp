@@ -225,13 +225,6 @@
                                            FontSize="14"/>
                             </Button>
 
-                            <!-- Kaydet -->
-                            <Button Classes="navBtn" Padding="6,4" ToolTip.Tip="Kaydet">
-                                <TextBlock Text="🔖"
-                                           Foreground="{DynamicResource MTextSecondary}"
-                                           FontSize="14"/>
-                            </Button>
-
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

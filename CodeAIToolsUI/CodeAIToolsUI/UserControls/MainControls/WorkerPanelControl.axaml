@@ -43,22 +43,6 @@
                                    FontSize="20" FontWeight="Bold"
                                    VerticalAlignment="Center"/>
 
-                        <!-- Search -->
-                        <Border Grid.Column="2" x:Name="SearchInputGrid"
-                                Background="{DynamicResource MMenubarBackground}"
-                                BorderBrush="{DynamicResource MMenubarBorderColor}"
-                                BorderThickness="1"
-                                CornerRadius="6"
-                                Padding="10,0"
-                                Margin="0,0,10,0"
-                                Width="180" Height="36">
-                            <StackPanel x:Name="NewProjectBtn"  Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="🔍" FontSize="12" Margin="0,0,6,0" 
-                                           Classes="search"/>
-                                           
-                                <TextBlock Text="Projeleri ara..." Classes="search"/>
-                            </StackPanel>
-                        </Border>
                     </Grid>
 
                     <!-- Divider -->

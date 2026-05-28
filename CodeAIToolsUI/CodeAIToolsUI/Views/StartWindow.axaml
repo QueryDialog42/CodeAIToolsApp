@@ -5,8 +5,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CodeAIToolsUI.Views.StartWindow"
         Title="StartWindow"
-        Width="850"
-        Height="600"
+        Width="450"
+        Height="500"
         WindowStartupLocation="CenterScreen"
         CanResize="False"> <!--ResizeMode="NoResize"-->
         <ContentControl x:Name="startContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
